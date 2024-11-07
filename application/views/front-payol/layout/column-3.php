@@ -1,0 +1,1 @@
+<?php $this->load->view('front-payol/block/'.$content_block , true); ?>

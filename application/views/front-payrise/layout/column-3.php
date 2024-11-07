@@ -1,0 +1,1 @@
+<?php $this->load->view('front-payrise/block/'.$content_block , true); ?>

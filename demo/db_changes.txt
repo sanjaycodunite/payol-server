@@ -1,0 +1,887 @@
+13-07-2023
+---------------------------------------------------
+
+CREATE TABLE `tbl_member_opening_balance` (
+  `id` int(11) NOT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `balance_date` date DEFAULT NULL,
+  `opening_amount` decimal(11,2) DEFAULT NULL,
+  `closing_amount` decimal(11,2) DEFAULT NULL,
+  `manual_credit` decimal(11,2) DEFAULT NULL,
+  `manual_debit` decimal(11,2) DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `success_payout` decimal(11,2) DEFAULT NULL,
+  `pending_payout` decimal(11,2) DEFAULT NULL,
+  `failed_payout` decimal(11,2) DEFAULT NULL,
+  `refund_payout` decimal(11,2) DEFAULT NULL,
+  `previous_refund_payout` decimal(11,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_member_opening_balance`
+--
+ALTER TABLE `tbl_member_opening_balance`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_member_opening_balance`
+--
+ALTER TABLE `tbl_member_opening_balance`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+
+
+
+
+---------------
+27-07-2023
+---------------
+
+
+CREATE TABLE `tbl_aeps_member_registration` (
+  `id` int(11) NOT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `txn_id` varchar(255) DEFAULT NULL,
+  `aadhar_number` varchar(255) DEFAULT NULL,
+  `mobile` varchar(255) DEFAULT NULL,
+  `merchant_code` varchar(255) DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_aeps_member_registration`
+--
+ALTER TABLE `tbl_aeps_member_registration`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_aeps_member_registration`
+--
+ALTER TABLE `tbl_aeps_member_registration`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+
+
+
+
+-----------------------
+07-08-2023
+---------------------
+
+ALTER TABLE `tbl_users` ADD `district` VARCHAR(255) NULL DEFAULT NULL AFTER `upi_call_back_url`, ADD `block` VARCHAR(255) NULL DEFAULT NULL AFTER `district`, ADD `village` VARCHAR(255) NULL DEFAULT NULL AFTER `block`, ADD `pincode` VARCHAR(255) NULL DEFAULT NULL AFTER `village`, ADD `aadhar_no` VARCHAR(255) NULL DEFAULT NULL AFTER `pincode`, ADD `pan_no` VARCHAR(255) NULL DEFAULT NULL AFTER `aadhar_no`;
+
+
+-------------------------------------
+
+
+CREATE TABLE `tbl_aeps_member_registration` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `txn_id` varchar(255) DEFAULT NULL,
+  `aadhar_number` varchar(255) DEFAULT NULL,
+  `mobile` varchar(255) DEFAULT NULL,
+  `merchant_code` varchar(255) DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT '0',
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_aeps_member_registration`
+--
+ALTER TABLE `tbl_aeps_member_registration`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_aeps_member_registration`
+--
+ALTER TABLE `tbl_aeps_member_registration`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+
+---------------------------------------------------------------------
+
+  
+CREATE TABLE `tbl_aeps_member_login_status` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `txn_id` varchar(255) DEFAULT NULL,
+  `aadhar_number` varchar(255) DEFAULT NULL,
+  `mobile` varchar(255) DEFAULT NULL,
+  `merchant_code` varchar(255) DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT '0',
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_aeps_member_login_status`
+--
+ALTER TABLE `tbl_aeps_member_login_status`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_aeps_member_login_status`
+--
+ALTER TABLE `tbl_aeps_member_login_status`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+
+
+
+
+------------
+08-08-2023
+------------
+
+ALTER TABLE `tbl_users` ADD `is_2fa_register` INT(1) NOT NULL DEFAULT '0' AFTER `pan_no`;
+
+
+CREATE TABLE `tbl_instantpay_aeps_member_login_status` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `status` int(1) NOT NULL DEFAULT 0,
+  `created` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_instantpay_aeps_member_login_status`
+--
+ALTER TABLE `tbl_instantpay_aeps_member_login_status`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_instantpay_aeps_member_login_status`
+--
+ALTER TABLE `tbl_instantpay_aeps_member_login_status`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+-----------------------------------------------------------------------
+
+08-08-2023
+
+INSERT INTO `tbl_services` (`id`, `title`) VALUES ('24', 'Society Module');
+
+
+
+CREATE TABLE `tbl_club_duration_type` (
+  `id` int(11) NOT NULL,
+  `title` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_club_duration_type`
+--
+
+INSERT INTO `tbl_club_duration_type` (`id`, `title`) VALUES
+(1, 'Daily'),
+(2, 'Weekly'),
+(3, 'Half Monthly'),
+(4, 'Monthly');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_club_duration_type`
+--
+ALTER TABLE `tbl_club_duration_type`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_club_duration_type`
+--
+ALTER TABLE `tbl_club_duration_type`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+COMMIT;
+
+
+
+CREATE TABLE `tbl_club_status` (
+  `id` int(11) NOT NULL,
+  `title` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_club_status`
+--
+
+INSERT INTO `tbl_club_status` (`id`, `title`) VALUES
+(1, 'Active'),
+(2, 'Close');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_club_status`
+--
+ALTER TABLE `tbl_club_status`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_club_status`
+--
+ALTER TABLE `tbl_club_status`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+COMMIT;
+
+
+
+CREATE TABLE `tbl_club_list` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `club_name` varchar(255) DEFAULT NULL,
+  `member_limit` int(11) DEFAULT NULL,
+  `total_amount` decimal(11,2) DEFAULT NULL,
+  `per_member_amount` decimal(11,2) DEFAULT NULL,
+  `commission` float DEFAULT NULL,
+  `is_flat` int(1) NOT NULL DEFAULT '0',
+  `tenure_type` int(11) DEFAULT NULL,
+  `min_bid_amount` decimal(11,2) DEFAULT NULL,
+  `bid_diff_amount` decimal(11,2) DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
+  `state_time` time DEFAULT NULL,
+  `duration` int(11) DEFAULT NULL,
+  `reserve_no` int(11) DEFAULT NULL,
+  `status` int(1) DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `close_datetime` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_club_list`
+--
+ALTER TABLE `tbl_club_list`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_club_list`
+--
+ALTER TABLE `tbl_club_list`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+
+
+CREATE TABLE `tbl_club_notification` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `club_id` int(11) DEFAULT NULL,
+  `msg` text,
+  `created` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_club_notification`
+--
+ALTER TABLE `tbl_club_notification`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_club_notification`
+--
+ALTER TABLE `tbl_club_notification`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+
+
+CREATE TABLE `tbl_club_member_request` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `club_id` int(11) DEFAULT NULL,
+  `action_type` int(1) NOT NULL DEFAULT '0',
+  `is_agree` int(1) NOT NULL DEFAULT '0',
+  `created` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_club_member_request`
+--
+ALTER TABLE `tbl_club_member_request`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_club_member_request`
+--
+ALTER TABLE `tbl_club_member_request`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+ALTER TABLE `tbl_club_member_request` ADD `updated` DATETIME NULL DEFAULT NULL AFTER `created`, ADD `updated_by` INT(11) NULL DEFAULT NULL AFTER `updated`;
+
+
+ALTER TABLE `tbl_club_member_request` ADD `status` INT(1) NOT NULL DEFAULT '1' AFTER `is_agree`;
+
+
+
+CREATE TABLE `tbl_club_request_status` (
+  `id` int(11) NOT NULL,
+  `title` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_club_request_status`
+--
+
+INSERT INTO `tbl_club_request_status` (`id`, `title`) VALUES
+(1, 'Request Sent'),
+(2, 'Accepted'),
+(3, 'Declined');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_club_request_status`
+--
+ALTER TABLE `tbl_club_request_status`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_club_request_status`
+--
+ALTER TABLE `tbl_club_request_status`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+COMMIT;
+
+
+
+CREATE TABLE `tbl_club_round_status` (
+  `id` int(11) NOT NULL,
+  `title` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_club_round_status`
+--
+
+INSERT INTO `tbl_club_round_status` (`id`, `title`) VALUES
+(1, 'Not Started'),
+(2, 'Live'),
+(3, 'Close');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_club_round_status`
+--
+ALTER TABLE `tbl_club_round_status`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_club_round_status`
+--
+ALTER TABLE `tbl_club_round_status`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+COMMIT;
+
+
+
+CREATE TABLE `tbl_club_rounds` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `club_id` int(11) DEFAULT NULL,
+  `round_no` int(11) DEFAULT NULL,
+  `start_datetime` datetime DEFAULT NULL,
+  `end_datetime` datetime DEFAULT NULL,
+  `status` int(1) NOT NULL DEFAULT '1',
+  `created` datetime DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_club_rounds`
+--
+ALTER TABLE `tbl_club_rounds`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_club_rounds`
+--
+ALTER TABLE `tbl_club_rounds`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+
+ALTER TABLE `tbl_club_rounds` ADD `close_datetime` DATETIME NULL DEFAULT NULL AFTER `updated_by`;
+
+
+
+CREATE TABLE `tbl_club_live_member` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `club_id` int(11) DEFAULT NULL,
+  `status` int(1) NOT NULL DEFAULT '0',
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_club_live_member`
+--
+ALTER TABLE `tbl_club_live_member`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_club_live_member`
+--
+ALTER TABLE `tbl_club_live_member`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+
+
+CREATE TABLE `tbl_club_round_chat` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `club_id` int(11) DEFAULT NULL,
+  `round_no` int(11) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL COMMENT '1 = Chat, 2 = Auto System, 3 = Super Timer',
+  `msg` text,
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_club_round_chat`
+--
+ALTER TABLE `tbl_club_round_chat`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_club_round_chat`
+--
+ALTER TABLE `tbl_club_round_chat`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+
+
+CREATE TABLE `tbl_club_round_member_bid` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `club_id` int(11) DEFAULT NULL,
+  `round_no` int(11) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `bid_amount` float DEFAULT NULL,
+  `status` int(1) NOT NULL DEFAULT '1' COMMENT '1 = Bid Submitted, 2 Bid Win, 3 = Bid Loss',
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_club_round_member_bid`
+--
+ALTER TABLE `tbl_club_round_member_bid`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_club_round_member_bid`
+--
+ALTER TABLE `tbl_club_round_member_bid`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+
+
+CREATE TABLE `tbl_club_event_datetime` (
+  `id` int(11) NOT NULL,
+  `updated` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_club_event_datetime`
+--
+
+INSERT INTO `tbl_club_event_datetime` (`id`, `updated`) VALUES
+(1, '2023-04-11 00:00:00');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_club_event_datetime`
+--
+ALTER TABLE `tbl_club_event_datetime`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_club_event_datetime`
+--
+ALTER TABLE `tbl_club_event_datetime`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+COMMIT;
+
+
+
+ALTER TABLE `tbl_club_rounds` ADD `winner_member_id` INT(11) NULL DEFAULT NULL AFTER `close_datetime`, ADD `club_amount` DECIMAL(11,2) NULL DEFAULT NULL AFTER `winner_member_id`, ADD `bid_amount` DECIMAL(11,2) NULL DEFAULT NULL AFTER `club_amount`, ADD `win_amount` DECIMAL(11,2) NULL DEFAULT NULL AFTER `bid_amount`, ADD `service_charge` DECIMAL(11,2) NULL DEFAULT NULL AFTER `win_amount`, ADD `devided_amount` DECIMAL(11,2) NULL DEFAULT NULL AFTER `service_charge`, ADD `next_round_payment` DECIMAL(11,2) NULL DEFAULT NULL AFTER `devided_amount`;
+
+
+ALTER TABLE `tbl_club_round_member_bid` CHANGE `status` `status` INT(1) NOT NULL DEFAULT '1' COMMENT '1 = Bid Submitted, 2 Bid Win, 3 = Bid Loss, 4 = Bid Close';
+
+ALTER TABLE `tbl_club_round_chat` CHANGE `type` `type` INT(11) NULL DEFAULT NULL COMMENT '1 = Chat, 2 = Auto System, 3 = Super Timer, 4 = Bid Start END';
+
+
+ALTER TABLE `tbl_club_rounds` ADD `payment_debit_datetime` DATETIME NULL DEFAULT NULL AFTER `end_datetime`;
+
+
+ALTER TABLE `tbl_club_list` ADD `payment_debit_duration` INT(11) NULL DEFAULT NULL AFTER `duration`;
+
+
+ALTER TABLE `tbl_club_rounds` ADD `payment_status` INT(1) NOT NULL DEFAULT '0' AFTER `payment_debit_datetime`;
+
+ALTER TABLE `tbl_club_rounds` ADD `payment_datetime` DATETIME NULL DEFAULT NULL AFTER `close_datetime`;
+
+
+ALTER TABLE `tbl_club_notification` ADD `to_member_id` INT(11) NOT NULL DEFAULT '0' AFTER `account_id`;
+
+
+
+CREATE TABLE `tbl_club_round_member_payment` (
+  `id` int(11) NOT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `club_id` int(11) DEFAULT NULL,
+  `round_no` int(11) DEFAULT NULL,
+  `amount` decimal(11,2) DEFAULT NULL,
+  `is_paid` int(1) NOT NULL DEFAULT '0',
+  `created` datetime DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_club_round_member_payment`
+--
+ALTER TABLE `tbl_club_round_member_payment`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_club_round_member_payment`
+--
+ALTER TABLE `tbl_club_round_member_payment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+
+ALTER TABLE `tbl_club_round_member_payment` ADD `account_id` INT(11) NULL DEFAULT NULL AFTER `id`;
+
+ALTER TABLE `tbl_club_notification` ADD `is_read` INT(1) NOT NULL DEFAULT '0' AFTER `msg`;
+
+ALTER TABLE `tbl_club_rounds` ADD `is_paid` INT(1) NOT NULL DEFAULT '0' AFTER `next_round_payment`;
+
+
+
+
+
+
+
+
+----------------------
+21-08-2023
+---------------------
+
+INSERT INTO `tbl_services` (`id`, `title`) VALUES ('25', 'AEPS3');
+
+ALTER TABLE `tbl_users` ADD `get_member_fingpay_aeps_status` INT(1) NOT NULL DEFAULT '0' AFTER `is_2fa_register`;
+
+
+
+--------------------------
+
+01-09-2023
+------------------------------
+
+
+ALTER TABLE `tbl_users` ADD `fingpay_2fa_ap_status` INT(1) NOT NULL DEFAULT '0' AFTER `fingpay_2fa_aeps_status`;
+
+ALTER TABLE `tbl_member_aeps_transaction` ADD `is_settlement` INT(1) NOT NULL DEFAULT '0' AFTER `transactionAmount`;
+
+
+------------------------
+02-10-2023
+------------------------
+
+INSERT INTO `tbl_services` (`id`, `title`) VALUES ('26', 'UTI PAN BALANCE');
+
+
+
+
+
+--------------------------
+17-10-2023
+--------------------------
+
+ALTER TABLE `tbl_member_fund_request` ADD `is_read` INT(1) NOT NULL DEFAULT '0' AFTER `gateway_status`;
+
+
+ALTER TABLE `tbl_uti_balance_request` ADD `is_read` INT(1) NOT NULL DEFAULT '0' AFTER `remark`;
+
+
+
+-----------------------------------
+20-10-2023
+-----------------------------------
+CREATE TABLE `tbl_member_surcharge_wallet` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `transaction_id` varchar(500) DEFAULT NULL,
+  `record_id` int(11) DEFAULT NULL,
+  `amount` varchar(255) DEFAULT NULL,
+  `surcharge` varchar(255) DEFAULT NULL,
+  `surcharge_type` int(11) DEFAULT NULL,
+  `final_amount` varchar(500) DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `credited_by` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_member_surcharge_wallet`
+--
+ALTER TABLE `tbl_member_surcharge_wallet`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_member_surcharge_wallet`
+--
+ALTER TABLE `tbl_member_surcharge_wallet`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+
+
+
+
+ALTER TABLE `tbl_member_wallet` ADD `transaction_id` VARCHAR(255) NULL AFTER `is_manual`;
+
+
+
+
+
+------------------------
+02-11-2023
+------------------------
+
+
+ALTER TABLE `tbl_upi_transaction` ADD `qr_image` TEXT NULL DEFAULT NULL AFTER `vpa_id`;
+
+ALTER TABLE `tbl_upi_transaction` ADD `payer_name` VARCHAR(255) NULL DEFAULT NULL AFTER `vpa_id`;
+
+
+-------------------------------------
+22-11-2023
+
+INSERT INTO `tbl_services` (`id`, `title`) VALUES ('27', 'UPI Payout');
+
+INSERT INTO `tbl_account_services` (`id`, `account_id`, `service_id`, `status`, `created`) VALUES (NULL, '2', '5', '1', NULL), (NULL, '2', '27', '1', NULL);
+
+
+
+
+CREATE TABLE `tbl_member_upi_wallet` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `before_balance` decimal(11,2) DEFAULT NULL,
+  `amount` decimal(11,2) DEFAULT NULL,
+  `after_balance` decimal(11,2) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
+  `wallet_type` int(11) NOT NULL DEFAULT '1',
+  `is_income` int(1) NOT NULL DEFAULT '0',
+  `income_type` int(11) DEFAULT NULL,
+  `credited_by` int(11) DEFAULT NULL,
+  `description` text NOT NULL,
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `is_deleted` int(11) NOT NULL DEFAULT '0',
+  `is_manual` int(1) NOT NULL DEFAULT '0',
+  `transaction_id` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_member_upi_wallet`
+--
+ALTER TABLE `tbl_member_upi_wallet`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `member_id` (`member_id`),
+  ADD KEY `type` (`type`),
+  ADD KEY `wallet_type` (`wallet_type`),
+  ADD KEY `is_income` (`is_income`),
+  ADD KEY `income_type` (`income_type`),
+  ADD KEY `account_id` (`account_id`),
+  ADD KEY `is_deleted` (`is_deleted`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_member_upi_wallet`
+--
+ALTER TABLE `tbl_member_upi_wallet`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;

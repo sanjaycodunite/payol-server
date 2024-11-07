@@ -1,0 +1,1 @@
+<?php $this->load->view('portal/block/'.$content_block , true); ?>

@@ -1,0 +1,89 @@
+@font-face {
+    font-family: "flaticon";
+    src: url("../fonts/flaticon.ttf?f726c938027ade580f3df80b23dff113") format("truetype"),
+url("../fonts/flaticon.woff?f726c938027ade580f3df80b23dff113") format("woff"),
+url("../fonts/flaticon.woff2?f726c938027ade580f3df80b23dff113") format("woff2"),
+url("../fonts/flaticon.eot?f726c938027ade580f3df80b23dff113#iefix") format("embedded-opentype"),
+url("../fonts/flaticon.svg?f726c938027ade580f3df80b23dff113#flaticon") format("svg");
+}
+
+i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
+    font-family: flaticon !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 30px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.flaticon-wifi-signal:before {
+    content: "\f101";
+}
+.flaticon-loan:before {
+    content: "\f102";
+}
+.flaticon-gas-bottle:before {
+    content: "\f103";
+}
+.flaticon-life-insurance:before {
+    content: "\f104";
+}
+.flaticon-mobile-phone:before {
+    content: "\f105";
+}
+.flaticon-satellite-dish:before {
+    content: "\f106";
+}
+.flaticon-plug:before {
+    content: "\f107";
+}
+.flaticon-water-drop:before {
+    content: "\f108";
+}
+.flaticon-telephone:before {
+    content: "\f109";
+}
+.flaticon-payment-method:before {
+    content: "\f10a";
+}
+.flaticon-statement:before {
+    content: "\f10b";
+}
+.flaticon-save-money:before {
+    content: "\f10c";
+}
+.flaticon-cash-payment:before {
+    content: "\f10d";
+}
+.flaticon-atm:before {
+    content: "\f10e";
+}
+.flaticon-transfer-money:before {
+    content: "\f10f";
+}
+.flaticon-credit-card:before {
+    content: "\f110";
+}
+.flaticon-bus:before {
+    content: "\f111";
+}
+.flaticon-airplane:before {
+    content: "\f112";
+}
+.flaticon-hotel:before {
+    content: "\f113";
+}
+.flaticon-taxi:before {
+    content: "\f114";
+}
+.flaticon-phone-call:before {
+    content: "\f115";
+}
+.flaticon-mail:before {
+    content: "\f116";
+}
+.flaticon-pin:before {
+    content: "\f117";
+}

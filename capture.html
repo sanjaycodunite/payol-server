@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AePS Test</title>
+
+        <script src="skin/admin/js/jquery-1.10.2.min.js"></script>
+    </head>
+    <body>
+        <div>
+            <input type="button" class="btn btn-primary btn-200" onclick="CaptureAvdm();" value="Capture" />
+            <textarea id="txtPidOptions" style="width: 100%; height: 100px;"> </textarea>
+            <textarea id="txtPidData" style="width: 100%; height: 150px;"> </textarea>
+        </div>
+
+        <script language="javascript" type="text/javascript">
+
+            var finalUrl="";
+            var MethodInfo="";
+            var MethodCapture="";
+            var OldPort=false;
+
+            function discoverAvdm()
+            {
+                var SuccessFlag=0;
+                var primaryUrl = "http://127.0.0.1:";
+
+                try 
+                {
+                    var protocol = window.location.href;
+                    if (protocol.indexOf("https") >= 0) {
+                        primaryUrl = "https://127.0.0.1:";
+                    }
+                } 
+                catch (e)
+                { }
+
+                url = "";
+                for (var i = 11100; i <= 11120; i++)
+                {
+                    if(primaryUrl=="https://127.0.0.1:" && OldPort==true)
+                    {
+                        i="8005";
+                    }
+
+                    var verb = "RDSERVICE";
+                    var err = "";
+                    SuccessFlag=0;
+                    var res;
+                    $.support.cors = true;
+                    var httpStaus = false;
+                    var jsonstr="";
+                    var data = new Object();
+                    var obj = new Object();
+
+                    $.ajax({
+
+                        type: "RDSERVICE",
+                        async: false,
+                        url: primaryUrl + i.toString(),
+                        contentType: "text/xml; charset=utf-8",
+                        processData: false,
+                        cache: false,
+                        crossDomain: true,
+
+                        success: function (data) {
+
+                            httpStaus = true;
+                            res = { httpStaus: httpStaus, data: data };
+                                
+                            finalUrl = primaryUrl + i.toString();
+                            var $doc = $.parseXML(data);
+                            var CmbData1 =  $($doc).find('RDService').attr('status');
+                            var CmbData2 =  $($doc).find('RDService').attr('info');
+                            if(RegExp('\\b'+ 'Mantra' +'\\b').test(CmbData2)==true)
+                            {
+                                if($($doc).find('Interface').eq(0).attr('path')=="/rd/capture")
+                                {
+                                    MethodCapture=$($doc).find('Interface').eq(0).attr('path');
+                                }
+                                if($($doc).find('Interface').eq(1).attr('path')=="/rd/capture")
+                                {
+                                    MethodCapture=$($doc).find('Interface').eq(1).attr('path');
+                                }
+                                if($($doc).find('Interface').eq(0).attr('path')=="/rd/info")
+                                {
+                                    MethodInfo=$($doc).find('Interface').eq(0).attr('path');
+                                }
+                                if($($doc).find('Interface').eq(1).attr('path')=="/rd/info")
+                                {
+                                    MethodInfo=$($doc).find('Interface').eq(1).attr('path');
+                                }
+
+                                SuccessFlag=1;
+                                //alert("RD SERVICE discovered successfully");
+                                return;
+                            }
+                        },
+
+                        error: function (jqXHR, ajaxOptions, thrownError) 
+                        {
+                            if(i=="8005" && OldPort==true)
+                            {
+                                OldPort=false;
+                                i="11099";
+                            }
+                        },
+                    });
+
+                    if(SuccessFlag==1)
+                    {
+                        break;
+                    }
+                }
+
+                if(SuccessFlag==0)
+                {
+                    alert("Connection failed. Please try again.");
+                }
+
+                return res;
+            }
+
+            function CaptureAvdm()
+            {
+                discoverAvdm();
+
+                var XML='<?xml version="1.0"?> <PidOptions ver="1.0"> <Opts fCount="1" fType="0" iCount="0" pCount="0" format="0" pidVer="2.0" timeout="10000" posh="UNKNOWN" env="P" /> </PidOptions>';
+
+                var verb = "CAPTURE";
+                var err = "";
+                var res;
+                $.support.cors = true;
+                var httpStaus = false;
+                var jsonstr="";
+
+                $.ajax({
+
+                    type: "CAPTURE",
+                    async: false,
+                    crossDomain: true,
+                    url: finalUrl+MethodCapture,
+                    data:XML,
+                    contentType: "text/xml; charset=utf-8",
+                    processData: false,
+                    success: function (data) 
+                    {
+                        httpStaus = true;
+                        res = { httpStaus: httpStaus, data: data };
+						
+						$('#txtPidData').val(data);
+						$('#txtPidOptions').val(XML);
+						
+                        var $doc = $.parseXML(data);
+                        var Message =  $($doc).find('Resp').attr('errInfo');
+                        //alert(Message);
+
+                        var param = "bmPIData=" + encodeURIComponent(data);
+
+                        var xhttp = new XMLHttpRequest();
+                        xhttp.onreadystatechange = function() 
+                        {
+                            if (this.readyState == 4 && this.status == 200) {
+                            alert(this.responseText);
+                            }
+                        };
+                        xhttp.open("POST", "aeps_transaction.php", true);
+                        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        xhttp.send(param);
+                    },
+
+                    error: function (jqXHR, ajaxOptions, thrownError) 
+                    {
+                        alert(thrownError);
+                        res = { httpStaus: httpStaus, err: getHttpError(jqXHR) };
+                    },
+                });
+
+                return res;
+            }
+
+            function getHttpError(jqXHR) 
+            {
+                var err = "Unhandled Exception";
+                if (jqXHR.status === 0) {
+                    err = 'Service Unavailable';
+                } else if (jqXHR.status == 404) {
+                    err = 'Requested page not found';
+                } else if (jqXHR.status == 500) {
+                    err = 'Internal Server Error';
+                } else if (thrownError === 'parsererror') {
+                    err = 'Requested JSON parse failed';
+                } else if (thrownError === 'timeout') {
+                    err = 'Time out error';
+                } else if (thrownError === 'abort') {
+                    err = 'Ajax request aborted';
+                } else {
+                    err = 'Unhandled Error';
+                }
+                return err;
+            }
+        </script>
+    </body>
+</html>

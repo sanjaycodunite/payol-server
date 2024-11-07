@@ -1,0 +1,1 @@
+<?php $this->load->view('superadmin/block/'.$content_block , true); ?>

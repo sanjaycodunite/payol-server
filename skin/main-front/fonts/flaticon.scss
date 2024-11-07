@@ -1,0 +1,117 @@
+$flaticon-font: "flaticon";
+
+@font-face {
+    font-family: $flaticon-font;
+    src: url("./flaticon.ttf?f726c938027ade580f3df80b23dff113") format("truetype"),
+url("./flaticon.woff?f726c938027ade580f3df80b23dff113") format("woff"),
+url("./flaticon.woff2?f726c938027ade580f3df80b23dff113") format("woff2"),
+url("./flaticon.eot?f726c938027ade580f3df80b23dff113#iefix") format("embedded-opentype"),
+url("./flaticon.svg?f726c938027ade580f3df80b23dff113#flaticon") format("svg");
+}
+
+i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
+    font-family: flaticon !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+$flaticon-map: (
+    "wifi-signal": "\f101",
+    "loan": "\f102",
+    "gas-bottle": "\f103",
+    "life-insurance": "\f104",
+    "mobile-phone": "\f105",
+    "satellite-dish": "\f106",
+    "plug": "\f107",
+    "water-drop": "\f108",
+    "telephone": "\f109",
+    "payment-method": "\f10a",
+    "statement": "\f10b",
+    "save-money": "\f10c",
+    "cash-payment": "\f10d",
+    "atm": "\f10e",
+    "transfer-money": "\f10f",
+    "credit-card": "\f110",
+    "bus": "\f111",
+    "airplane": "\f112",
+    "hotel": "\f113",
+    "taxi": "\f114",
+    "phone-call": "\f115",
+    "mail": "\f116",
+    "pin": "\f117",
+);
+
+.flaticon-wifi-signal:before {
+    content: map-get($flaticon-map, "wifi-signal");
+}
+.flaticon-loan:before {
+    content: map-get($flaticon-map, "loan");
+}
+.flaticon-gas-bottle:before {
+    content: map-get($flaticon-map, "gas-bottle");
+}
+.flaticon-life-insurance:before {
+    content: map-get($flaticon-map, "life-insurance");
+}
+.flaticon-mobile-phone:before {
+    content: map-get($flaticon-map, "mobile-phone");
+}
+.flaticon-satellite-dish:before {
+    content: map-get($flaticon-map, "satellite-dish");
+}
+.flaticon-plug:before {
+    content: map-get($flaticon-map, "plug");
+}
+.flaticon-water-drop:before {
+    content: map-get($flaticon-map, "water-drop");
+}
+.flaticon-telephone:before {
+    content: map-get($flaticon-map, "telephone");
+}
+.flaticon-payment-method:before {
+    content: map-get($flaticon-map, "payment-method");
+}
+.flaticon-statement:before {
+    content: map-get($flaticon-map, "statement");
+}
+.flaticon-save-money:before {
+    content: map-get($flaticon-map, "save-money");
+}
+.flaticon-cash-payment:before {
+    content: map-get($flaticon-map, "cash-payment");
+}
+.flaticon-atm:before {
+    content: map-get($flaticon-map, "atm");
+}
+.flaticon-transfer-money:before {
+    content: map-get($flaticon-map, "transfer-money");
+}
+.flaticon-credit-card:before {
+    content: map-get($flaticon-map, "credit-card");
+}
+.flaticon-bus:before {
+    content: map-get($flaticon-map, "bus");
+}
+.flaticon-airplane:before {
+    content: map-get($flaticon-map, "airplane");
+}
+.flaticon-hotel:before {
+    content: map-get($flaticon-map, "hotel");
+}
+.flaticon-taxi:before {
+    content: map-get($flaticon-map, "taxi");
+}
+.flaticon-phone-call:before {
+    content: map-get($flaticon-map, "phone-call");
+}
+.flaticon-mail:before {
+    content: map-get($flaticon-map, "mail");
+}
+.flaticon-pin:before {
+    content: map-get($flaticon-map, "pin");
+}

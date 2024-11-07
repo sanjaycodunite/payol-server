@@ -1,0 +1,1 @@
+<?php $this->load->view('front-morningpay/block/'.$content_block , true); ?>

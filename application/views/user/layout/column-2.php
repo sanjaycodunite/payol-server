@@ -1,0 +1,1 @@
+<?php $this->load->view('user/block/'.$content_block , true); ?>

@@ -1,0 +1,101 @@
+@font-face {
+    font-family: "flaticon";
+    src: url("../fonts/flaticon.ttf?5212150fdb150d9bd0ef55077c73b2ab") format("truetype"),
+url("../fonts/flaticon.woff?5212150fdb150d9bd0ef55077c73b2ab") format("woff"),
+url("../fonts/flaticon.woff2?5212150fdb150d9bd0ef55077c73b2ab") format("woff2"),
+url("../fonts/flaticon.eot?5212150fdb150d9bd0ef55077c73b2ab#iefix") format("embedded-opentype"),
+url("../fonts/flaticon.svg?5212150fdb150d9bd0ef55077c73b2ab#flaticon") format("svg");
+}
+
+i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
+    font-family: flaticon !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.flaticon-wifi-signal:before {
+    content: "\f101";
+}
+.flaticon-loan:before {
+    content: "\f102";
+}
+.flaticon-gas-bottle:before {
+    content: "\f103";
+}
+.flaticon-life-insurance:before {
+    content: "\f104";
+}
+.flaticon-mobile-phone:before {
+    content: "\f105";
+}
+.flaticon-satellite-dish:before {
+    content: "\f106";
+}
+.flaticon-plug:before {
+    content: "\f107";
+}
+.flaticon-water-drop:before {
+    content: "\f108";
+}
+.flaticon-telephone:before {
+    content: "\f109";
+}
+.flaticon-payment-method:before {
+    content: "\f10a";
+}
+.flaticon-save-money:before {
+    content: "\f10b";
+}
+.flaticon-life-insurance-1:before {
+    content: "\f10c";
+}
+.flaticon-credit-card:before {
+    content: "\f10d";
+}
+.flaticon-gas:before {
+    content: "\f10e";
+}
+.flaticon-fire:before {
+    content: "\f10f";
+}
+.flaticon-toll-road:before {
+    content: "\f110";
+}
+.flaticon-tv-screen:before {
+    content: "\f111";
+}
+.flaticon-healthcare:before {
+    content: "\f112";
+}
+.flaticon-apartment:before {
+    content: "\f113";
+}
+.flaticon-city-hall:before {
+    content: "\f114";
+}
+.flaticon-tax:before {
+    content: "\f115";
+}
+.flaticon-subscription:before {
+    content: "\f116";
+}
+.flaticon-hospital:before {
+    content: "\f117";
+}
+.flaticon-smartphone:before {
+    content: "\f118";
+}
+.flaticon-cinema:before {
+    content: "\f119";
+}
+.flaticon-luggage:before {
+    content: "\f11a";
+}
+.flaticon-entrance:before {
+    content: "\f11b";
+}

@@ -1,0 +1,74 @@
+
+/*-------------------------------------------------------*/
+/* When the browser is between 0px and 992px wide,below css will be applied.
+/*-------------------------------------------------------*/
+ @media screen and (max-width:992px){
+	.ad-log-in {
+		width: 80%;
+		padding: 25px;
+	}
+	 .ed-rsear-in ul li{
+		 width:100%;
+	 }
+     .web-search-form div input{
+         margin-bottom:0px;
+    }
+     .web-search-form div input i{
+         display:block;
+    }
+     .wed-search-1 {
+         padding: 115px 0px 50px 0px;
+    }
+     .h-quote:before {
+         width: 100%;
+    }
+     .admiss-form {
+         padding: 0px 30px;
+         margin-top: 50px;
+    }
+     .admiss-form form label{
+         color:#fff;
+    }
+     .help-arrow{
+         display:none;
+    }
+     .semi-form{
+         margin-top:40px;
+    }
+     .semi-left{
+         width:100%;
+         padding:0px 0px 0px 0px;
+    }
+     .semi-right{
+         width:100%;
+    }
+     .pg-eve-reg{
+         display:none;
+    }
+     .ho-ev-link {
+         width: 75%;
+    }
+     .search-form {
+         width: 100%;
+    }
+     .sf-list{
+         width:57.5%;
+    }
+     .sf-submit {
+         width: 40%;
+    }
+     .sf-type {
+         width: 60%;
+    }
+
+     .ed-mob-menu{
+         display:block;
+    }
+     .search-top{
+         margin-top: 55px;
+         border: 0px;
+    }
+
+}
+
+ 

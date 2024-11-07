@@ -1,0 +1,1 @@
+<?php $this->load->view('master/block/'.$content_block , true); ?>

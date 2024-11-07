@@ -1,0 +1,10 @@
+.home_search {
+    float: right; 
+    width: 100%;
+}
+
+.myflex {
+    display: flex;
+    justify-content: flex-end; 
+}
+

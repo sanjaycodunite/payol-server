@@ -1,0 +1,133 @@
+$flaticon-font: "flaticon";
+
+@font-face {
+    font-family: $flaticon-font;
+    src: url("./flaticon.ttf?5212150fdb150d9bd0ef55077c73b2ab") format("truetype"),
+url("./flaticon.woff?5212150fdb150d9bd0ef55077c73b2ab") format("woff"),
+url("./flaticon.woff2?5212150fdb150d9bd0ef55077c73b2ab") format("woff2"),
+url("./flaticon.eot?5212150fdb150d9bd0ef55077c73b2ab#iefix") format("embedded-opentype"),
+url("./flaticon.svg?5212150fdb150d9bd0ef55077c73b2ab#flaticon") format("svg");
+}
+
+i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
+    font-family: flaticon !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+$flaticon-map: (
+    "wifi-signal": "\f101",
+    "loan": "\f102",
+    "gas-bottle": "\f103",
+    "life-insurance": "\f104",
+    "mobile-phone": "\f105",
+    "satellite-dish": "\f106",
+    "plug": "\f107",
+    "water-drop": "\f108",
+    "telephone": "\f109",
+    "payment-method": "\f10a",
+    "save-money": "\f10b",
+    "life-insurance-1": "\f10c",
+    "credit-card": "\f10d",
+    "gas": "\f10e",
+    "fire": "\f10f",
+    "toll-road": "\f110",
+    "tv-screen": "\f111",
+    "healthcare": "\f112",
+    "apartment": "\f113",
+    "city-hall": "\f114",
+    "tax": "\f115",
+    "subscription": "\f116",
+    "hospital": "\f117",
+    "smartphone": "\f118",
+    "cinema": "\f119",
+    "luggage": "\f11a",
+    "entrance": "\f11b",
+);
+
+.flaticon-wifi-signal:before {
+    content: map-get($flaticon-map, "wifi-signal");
+}
+.flaticon-loan:before {
+    content: map-get($flaticon-map, "loan");
+}
+.flaticon-gas-bottle:before {
+    content: map-get($flaticon-map, "gas-bottle");
+}
+.flaticon-life-insurance:before {
+    content: map-get($flaticon-map, "life-insurance");
+}
+.flaticon-mobile-phone:before {
+    content: map-get($flaticon-map, "mobile-phone");
+}
+.flaticon-satellite-dish:before {
+    content: map-get($flaticon-map, "satellite-dish");
+}
+.flaticon-plug:before {
+    content: map-get($flaticon-map, "plug");
+}
+.flaticon-water-drop:before {
+    content: map-get($flaticon-map, "water-drop");
+}
+.flaticon-telephone:before {
+    content: map-get($flaticon-map, "telephone");
+}
+.flaticon-payment-method:before {
+    content: map-get($flaticon-map, "payment-method");
+}
+.flaticon-save-money:before {
+    content: map-get($flaticon-map, "save-money");
+}
+.flaticon-life-insurance-1:before {
+    content: map-get($flaticon-map, "life-insurance-1");
+}
+.flaticon-credit-card:before {
+    content: map-get($flaticon-map, "credit-card");
+}
+.flaticon-gas:before {
+    content: map-get($flaticon-map, "gas");
+}
+.flaticon-fire:before {
+    content: map-get($flaticon-map, "fire");
+}
+.flaticon-toll-road:before {
+    content: map-get($flaticon-map, "toll-road");
+}
+.flaticon-tv-screen:before {
+    content: map-get($flaticon-map, "tv-screen");
+}
+.flaticon-healthcare:before {
+    content: map-get($flaticon-map, "healthcare");
+}
+.flaticon-apartment:before {
+    content: map-get($flaticon-map, "apartment");
+}
+.flaticon-city-hall:before {
+    content: map-get($flaticon-map, "city-hall");
+}
+.flaticon-tax:before {
+    content: map-get($flaticon-map, "tax");
+}
+.flaticon-subscription:before {
+    content: map-get($flaticon-map, "subscription");
+}
+.flaticon-hospital:before {
+    content: map-get($flaticon-map, "hospital");
+}
+.flaticon-smartphone:before {
+    content: map-get($flaticon-map, "smartphone");
+}
+.flaticon-cinema:before {
+    content: map-get($flaticon-map, "cinema");
+}
+.flaticon-luggage:before {
+    content: map-get($flaticon-map, "luggage");
+}
+.flaticon-entrance:before {
+    content: map-get($flaticon-map, "entrance");
+}

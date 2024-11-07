@@ -1,0 +1,1 @@
+<?php $this->load->view('theme-three/block/'.$content_block , true); ?>

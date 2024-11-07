@@ -1,0 +1,1 @@
+<?php $this->load->view('distributor/block/'.$content_block , true); ?>

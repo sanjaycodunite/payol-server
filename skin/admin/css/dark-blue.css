@@ -1,0 +1,73 @@
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+a {color: #392C70;}
+a:hover {text-decoration: none; color: #392C70;}
+.bg-gradient-primary {
+    background-color: #392C70  !important;
+    background-image:linear-gradient(180deg, #271a61  10%, #392C70  100%) !important;
+    background-size: cover;
+}
+.sidebar-dark .sidebar-heading {
+    color: #fff !important;
+}
+.sidebar-dark .nav-item .nav-link i {
+    color: #fff !important;
+}
+.btn-success, .btn-primary, .page-item.active .page-link {
+    color: #fff;
+    background-color: #392C70  !important;
+    border-color: #392C70  !important;
+}
+
+.scroll-to-top{background:#392C70  !important;}
+.scroll-to-top:hover{background:#271a61 !important; }
+.login_marwar:before{background-color: #392C70  !important;
+    background-image:linear-gradient(180deg, #271a61  10%, #392C70  100%) !important;}
+
+    .recharge_services_items ul li a span {
+    display: block;
+    padding: 15px 0;
+    margin: 0 auto 10px;
+    text-align: center;
+    background: #392C70;
+    border-radius: 5px;
+    width: 70px;
+    height: 70px;
+}    
+
+.recharge_services_items ul li a:hover {
+    text-decoration: none; color:#392C70;
+}
+
+.recharge_form .form-group button.procced-btn.btn-primary {
+    padding: 14px 20px;
+    background: #392C70;
+    border: 0;
+    border-radius: 7px;
+    box-shadow: 0 9px 7px rgb(83 137 61 / 40%);
+}
+
+.recharge_view .modal-header {
+    background: #392C70;
+    padding: 10px 20px;
+    border-bottom: 0px;
+    color: #fff;
+}
+
+.add_fund_btn a {
+    padding: 10px 30px;
+    background: #392C70;
+    color: #fff;
+    margin: 0 20px;
+    border-radius: 10px;
+}
+.add_fund_btn a:hover {
+    background: #000;
+}
+.add_fund_btn a i {
+    margin-right: 10px;
+}
