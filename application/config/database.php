@@ -70,8 +70,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
 */
-#$active_group = 'default';
-$active_group = 'server';
+$active_group = 'default';
+#$active_group = 'server';
 $query_builder = TRUE;
 
 $db['server'] = array(
@@ -100,7 +100,7 @@ $db['default'] = array(
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => '',
-	'database' => 'trustcart',
+	'database' => 'payol_livedb_server',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => 'tbl_',
 	'pconnect' => FALSE,
