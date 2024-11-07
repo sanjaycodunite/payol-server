@@ -168,6 +168,7 @@ class Transfer extends CI_Controller
         $account_id = $this->User->get_domain_account();
         $loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
         $loggedAccountID = $loggedUser['id'];
+
         //get logged user info
         $activeService = $this->User->account_active_service($loggedUser['id']);
         if (!in_array(6, $activeService)) {
@@ -183,8 +184,6 @@ class Transfer extends CI_Controller
                 'is_delete' => 0
             ])
             ->result_array();
-        // echo $this->db->last_query();
-        // die;
         // get bank list
         $bankList = $this->db->get('tbl_instantpay_aeps_bank_list')->result_array();
 
@@ -2721,7 +2720,7 @@ class Transfer extends CI_Controller
         $this->parser->parse('retailer/layout/column-1', $data);
     }
 
-    //payout benificery auth
+    //Money Transfer1 Add UPI Beneficiary
 
     public function upiOpenPayoutBenificaryAuth()
     {
@@ -2736,29 +2735,54 @@ class Transfer extends CI_Controller
         }
 
         $post = $this->input->post();
+        // Load form validation library and rules
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('account_holder_name', 'Account Holder Name', 'required');
-        $this->form_validation->set_rules('account_number', 'Account Number', 'required');
+        $this->form_validation->set_rules('account_holder_name', 'Account Holder Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+        $this->form_validation->set_rules('ben_upi_id_account_number', 'UPI ID', 'required|trim|xss_clean|numeric');
+        $this->form_validation->set_rules('mobile_no', 'Mobile Number', 'required|trim|xss_clean|numeric|min_length[10]|max_length[10]');
+        $this->form_validation->set_message('regex_match', 'The %s field must contain only alphabetic characters and single spaces between names.');
 
-        if ($this->form_validation->run() == false) {
-            $this->upiPayoutBeneficiaryList();
+        if ($this->form_validation->run() === false) {
+            $response = [
+                'error' => true,
+                'errors' => [
+                    'account_holder_name' => form_error('account_holder_name'),
+                    'bankID' => form_error('bankID'),
+                    'ben_upi_id_account_number' => form_error('ben_upi_id_account_number'),
+                    'ifsc' => form_error('ifsc'),
+                    'mobile_no' => form_error('mobile_no'),
+                ],
+            ];
+            echo json_encode($response);
+            return;
         } else {
             $bene_data = [
                 'account_id' => $account_id,
                 'user_id' => $loggedAccountID,
                 'account_holder_name' => ucwords($post['account_holder_name']),
-                'account_no' => $post['account_number'],
-                'encode_ban_id' => do_hash($post['account_number']),
+                'account_no' => $post['ben_upi_id_account_number'],
+                'encode_ban_id' => do_hash($post['ben_upi_id_account_number']),
                 'status' => 1,
                 'created' => date('Y-m-d H:i:s'),
+                'mobile' => $post['mobile_no'],
+                'txn_id'=> $post['txn_id'],
+                'type'=> $post['type'] ?? 2,
             ];
-
-            $this->db->insert('instantpay_upi_open_payout_user_benificary', $bene_data);
-
-            $this->Az->redirect('retailer/transfer/upiOpenPayoutBeneficiaryList', 'system_message_error', lang('BENEFICIARY_SAVE_SUCCESS'));
+            if ($this->db->insert('instantpay_upi_open_payout_user_benificary', $bene_data)) {
+                $response = [
+                    'error' => false,
+                    'dataval' => 'Beneficiary added successfully.',
+                ];
+            } else {
+                $response = [
+                    'error' => true,
+                    'dataval' => 'Failed to add beneficiary. Please try again later.',
+                ];
+            }
+            echo json_encode($response);
+            return;
         }
     }
-
     public function upiOpenPayoutFundTransfer($bene_id = 0)
     {
         $account_id = $this->User->get_domain_account();

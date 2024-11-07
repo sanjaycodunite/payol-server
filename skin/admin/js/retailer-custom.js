@@ -2251,35 +2251,165 @@ $('#addBeneficiaryBtn').click(function (e) {
 });
 
 
-$("#upiVerifyBtn").click(function () {
-  var siteUrl = $("#siteUrl").val();
-  $(".ajaxx-loader").html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/images/large-loading.gif' alt='loading' width='100' /></center>"
-  );
-  var str = $("#upi_verify_form").serialize();
+// $("#upiVerifyBtn").click(function () {
+//   var siteUrl = $("#siteUrl").val();
+//   $(".ajaxx-loader").html(
+//     "<center><img src='" +
+//     siteUrl +
+//     "skin/images/large-loading.gif' alt='loading' width='100' /></center>"
+//   );
+//   var str = $("#upi_verify_form").serialize();
+//   $.ajax({
+//     type: "POST",
+//     url: siteUrl + "retailer/bank/upiVerifyAuth",
+//     data: str,
+//     success: function (r) {
+//       var data = JSON.parse($.trim(r));
+//       if (data["status"] == 1) {
+//         $(".ajaxx-loader").html("");
+//         $("#upi_account_holder_name").val(data["upi_account_holder_name"]);
+//         $("#bankUpiModal").modal("show");
+//         $("#bankUpiResponse").html(data["msg"]);
+//       } else {
+//         $(".ajaxx-loader").html(
+//           '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+//           data["msg"] +
+//           "</div>"
+//         );
+//       }
+//     }
+//   });
+// });
+
+/** Money Transfer UPI Beneficiary Wroks */
+//Add Bank M1 Benificary
+$('#saveMT1UpiBeneficiaryBtn').click(function (e) {
+  e.preventDefault();
+  var formData = $('#upi_verify_form').serialize();
+  var siteUrl = $('#siteUrl').val();
+
   $.ajax({
+    url: siteUrl + "retailer/transfer/upiOpenPayoutBenificaryAuth",
     type: "POST",
-    url: siteUrl + "retailer/bank/upiVerifyAuth",
-    data: str,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $(".ajaxx-loader").html("");
-        $("#upi_account_holder_name").val(data["upi_account_holder_name"]);
-        $("#bankUpiModal").modal("show");
-        $("#bankUpiResponse").html(data["msg"]);
+    data: formData,
+    dataType: "json",
+    success: function (response) {
+      // Clear previous errors and success messages
+      $('.error').html('');
+      $('#benAlert').removeClass('show').addClass('hide').html('');
+      if (response.error && response.errors) {
+        // Display validation errors
+        $.each(response.errors, function (key, value) {
+          $('#' + key + '_error').html(value);
+        });
+      } else if (response.error) {
+        $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
+        $('#benAlert').html(`<strong>Error: </strong>${response.dataval}`);
+        setTimeout(function () {
+          $('#benAlert').removeClass('show').addClass('hide');
+          $('#benAlert').empty();
+        }, 3000);
       } else {
-        $(".ajaxx-loader").html(
-          '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-          data["msg"] +
-          "</div>"
-        );
+        $('#account_verify_form')[0].reset();
+        $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
+        $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
+        setTimeout(function () {
+          $('#benAlert').removeClass('show').addClass('hide');
+          $('#benAlert').empty();
+          location.reload();
+        }, 3000);
       }
+    },
+    error: function (xhr, status, error) {
+      console.log('AJAX Error: ' + error);
     }
   });
 });
+var delBeneficiaryId;
+$('.benm1Deletebtn').click(function (e) {
+  e.preventDefault();
+  delBeneficiaryId = $(this).attr('benm1DeleteID');
+});
+
+$('#confirmDeletem1').click(function () {
+  var benDeleteUrl = siteUrl + `retailer/transfer/deleteBeneficiary/${delBeneficiaryId}`;
+  $.ajax({
+    url: benDeleteUrl,
+    type: "POST",
+    dataType: "json",
+    success: function (response) {
+      $('.error').html('');
+      $('#benAlert').removeClass('show').addClass('hide').html('');
+      $('#confirmModal').modal('hide');
+      if (response.error) {
+        $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
+        $('#benAlert').html(`<strong>Error: </strong>${response.dataval}`);
+        setTimeout(function () {
+          $('#benAlert').removeClass('show').addClass('hide');
+          $('#benAlert').empty();
+        }, 3000);
+      } else {
+        $('#account_verify_form')[0].reset();
+        $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
+        $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
+        setTimeout(function () {
+          $('#benAlert').removeClass('show').addClass('hide');
+          $('#benAlert').empty();
+          location.reload();
+        }, 3000);
+      }
+    },
+    error: function (xhr, status, error) {
+      console.log('AJAX Error: ' + error);
+    }
+  });
+
+});
+
+//Update Ben Money Transfer 1 Benificary Bank Details :
+$('#saveBenM1Changes').click(function (e) {
+  e.preventDefault();
+
+  var formData = $('#updateBenM2BankData').serialize();
+  var siteUrl = $('#siteUrl').val();
+
+  $.ajax({
+    url: siteUrl + "retailer/transfer/updateBenificaryAuth",
+    type: "POST",
+    data: formData,
+    dataType: "json",
+    success: function (obj) {
+
+      if (obj.error && obj.errors) {
+        $.each(obj.errors, function (key, value) {
+          $('#' + key + '_error').html(value);
+        });
+      } else if (obj.error) {
+        $('#updateBenAlert').removeClass('hide alert-success').addClass('show alert-danger');
+        $('#updateBenAlert').html(`<strong>Error: </strong>${obj.dataval}`);
+        setTimeout(function () {
+          $('#updateBenAlert').removeClass('show').addClass('hide');
+          $('#updateBenAlert').empty();
+        }, 3000);
+      } else {
+        $('#account_verify_form')[0].reset();
+        $('#updateBenAlert').removeClass('hide alert-danger').addClass('show alert-success');
+        $('#updateBenAlert').html(`<strong>Success: </strong>${obj.dataval}`);
+        setTimeout(function () {
+          $('#updateBenAlert').removeClass('show').addClass('hide');
+          $('#updateBenAlert').empty();
+          location.reload();
+        }, 3000);
+      }
+    },
+    error: function (xhr, status, error) {
+      console.log('AJAX Error: ' + error);
+    }
+  });
+});
+
+
+///////////////
 
 $("#selDmtBankID").change(function () {
   var siteUrl = $("#siteUrl").val();
@@ -2689,7 +2819,7 @@ $(document).ready(function () {
 
   });
 
-  //Update Ben Money Transfer 2 Benificary Bank Details :
+  //Update Ben Money Transfer 1 Benificary Bank Details :
   $('#saveBenM1Changes').click(function (e) {
     e.preventDefault();
 
