@@ -115,6 +115,7 @@
         </div>
     </div>
     <div class="col-sm-12">
+        <?php $_SERVER['REMOTE_ADDR']; ?>
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
@@ -143,7 +144,8 @@
                                 <td class="align-middle"><?php echo $list['account_no']; ?></td>
                                 <td class="align-middle"><?php echo $list['bank_name']; ?></td>
                                 <td class="align-middle"><?php echo $list['ifsc']; ?></td>
-                                <td class="align-middle"> <?php echo date('d-m-Y <b>h:i A</b>', strtotime($list['created'])); ?></td>
+                                <td class="align-middle">
+                                    <?php echo date('d-m-Y <b>h:i A</b>', strtotime($list['created'])); ?></td>
                                 <td class="align-middle">
                                     <a
                                         href="<?php echo site_url('retailer/transfer/fundTransfer/' . $list['ben_id']); ?>">

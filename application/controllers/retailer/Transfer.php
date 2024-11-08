@@ -2738,7 +2738,8 @@ class Transfer extends CI_Controller
         // Load form validation library and rules
         $this->load->library('form_validation');
         $this->form_validation->set_rules('account_holder_name', 'Account Holder Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-        $this->form_validation->set_rules('ben_upi_id_account_number', 'UPI ID', 'required|trim|xss_clean|numeric');
+        $this->form_validation->set_rules('ben_upi_id_account_number', 'UPI ID', 'required|trim|xss_clean|callback_validate_upi_id');
+        $this->form_validation->set_rules('ben_upi_id_account_number', 'UPI ID', 'callback_validate_upi_id');
         $this->form_validation->set_rules('mobile_no', 'Mobile Number', 'required|trim|xss_clean|numeric|min_length[10]|max_length[10]');
         $this->form_validation->set_message('regex_match', 'The %s field must contain only alphabetic characters and single spaces between names.');
 
@@ -2781,6 +2782,18 @@ class Transfer extends CI_Controller
             }
             echo json_encode($response);
             return;
+        }
+    }
+
+    public function validate_upi_id($upi_id) {
+        // Regular expression for UPI ID validation
+        $pattern = '/^[a-zA-Z0-9_.]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/';
+
+        if (preg_match($pattern, $upi_id)) {
+            return TRUE;
+        } else {
+            $this->form_validation->set_message('validate_upi_id', 'The {field} field must contain a valid UPI ID.');
+            return FALSE;
         }
     }
     public function upiOpenPayoutFundTransfer($bene_id = 0)
