@@ -72,9 +72,10 @@ class Bank extends CI_Controller
 
         // Wallet and package logic
         $chk_wallet_balance = $this->db->get_where('users', ['account_id' => $account_id, 'id' => $loggedUser['id']])->row_array();
-        $wallet_balance = isset($chk_wallet_balance['wallet_balance']) ? $chk_wallet_balance['wallet_balance'] : 0;
+        $wallet_balance =$this->User->getMemberWalletBalanceSP($loggedUser['id']);
 
         $get_verification_charge = $this->db->get_where('tbl_dmr_account_verify_charge', ['account_id' => $account_id, 'package_id' => $chk_wallet_balance['package_id']])->row_array();
+
         $verification_charge = isset($get_verification_charge['surcharge']) ? $get_verification_charge['surcharge'] : 0;
 
         $admin_id = $this->User->get_admin_id($account_id);
