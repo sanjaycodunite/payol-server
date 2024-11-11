@@ -2217,8 +2217,6 @@ $('#addBeneficiaryBtn').click(function (e) {
     data: formData,
     dataType: "json",
     success: function (response) {
-
-
       if (response.error) {
         $spinner.hide();
         $button.prop('disabled', false);
@@ -2281,13 +2279,11 @@ $('#addBeneficiaryBtn').click(function (e) {
 //   });
 // });
 
-/** Money Transfer UPI Beneficiary Wroks */
-//Add Bank M1 Benificary
+/** Money Transfer1 UPI Beneficiary Wroks*/
 $('#saveMT1UpiBeneficiaryBtn').click(function (e) {
   e.preventDefault();
   var formData = $('#upi_verify_form').serialize();
   var siteUrl = $('#siteUrl').val();
-
   $.ajax({
     url: siteUrl + "retailer/transfer/upiOpenPayoutBenificaryAuth",
     type: "POST",
@@ -2310,7 +2306,7 @@ $('#saveMT1UpiBeneficiaryBtn').click(function (e) {
           $('#benAlert').empty();
         }, 3000);
       } else {
-        $('#account_verify_form')[0].reset();
+        $('#upi_verify_form')[0].reset();
         $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
         $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
         setTimeout(function () {
@@ -2325,14 +2321,14 @@ $('#saveMT1UpiBeneficiaryBtn').click(function (e) {
     }
   });
 });
-var delBeneficiaryId;
-$('.benm1Deletebtn').click(function (e) {
+var delm1UpiBeneficiaryId;
+$('.benm1UpiDeletebtn').click(function (e) {
   e.preventDefault();
-  delBeneficiaryId = $(this).attr('benm1DeleteID');
+  delm1UpiBeneficiaryId = $(this).attr('benm1UpiDeleteID');
 });
 
-$('#confirmDeletem1').click(function () {
-  var benDeleteUrl = siteUrl + `retailer/transfer/deleteBeneficiary/${delBeneficiaryId}`;
+$('#confirmUpiDeletem1').click(function () {
+  var benDeleteUrl = siteUrl + `retailer/transfer/deleteBeneficiary/${delm1UpiBeneficiaryId}`;
   $.ajax({
     url: benDeleteUrl,
     type: "POST",
@@ -2366,15 +2362,15 @@ $('#confirmDeletem1').click(function () {
 
 });
 
-//Update Ben Money Transfer 1 Benificary Bank Details :
-$('#saveBenM1Changes').click(function (e) {
+//Update Ben Money Transfer 1 UPI Benificary Details :
+$('#saveBenM1UpiChanges').click(function (e) {
   e.preventDefault();
 
-  var formData = $('#updateBenM2BankData').serialize();
+  var formData = $('#updateBenM1UpiData').serialize();
   var siteUrl = $('#siteUrl').val();
 
   $.ajax({
-    url: siteUrl + "retailer/transfer/updateBenificaryAuth",
+    url: siteUrl + "retailer/transfer/updateUpiBenificaryAuth",
     type: "POST",
     data: formData,
     dataType: "json",
@@ -2383,21 +2379,22 @@ $('#saveBenM1Changes').click(function (e) {
       if (obj.error && obj.errors) {
         $.each(obj.errors, function (key, value) {
           $('#' + key + '_error').html(value);
+
         });
       } else if (obj.error) {
-        $('#updateBenAlert').removeClass('hide alert-success').addClass('show alert-danger');
-        $('#updateBenAlert').html(`<strong>Error: </strong>${obj.dataval}`);
+        $('#updateBenUpiAlert').removeClass('hide alert-success').addClass('show alert-danger');
+        $('#updateBenUpiAlert').html(`<strong>Error: </strong>${obj.dataval}`);
         setTimeout(function () {
-          $('#updateBenAlert').removeClass('show').addClass('hide');
-          $('#updateBenAlert').empty();
+          $('#updateBenUpiAlert').removeClass('show').addClass('hide');
+          $('#updateBenUpiAlert').empty();
         }, 3000);
       } else {
         $('#account_verify_form')[0].reset();
-        $('#updateBenAlert').removeClass('hide alert-danger').addClass('show alert-success');
-        $('#updateBenAlert').html(`<strong>Success: </strong>${obj.dataval}`);
+        $('#updateBenUpiAlert').removeClass('hide alert-danger').addClass('show alert-success');
+        $('#updateBenUpiAlert').html(`<strong>Success: </strong>${obj.dataval}`);
         setTimeout(function () {
-          $('#updateBenAlert').removeClass('show').addClass('hide');
-          $('#updateBenAlert').empty();
+          $('#updateBenUpiAlert').removeClass('show').addClass('hide');
+          $('#updateBenUpiAlert').empty();
           location.reload();
         }, 3000);
       }
@@ -2407,7 +2404,6 @@ $('#saveBenM1Changes').click(function (e) {
     }
   });
 });
-
 
 ///////////////
 
@@ -2861,7 +2857,6 @@ $(document).ready(function () {
     });
   });
 
-  //Add Bank M2 Benificary
   $('#saveBeneficiaryBtn').click(function (e) {
     e.preventDefault();
     var formData = $('#account_verify_form').serialize();
@@ -3030,5 +3025,26 @@ function updateBenModel2(id) {
   });
 }
 
+/**Update Money Transfer 1 Ben UPI ID : */
+function updateUpiBenModel1(id) {
+  var siteUrl = $("#siteUrl").val();
+  $.ajax({
+    url: siteUrl + "retailer/transfer/getBenM1UpiData/" + id,
+    success: function (response) {
+      var data = JSON.parse($.trim(response));
+      if (data["status"] == 1) {
+        $("#recordID").val(id);
+        $("#updateupiBenModel1").modal("show");
+        $("#updatebenUpiBlock1").html(data["dataval"]);
+        return false;
+      } else {
+        $.each(response.errors, function (key, value) {
+          $("#updateupiBenModel1").modal("show");
+          $('#' + key + '_error').html(value);
+        });
+      }
+    }
+  });
+}
 
 

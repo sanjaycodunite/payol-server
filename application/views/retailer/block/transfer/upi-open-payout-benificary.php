@@ -88,8 +88,8 @@
                                 <th>Beneficiary Name</th>
                                 <th>Account No.</th>
                                 <th>Added On</th>
-                                <th>Fund</th>
-                            </tr>
+                                <th width="5%">Fund</th>
+                                <th>Action</th>
                         </thead>
                         <tbody>
                             <?php if ($benificaryList) {
@@ -104,8 +104,18 @@
                                 <td class="align-middle">
                                     <a
                                         href="<?php echo site_url('retailer/transfer/upiOpenPayoutFundTransfer/' . $list['id']); ?>">
-                                        <button class="btn btn-primary" type="button">Transfer</button>
+                                        <button class="btn btn-primary btn-sm" type="button">Transfer</button>
                                     </a>
+                                </td>
+                                <td class="align-middle">
+                                    <a title="edit" class="btn btn-primary btn-sm" href="#"
+                                        onclick="updateUpiBenModel1(<?php echo $list['id']; ?>); return false;">
+                                        <i class="fa fa-edit" aria-hidden="true"></i>
+                                    </a>
+                                    <button class="btn btn-danger btn-sm benm1UpiDeletebtn" data-toggle="modal"
+                                        data-target="#confirmUpiModal" benm1UpiDeleteID="<?= $list['id'] ?>">
+                                        <i class=" fa fa-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                             <?php $i++; }
@@ -121,7 +131,8 @@
                                 <th>Beneficiary Name</th>
                                 <th>Account No.</th>
                                 <th>Added On</th>
-                                <th>Fund</th>
+                                <th width="5%">Fund</th>
+                                <th>Action</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -165,26 +176,26 @@
 </div>
 
 <!-- Modal for Update Beneficiary -->
-<div id="updateBenModel1" class="modal fade" role="dialog">
+<div id="updateupiBenModel1" class="modal fade" role="dialog">
     <div class="modal-dialog assign-modal">
         <div class="modal-content">
-            <form id="updateBenM2BankData" method="post">
+            <form id="updateBenM1UpiData" method="post">
                 <input type="hidden" name="recordID" id="recordID" value="0">
                 <div class="modal-header">
                     <h4 class="modal-title">Update Beneficiary</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="alert alert-success alert-dismissible fade hide" role="alert" id="updateBenAlert">
+                    <div class="alert alert-success alert-dismissible fade hide" role="alert" id="updateBenUpiAlert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div id="updatebenBlock1"></div>
+                    <div id="updatebenUpiBlock1"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="saveBenM1Changes">Save Changes</button>
+                    <button type="submit" class="btn btn-primary" id="saveBenM1UpiChanges">Save Changes</button>
                 </div>
             </form>
         </div>

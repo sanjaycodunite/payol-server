@@ -1500,6 +1500,132 @@ class Transfer extends CI_Controller
 
         echo json_encode($response);
     }
+    /** Update Money Transfer1 UPI Ben */
+     public function updateUpiBenificaryAuth()
+    {
+        $account_id = $this->User->get_domain_account();
+        $loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
+        $loggedAccountID = $loggedUser['id'];
+        $post = $this->input->post();
+        $response = [];
+        // Set validation rules
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('update_ben_account_holder_name', 'Account Holder Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+        $this->form_validation->set_rules('update_ben_upi_id_account_number', 'UPI ID', 'required|xss_clean');
+        $this->form_validation->set_rules('update_ben_mobile_no', 'Mobile Number', 'required|xss_clean|numeric|min_length[10]|max_length[10]');
+
+        // Custom error message for regex
+        $this->form_validation->set_message('regex_match', 'The %s field must contain only alphabetic characters and single spaces.');
+
+        // If validation fails, return error messages
+        if ($this->form_validation->run() === false) {
+            $response = [
+                'error' => true,
+                'errors' => [
+                    'update_ben_account_holder_name' => form_error('update_ben_account_holder_name'),
+                    'update_ben_bankID' => form_error('update_ben_bankID'),
+                    'update_ben_account_number' => form_error('update_ben_upi_id_account_number'),
+                    'update_ben_mobile_no' => form_error('update_ben_mobile_no'),
+                ],
+            ];
+            echo json_encode($response);
+            return;
+        }
+
+        // Check if the beneficiary exists in the database
+        $beneficiaryExists = $this->db
+            ->where([
+                'account_id' => $account_id,
+                'user_id' => $loggedAccountID,
+                'id' => $post['recordID'],
+            ])
+            ->count_all_results('instantpay_upi_open_payout_user_benificary');
+
+        if ($beneficiaryExists === 0) {
+            $response = [
+                'error' => true,
+                'dataval' => 'No changes were made. Invalid beneficiary ID.',
+            ];
+            echo json_encode($response);
+            return;
+        }
+
+        // Prepare update data
+        $updateData = [
+            'account_holder_name' => ucwords($post['update_ben_account_holder_name']),
+            'account_no' => $post['update_ben_upi_id_account_number'],
+            'encode_ban_id' => do_hash($post['update_ben_upi_id_account_number']),
+            'status' => 1,
+            'mobile' => $post['update_ben_mobile_no'],
+            'updated' => date('Y-m-d H:i:s'),
+        ];
+
+        // Perform update operation
+        $this->db->where([
+            'id' => $post['recordID'],
+            'account_id' => $account_id,
+            'user_id' => $loggedAccountID,
+        ]);
+
+        $updateSuccess = $this->db->update('instantpay_upi_open_payout_user_benificary', $updateData);
+
+        if ($updateSuccess && $this->db->affected_rows() > 0) {
+            // Successful update
+            $response = [
+                'error' => false,
+                'dataval' => 'Beneficiary details updated successfully.',
+            ];
+        } else {
+            // Either no changes were made or update failed
+            $response = [
+                'error' => true,
+                'dataval' => 'No changes were made or update failed.',
+            ];
+        }
+
+        echo json_encode($response);
+    }
+    public function getBenM1UpiData($recordID = 0)
+    {
+        $response = [];
+        $account_id = $this->User->get_domain_account();
+        $accountData = $this->User->get_account_data($account_id);
+        $loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
+        $loggedAccountID = $loggedUser['id'];
+
+        $chk_member = $this->db->get_where('instantpay_upi_open_payout_user_benificary', ['account_id' => $account_id, 'user_id' => $loggedAccountID, 'id' => $recordID])->num_rows();
+
+        if (!$chk_member) {
+            $response = [
+                'status' => 0,
+                'dataval' => 'Something wrong ! Please try again.',
+            ];
+        } else {
+
+            $dmrData = $this->db->get_where('instantpay_upi_open_payout_user_benificary', ['account_id' => $account_id, 'user_id' => $loggedAccountID, 'id' => $recordID])->row_array();
+            $str = '<div class="form-group">';
+            $str .= '<label>Account Holder Name*</label>';
+            $str .= '<input type="text" autocomplete="off" name="update_ben_account_holder_name" class="form-control" value="' . $dmrData['account_holder_name'] . '"><div class="error" id="update_ben_account_holder_name_error"></div>';
+            $str .= '</div>';
+
+
+            $str .= '<div class="form-group">';
+            $str .= '<label>Account No.*</label>';
+            $str .= '<input type="text" autocomplete="off" name="update_ben_upi_id_account_number" class="form-control" value="' . $dmrData['account_no'] . '"> <div class="error" id="update_ben_upi_id_account_number_error"></div>';
+            $str .= '</div>';
+
+            $str .= '<div class="form-group">';
+            $str .= '<label>Mobile No*</label>';
+            $str .= '<input type="text" autocomplete="off" name="update_ben_mobile_no" class="form-control" value="' . $dmrData['mobile'] . '"><div class="error" id="update_ben_mobile_no_error"></div>';
+            $str .= '</div>';
+
+            $response = [
+                'status' => 1,
+                'dataval' => $str,
+            ];
+        }
+        echo json_encode($response);
+    }
     //instantpay Payout
     public function newPayoutBeneficiaryList()
     {
@@ -2724,39 +2850,66 @@ class Transfer extends CI_Controller
 
     public function upiOpenPayoutBenificaryAuth()
     {
-        //check for foem validation
+
+        // Get the current account and logged user info
         $account_id = $this->User->get_domain_account();
         $loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
         $loggedAccountID = $loggedUser['id'];
-        //get logged user info
+        $response = [];
+        // Check if the logged user has active service for this operation
         $activeService = $this->User->account_active_service($loggedUser['id']);
         if (!in_array(6, $activeService)) {
-            $this->Az->redirect('retailer/dashboard', 'system_message_error', lang('AUTHORIZE_ERROR'));
+            $response = [
+                'error' => true,
+                'dataval' => 'Sorry ! You are not authorized to access this page.',
+            ];
+            echo json_encode($response);
+            return;
         }
 
         $post = $this->input->post();
-        // Load form validation library and rules
+
+        // Load form validation library and set rules
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('account_holder_name', 'Account Holder Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-        $this->form_validation->set_rules('ben_upi_id_account_number', 'UPI ID', 'required|trim|xss_clean|callback_validate_upi_id');
-        $this->form_validation->set_rules('ben_upi_id_account_number', 'UPI ID', 'callback_validate_upi_id');
-        $this->form_validation->set_rules('mobile_no', 'Mobile Number', 'required|trim|xss_clean|numeric|min_length[10]|max_length[10]');
-        $this->form_validation->set_message('regex_match', 'The %s field must contain only alphabetic characters and single spaces between names.');
+
+        $this->form_validation->set_rules(
+            'account_holder_name',
+            'Account Holder Name',
+            'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]',
+            ['regex_match' => 'The %s field must contain only alphabetic characters and single spaces.']
+        );
+
+        $this->form_validation->set_rules(
+            'ben_upi_id_account_number',
+            'UPI ID',
+            'required|trim|xss_clean',
+            ['required' => 'The %s field is required.']
+        );
+
+        $this->form_validation->set_rules(
+            'mobile_no',
+            'Mobile Number',
+            'required|trim|xss_clean|numeric|exact_length[10]',
+            [
+                'required' => 'The %s field is required.',
+                'numeric' => 'The %s field must contain only numbers.',
+                'exact_length' => 'The %s field must be exactly 10 digits long.',
+            ]
+        );
 
         if ($this->form_validation->run() === false) {
             $response = [
                 'error' => true,
                 'errors' => [
                     'account_holder_name' => form_error('account_holder_name'),
-                    'bankID' => form_error('bankID'),
                     'ben_upi_id_account_number' => form_error('ben_upi_id_account_number'),
-                    'ifsc' => form_error('ifsc'),
                     'mobile_no' => form_error('mobile_no'),
                 ],
             ];
             echo json_encode($response);
             return;
         } else {
+
             $bene_data = [
                 'account_id' => $account_id,
                 'user_id' => $loggedAccountID,
@@ -2774,28 +2927,20 @@ class Transfer extends CI_Controller
                     'error' => false,
                     'dataval' => 'Beneficiary added successfully.',
                 ];
+                echo json_encode($response);
+                return;
             } else {
                 $response = [
                     'error' => true,
                     'dataval' => 'Failed to add beneficiary. Please try again later.',
                 ];
+                echo json_encode($response);
+                return;
             }
-            echo json_encode($response);
-            return;
+
         }
     }
 
-    public function validate_upi_id($upi_id) {
-        // Regular expression for UPI ID validation
-        $pattern = '/^[a-zA-Z0-9_.]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/';
-
-        if (preg_match($pattern, $upi_id)) {
-            return TRUE;
-        } else {
-            $this->form_validation->set_message('validate_upi_id', 'The {field} field must contain a valid UPI ID.');
-            return FALSE;
-        }
-    }
     public function upiOpenPayoutFundTransfer($bene_id = 0)
     {
         $account_id = $this->User->get_domain_account();

@@ -115,7 +115,6 @@
         </div>
     </div>
     <div class="col-sm-12">
-        <?php $_SERVER['REMOTE_ADDR']; ?>
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
@@ -239,7 +238,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div id="updatebenBlock1"></div>
+                    <div id="updatebenUpiBlock1"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
