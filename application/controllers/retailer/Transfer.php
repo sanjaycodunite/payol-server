@@ -181,7 +181,7 @@ class Transfer extends CI_Controller
             ->get_where('user_benificary', [
                 'user_benificary.account_id' => $account_id,
                 'user_benificary.user_id' => $loggedAccountID,
-                'is_delete' => 0
+                'is_delete' => 0,
             ])
             ->result_array();
         // get bank list
@@ -254,8 +254,8 @@ class Transfer extends CI_Controller
                 'status' => 1,
                 'created' => date('Y-m-d H:i:s'),
                 'mobile' => $post['mobile_no'],
-                'txn_id'=> $post['txn_id'],
-                'type'=> $post['type'] ?? 1,
+                'txn_id' => $post['txn_id'],
+                'type' => $post['type'] ?? 1,
             ];
             if ($this->db->insert('user_benificary', $bene_data)) {
                 $response = [
@@ -1501,7 +1501,7 @@ class Transfer extends CI_Controller
         echo json_encode($response);
     }
     /** Update Money Transfer1 UPI Ben */
-     public function updateUpiBenificaryAuth()
+    public function updateUpiBenificaryAuth()
     {
         $account_id = $this->User->get_domain_account();
         $loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
@@ -1540,16 +1540,6 @@ class Transfer extends CI_Controller
                 'id' => $post['recordID'],
             ])
             ->count_all_results('instantpay_upi_open_payout_user_benificary');
-
-        if ($beneficiaryExists === 0) {
-            $response = [
-                'error' => true,
-                'dataval' => 'No changes were made. Invalid beneficiary ID.',
-            ];
-            echo json_encode($response);
-            return;
-        }
-
         // Prepare update data
         $updateData = [
             'account_holder_name' => ucwords($post['update_ben_account_holder_name']),
@@ -1601,13 +1591,11 @@ class Transfer extends CI_Controller
                 'dataval' => 'Something wrong ! Please try again.',
             ];
         } else {
-
             $dmrData = $this->db->get_where('instantpay_upi_open_payout_user_benificary', ['account_id' => $account_id, 'user_id' => $loggedAccountID, 'id' => $recordID])->row_array();
             $str = '<div class="form-group">';
             $str .= '<label>Account Holder Name*</label>';
             $str .= '<input type="text" autocomplete="off" name="update_ben_account_holder_name" class="form-control" value="' . $dmrData['account_holder_name'] . '"><div class="error" id="update_ben_account_holder_name_error"></div>';
             $str .= '</div>';
-
 
             $str .= '<div class="form-group">';
             $str .= '<label>Account No.*</label>';
@@ -2821,7 +2809,7 @@ class Transfer extends CI_Controller
             $this->Az->redirect('retailer/dashboard', 'system_message_error', lang('AUTHORIZE_ERROR'));
         }
 
-        $benificaryList = $this->db->get_where('instantpay_upi_open_payout_user_benificary', ['account_id' => $account_id, 'user_id' => $loggedAccountID])->result_array();
+        $benificaryList = $this->db->get_where('instantpay_upi_open_payout_user_benificary', ['account_id' => $account_id, 'user_id' => $loggedAccountID, 'is_delete' => 0])->result_array();
         // get bank list
         $bankList = $this->db->get('aeps_bank_list')->result_array();
 
@@ -2850,7 +2838,6 @@ class Transfer extends CI_Controller
 
     public function upiOpenPayoutBenificaryAuth()
     {
-
         // Get the current account and logged user info
         $account_id = $this->User->get_domain_account();
         $loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
@@ -2868,34 +2855,12 @@ class Transfer extends CI_Controller
         }
 
         $post = $this->input->post();
-
-        // Load form validation library and set rules
         $this->load->library('form_validation');
+        $this->form_validation->set_rules('account_holder_name', 'Account Holder Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+        $this->form_validation->set_rules('ben_upi_id_account_number', 'Account Number', 'required|trim|xss_clean');
+        $this->form_validation->set_rules('mobile_no', 'Mobile Number', 'required|trim|xss_clean|numeric|min_length[10]|max_length[10]');
 
-        $this->form_validation->set_rules(
-            'account_holder_name',
-            'Account Holder Name',
-            'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]',
-            ['regex_match' => 'The %s field must contain only alphabetic characters and single spaces.']
-        );
-
-        $this->form_validation->set_rules(
-            'ben_upi_id_account_number',
-            'UPI ID',
-            'required|trim|xss_clean',
-            ['required' => 'The %s field is required.']
-        );
-
-        $this->form_validation->set_rules(
-            'mobile_no',
-            'Mobile Number',
-            'required|trim|xss_clean|numeric|exact_length[10]',
-            [
-                'required' => 'The %s field is required.',
-                'numeric' => 'The %s field must contain only numbers.',
-                'exact_length' => 'The %s field must be exactly 10 digits long.',
-            ]
-        );
+        $this->form_validation->set_message('regex_match', 'The %s field must contain only alphabetic characters and single spaces between names.');
 
         if ($this->form_validation->run() === false) {
             $response = [
@@ -2909,7 +2874,6 @@ class Transfer extends CI_Controller
             echo json_encode($response);
             return;
         } else {
-
             $bene_data = [
                 'account_id' => $account_id,
                 'user_id' => $loggedAccountID,
@@ -2919,8 +2883,8 @@ class Transfer extends CI_Controller
                 'status' => 1,
                 'created' => date('Y-m-d H:i:s'),
                 'mobile' => $post['mobile_no'],
-                'txn_id'=> $post['txn_id'],
-                'type'=> $post['type'] ?? 2,
+                'txn_id' => $post['txn_id'],
+                'type' => $post['type'] ?? 2,
             ];
             if ($this->db->insert('instantpay_upi_open_payout_user_benificary', $bene_data)) {
                 $response = [
@@ -2937,7 +2901,6 @@ class Transfer extends CI_Controller
                 echo json_encode($response);
                 return;
             }
-
         }
     }
 
@@ -3517,5 +3480,38 @@ class Transfer extends CI_Controller
 
             $this->Az->redirect('retailer/transfer/addBankAccount', 'system_message_error', lang('BENEFICIARY_SAVE_SUCCESS'));
         }
+    }
+    /** Delete Money Transfer UPI ID Beneficiary*/
+    public function deleteM1UpiBeneficiary($id)
+    {
+        $account_id = $this->User->get_domain_account();
+        $loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
+        $loggedAccountID = $loggedUser['id'];
+        $response = [];
+
+        $this->db->where('account_id', $account_id);
+        $this->db->where('user_id', $loggedAccountID);
+        $this->db->where('id', $id);
+        $success = $this->db->update('instantpay_upi_open_payout_user_benificary', ['is_delete' => 1]);
+        if ($success) {
+            if ($this->db->affected_rows() > 0) {
+                $response = [
+                    'error' => false,
+                    'dataval' => 'Beneficiary deleted successfully.',
+                ];
+            } else {
+                $response = [
+                    'error' => true,
+                    'dataval' => 'No changes were made. Please check the ID and data.',
+                ];
+            }
+        } else {
+            log_message('error', 'Money Transfer UPI,Failed to delete beneficiary: ' . $this->db->last_query());
+            $response = [
+                'error' => true,
+                'dataval' => 'Money Transfer UPI,Failed to delete beneficiary. Please try again.',
+            ];
+        }
+        echo json_encode($response);
     }
 }

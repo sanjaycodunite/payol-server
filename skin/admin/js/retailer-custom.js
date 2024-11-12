@@ -22,9 +22,7 @@ $(document).ready(function () {
   $("#rechargeComSearchBtn").click(function () {
     var siteUrl = $("#siteUrl").val();
     var memberID = $("#selMemberID").val();
-    $(".recharge-comm-loader").html(
-      "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
-    );
+    $(".recharge-comm-loader").html("<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />");
     if (memberID != 0) {
       $.ajax({
         url: siteUrl + "retailer/master/getRechargeCommData/" + memberID,
@@ -34,16 +32,12 @@ $(document).ready(function () {
             $(".recharge-comm-loader").html("");
             $("#recharge-comm-block").html(data["str"]);
           } else {
-            $(".recharge-comm-loader").html(
-              '<font color="red">' + data["msg"] + "</font>"
-            );
+            $(".recharge-comm-loader").html('<font color="red">' + data["msg"] + "</font>");
           }
-        }
+        },
       });
     } else {
-      $(".recharge-comm-loader").html(
-        '<font color="red">Member Not Valid.</font>'
-      );
+      $(".recharge-comm-loader").html('<font color="red">Member Not Valid.</font>');
     }
   });
 
@@ -64,18 +58,14 @@ $(document).ready(function () {
             $("#vpa_error").html(data["vpa_error"]);
             $("#description_error").html(data["description_error"]);
           } else {
-            $("#apiErrorResponse").html(
-              '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-              data["message"] +
-              "</div>"
-            );
+            $("#apiErrorResponse").html('<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + data["message"] + "</div>");
           }
         } else {
           $(".upi_loader").hide();
           $(".upi_request_loader").show();
           setTimeout(getUpiCallback(data["txnid"]), 3000);
         }
-      }
+      },
     });
   });
 
@@ -90,7 +80,7 @@ $(document).ready(function () {
         } else {
           setTimeout(getUpiCallback(txnid), 3000);
         }
-      }
+      },
     });
   }
 
@@ -111,18 +101,14 @@ $(document).ready(function () {
             $("#vpa_error").html(data["vpa_error"]);
             $("#description_error").html(data["description_error"]);
           } else {
-            $("#apiErrorResponse").html(
-              '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-              data["message"] +
-              "</div>"
-            );
+            $("#apiErrorResponse").html('<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + data["message"] + "</div>");
           }
         } else {
           $(".upi_loader").hide();
           $(".upi_request_loader").show();
           setTimeout(getUpiCashCallback(data["txnid"]), 3000);
         }
-      }
+      },
     });
   });
 
@@ -137,7 +123,7 @@ $(document).ready(function () {
         } else {
           setTimeout(getUpiCashCallback(txnid), 3000);
         }
-      }
+      },
     });
   }
 
@@ -156,27 +142,21 @@ $(document).ready(function () {
           if (data["is_api_error"] == 0) {
             $("#amount_error").html(data["amount_error"]);
           } else {
-            $("#apiErrorResponse").html(
-              '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-              data["message"] +
-              "</div>"
-            );
+            $("#apiErrorResponse").html('<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + data["message"] + "</div>");
           }
         } else {
           $(".upi_loader").hide();
           $("#qrModal").modal("show");
           $("#qr_div").html(data["qr_code"]);
         }
-      }
+      },
     });
   });
 
   $("#bbpsComSearchBtn").click(function () {
     var siteUrl = $("#siteUrl").val();
     var memberID = $("#selMemberID").val();
-    $(".recharge-comm-loader").html(
-      "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
-    );
+    $(".recharge-comm-loader").html("<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />");
     if (memberID != 0) {
       $.ajax({
         url: siteUrl + "retailer/master/getBBPSCommData/" + memberID,
@@ -186,25 +166,19 @@ $(document).ready(function () {
             $(".recharge-comm-loader").html("");
             $("#recharge-comm-block").html(data["str"]);
           } else {
-            $(".recharge-comm-loader").html(
-              '<font color="red">' + data["msg"] + "</font>"
-            );
+            $(".recharge-comm-loader").html('<font color="red">' + data["msg"] + "</font>");
           }
-        }
+        },
       });
     } else {
-      $(".recharge-comm-loader").html(
-        '<font color="red">Member Not Valid.</font>'
-      );
+      $(".recharge-comm-loader").html('<font color="red">Member Not Valid.</font>');
     }
   });
 
   $("#bbpsLiveComSearchBtn").click(function () {
     var siteUrl = $("#siteUrl").val();
     var memberID = $("#selMemberID").val();
-    $(".recharge-comm-loader").html(
-      "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
-    );
+    $(".recharge-comm-loader").html("<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />");
     if (memberID != 0) {
       $.ajax({
         url: siteUrl + "retailer/master/getBBPSCommData/" + memberID,
@@ -214,25 +188,19 @@ $(document).ready(function () {
             $(".recharge-comm-loader").html("");
             $("#recharge-comm-block").html(data["str"]);
           } else {
-            $(".recharge-comm-loader").html(
-              '<font color="red">' + data["msg"] + "</font>"
-            );
+            $(".recharge-comm-loader").html('<font color="red">' + data["msg"] + "</font>");
           }
-        }
+        },
       });
     } else {
-      $(".recharge-comm-loader").html(
-        '<font color="red">Member Not Valid.</font>'
-      );
+      $(".recharge-comm-loader").html('<font color="red">Member Not Valid.</font>');
     }
   });
 
   $("#dmrComSearchBtn").click(function () {
     var siteUrl = $("#siteUrl").val();
     var memberID = $("#selMemberID").val();
-    $(".recharge-comm-loader").html(
-      "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
-    );
+    $(".recharge-comm-loader").html("<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />");
     if (memberID != 0) {
       $.ajax({
         url: siteUrl + "retailer/master/getMemberDMRCommData/" + memberID,
@@ -242,25 +210,19 @@ $(document).ready(function () {
             $(".recharge-comm-loader").html("");
             $("#dmr-comm-block").html(data["str"]);
           } else {
-            $(".recharge-comm-loader").html(
-              '<font color="red">' + data["msg"] + "</font>"
-            );
+            $(".recharge-comm-loader").html('<font color="red">' + data["msg"] + "</font>");
           }
-        }
+        },
       });
     } else {
-      $(".recharge-comm-loader").html(
-        '<font color="red">Member Not Valid.</font>'
-      );
+      $(".recharge-comm-loader").html('<font color="red">Member Not Valid.</font>');
     }
   });
 
   $("#aepsComSearchBtn").click(function () {
     var siteUrl = $("#siteUrl").val();
     var memberID = $("#selMemberID").val();
-    $(".recharge-comm-loader").html(
-      "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
-    );
+    $(".recharge-comm-loader").html("<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />");
     $.ajax({
       url: siteUrl + "retailer/master/getMemberAEPSCommData/" + memberID,
       success: function (r) {
@@ -269,20 +231,16 @@ $(document).ready(function () {
           $(".recharge-comm-loader").html("");
           $("#dmr-comm-block").html(data["str"]);
         } else {
-          $(".recharge-comm-loader").html(
-            '<font color="red">' + data["msg"] + "</font>"
-          );
+          $(".recharge-comm-loader").html('<font color="red">' + data["msg"] + "</font>");
         }
-      }
+      },
     });
   });
 
   $("#serviceSearchBtn").click(function () {
     var siteUrl = $("#siteUrl").val();
     var memberID = $("#selMemberID").val();
-    $(".recharge-comm-loader").html(
-      "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
-    );
+    $(".recharge-comm-loader").html("<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />");
     $.ajax({
       url: siteUrl + "retailer/master/getServiceData/" + memberID,
       success: function (r) {
@@ -291,11 +249,9 @@ $(document).ready(function () {
           $(".recharge-comm-loader").html("");
           $("#recharge-comm-block").html(data["str"]);
         } else {
-          $(".recharge-comm-loader").html(
-            '<font color="red">' + data["msg"] + "</font>"
-          );
+          $(".recharge-comm-loader").html('<font color="red">' + data["msg"] + "</font>");
         }
-      }
+      },
     });
   });
 
@@ -310,7 +266,7 @@ $(document).ready(function () {
           if (data["status"] == 1) {
             $("#selCity").html(data["str"]);
           }
-        }
+        },
       });
     }
   });
@@ -323,7 +279,7 @@ $(document).ready(function () {
         url: siteUrl + "retailer/pancard/getNsdlDistrictList/" + stateID,
         success: function (r) {
           $("#nsdlDistrictId").html(r);
-        }
+        },
       });
     }
   });
@@ -342,9 +298,7 @@ $(document).ready(function () {
       $("#amount-field-block").css("display", "none");
     } else {
       var siteUrl = $("#siteUrl").val();
-      $(".ajax-loader").html(
-        "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
-      );
+      $(".ajax-loader").html("<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />");
       $.ajax({
         type: "POST",
         url: siteUrl + "retailer/recharge/fetchBiller/" + operator_id,
@@ -354,28 +308,20 @@ $(document).ready(function () {
             $(".ajax-loader").html("");
             $("#fetch_status").val(1);
             $("#fieldName").val(data["fieldName"]);
-            $("#account_number").attr(
-              "placeholder",
-              "Enter " + data["fieldName"]
-            );
-            $("#customer_name").attr(
-              "placeholder",
-              "Enter " + data["fieldOther"]
-            );
+            $("#account_number").attr("placeholder", "Enter " + data["fieldName"]);
+            $("#customer_name").attr("placeholder", "Enter " + data["fieldOther"]);
             $("#field-block").css("display", "block");
             $("#name-field-block").css("display", "block");
             $("#amount-field-block").css("display", "block");
           } else {
-            $(".ajax-loader").html(
-              '<font color="red">' + data["msg"] + "</font>"
-            );
+            $(".ajax-loader").html('<font color="red">' + data["msg"] + "</font>");
             $("#fetch_status").val(0);
             $("#fieldName").val("");
             $("#field-block").css("display", "none");
             $("#name-field-block").css("display", "none");
             $("#amount-field-block").css("display", "none");
           }
-        }
+        },
       });
     }
   });
@@ -391,9 +337,7 @@ $(document).ready(function () {
       $("#amount-field-block").css("display", "none");
     } else {
       var siteUrl = $("#siteUrl").val();
-      $(".ajax-loader").html(
-        "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
-      );
+      $(".ajax-loader").html("<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />");
       var str = $("#electricity-form").serialize();
       $.ajax({
         type: "POST",
@@ -407,11 +351,9 @@ $(document).ready(function () {
             $("#amount").val(data["amount"]);
             $("#reference_id").val(data["reference_id"]);
           } else {
-            $(".ajax-loader").html(
-              '<font color="red">' + data["msg"] + "</font>"
-            );
+            $(".ajax-loader").html('<font color="red">' + data["msg"] + "</font>");
           }
-        }
+        },
       });
     }
   });
@@ -426,7 +368,7 @@ $(document).ready(function () {
         success: function (r) {
           var data = JSON.parse($.trim(r));
           $("#memberBlock").html(data["msg"]);
-        }
+        },
       });
     }
   });
@@ -434,17 +376,10 @@ $(document).ready(function () {
   $("#transfer_amount").keyup(function () {
     var transfer_amount = $(this).val();
     if ($.isNumeric(transfer_amount)) {
-      var service_tax_percentage = parseFloat(
-        $("#service_tax_percentage").val()
-      );
-      var service_amount = (
-        (service_tax_percentage / 100) *
-        parseInt(transfer_amount)
-      ).toFixed(2);
+      var service_tax_percentage = parseFloat($("#service_tax_percentage").val());
+      var service_amount = ((service_tax_percentage / 100) * parseInt(transfer_amount)).toFixed(2);
       $("#service_tax").val(service_amount);
-      $("#wallet_transfer_amount").val(
-        (transfer_amount - service_amount).toFixed(2)
-      );
+      $("#wallet_transfer_amount").val((transfer_amount - service_amount).toFixed(2));
     } else {
       $("#service_tax").val(0);
       $("#wallet_transfer_amount").val(0);
@@ -498,7 +433,7 @@ $(document).ready(function () {
           if (data["status"] == 1) {
             $("#balance").val(data["balance"]);
           }
-        }
+        },
       });
     }
   });
@@ -514,7 +449,7 @@ $(document).ready(function () {
           if (data["status"] == 1) {
             $("#balance").val(data["balance"]);
           }
-        }
+        },
       });
     }
   });
@@ -528,11 +463,7 @@ $(document).ready(function () {
   $("#viewPlanSearchBtn").click(function () {
     var siteUrl = $("#siteUrl").val();
     $("#offerModal").modal("show");
-    $("#offerLoader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='200' /></center>"
-    );
+    $("#offerLoader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='200' /></center>");
     var str = $("#offerFilterForm").serialize();
     $.ajax({
       type: "POST",
@@ -543,22 +474,16 @@ $(document).ready(function () {
         if (data["status"] == 1) {
           $("#offerLoader").html(data["str"]);
         } else {
-          $("#offerLoader").html(
-            '<center><font color="red">' + data["msg"] + "</font></center>"
-          );
+          $("#offerLoader").html('<center><font color="red">' + data["msg"] + "</font></center>");
         }
-      }
+      },
     });
   });
 
   $("#dthViewPlanSearchBtn").click(function () {
     var siteUrl = $("#siteUrl").val();
     $("#offerModal").modal("show");
-    $("#offerLoader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='200' /></center>"
-    );
+    $("#offerLoader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='200' /></center>");
     var str = $("#offerFilterForm").serialize();
     $.ajax({
       type: "POST",
@@ -569,11 +494,9 @@ $(document).ready(function () {
         if (data["status"] == 1) {
           $("#offerLoader").html(data["str"]);
         } else {
-          $("#offerLoader").html(
-            '<center><font color="red">' + data["msg"] + "</font></center>"
-          );
+          $("#offerLoader").html('<center><font color="red">' + data["msg"] + "</font></center>");
         }
-      }
+      },
     });
   });
 
@@ -587,23 +510,16 @@ $(document).ready(function () {
       success: function (r) {
         var data = JSON.parse($.trim(r));
         if (data["status"] == 1) {
-          $('#operator option[value="' + data["operator_id"] + '"]').prop(
-            "selected",
-            true
-          );
+          $('#operator option[value="' + data["operator_id"] + '"]').prop("selected", true);
         }
-      }
+      },
     });
   });
 
   $("#rofferSearchBtn").click(function () {
     var siteUrl = $("#siteUrl").val();
     $("#rofferModal").modal("show");
-    $("#rofferLoader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='200' /></center>"
-    );
+    $("#rofferLoader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='200' /></center>");
     var str = $("#rofferFilterForm").serialize();
     $.ajax({
       type: "POST",
@@ -614,22 +530,16 @@ $(document).ready(function () {
         if (data["status"] == 1) {
           $("#rofferLoader").html(data["str"]);
         } else {
-          $("#rofferLoader").html(
-            '<center><font color="red">' + data["msg"] + "</font></center>"
-          );
+          $("#rofferLoader").html('<center><font color="red">' + data["msg"] + "</font></center>");
         }
-      }
+      },
     });
   });
 
   $("#dthRofferSearchBtn").click(function () {
     var siteUrl = $("#siteUrl").val();
     $("#rofferModal").modal("show");
-    $("#rofferLoader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='200' /></center>"
-    );
+    $("#rofferLoader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='200' /></center>");
     var str = $("#rofferFilterForm").serialize();
     $.ajax({
       type: "POST",
@@ -640,11 +550,9 @@ $(document).ready(function () {
         if (data["status"] == 1) {
           $("#rofferLoader").html(data["str"]);
         } else {
-          $("#rofferLoader").html(
-            '<center><font color="red">' + data["msg"] + "</font></center>"
-          );
+          $("#rofferLoader").html('<center><font color="red">' + data["msg"] + "</font></center>");
         }
-      }
+      },
     });
   });
 
@@ -653,11 +561,7 @@ $(document).ready(function () {
     var cardNumber = $("#cardNumber").val();
     var operator = $("#operator").val();
     if (cardNumber != "" && operator != "") {
-      $("#customerInfoLoader").html(
-        "<center><img src='" +
-        siteUrl +
-        "skin/admin/images/large-loading.gif' width='100' /></center>"
-      );
+      $("#customerInfoLoader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
       var str = $("#admin_profile").serialize();
       $.ajax({
         type: "POST",
@@ -669,15 +573,11 @@ $(document).ready(function () {
             $("#customerInfoLoader").html("");
             $("#customerName").val(data["customerName"]);
             $("#amount").val(data["monthlyRechargeAmount"]);
-            $("#balanceInfo").html(
-              "Available Balance - &#8377; " + data["balance"]
-            );
+            $("#balanceInfo").html("Available Balance - &#8377; " + data["balance"]);
           } else {
-            $("#customerInfoLoader").html(
-              '<font color="red">' + data["msg"] + "</font>"
-            );
+            $("#customerInfoLoader").html('<font color="red">' + data["msg"] + "</font>");
           }
-        }
+        },
       });
     }
   });
@@ -685,11 +585,7 @@ $(document).ready(function () {
   $("#bbps-mobile-prepaid-btn").click(function () {
     $(this).prop("disabled", true);
     var siteUrl = $("#siteUrl").val();
-    $("#mobile-prepaid-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#mobile-prepaid-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var str = $("#bbps-mobile-prepaid-form").serialize();
     $.ajax({
       type: "POST",
@@ -703,13 +599,9 @@ $(document).ready(function () {
           document.getElementById("bbps-mobile-prepaid-form").reset();
         } else {
           $("#bbps-mobile-prepaid-btn").prop("disabled", false);
-          $("#mobile-prepaid-loader").html(
-            '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-            data["msg"] +
-            "</div>"
-          );
+          $("#mobile-prepaid-loader").html('<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + data["msg"] + "</div>");
         }
-      }
+      },
     });
   });
 
@@ -718,12 +610,7 @@ $(document).ready(function () {
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        3,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 3,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#mobilepostpaid-form-block").html(data["str"]);
@@ -732,18 +619,14 @@ $(document).ready(function () {
         } else {
           $("#mobile-postpaid-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbps-mobile-postpaid-btn").click(function () {
     $(this).prop("disabled", true);
     var siteUrl = $("#siteUrl").val();
-    $("#mobile-postpaid-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#mobile-postpaid-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var str = $("#bbps-mobile-postpaid-form").serialize();
     $.ajax({
       type: "POST",
@@ -757,32 +640,19 @@ $(document).ready(function () {
           document.getElementById("bbps-mobile-postpaid-form").reset();
         } else {
           $("#bbps-mobile-postpaid-btn").prop("disabled", false);
-          $("#mobile-postpaid-loader").html(
-            '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-            data["msg"] +
-            "</div>"
-          );
+          $("#mobile-postpaid-loader").html('<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + data["msg"] + "</div>");
         }
-      }
+      },
     });
   });
 
   $("#bbpsElectricityOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#electricity-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#electricity-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        4,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 4,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#electricity-loader").html("");
@@ -793,18 +663,14 @@ $(document).ready(function () {
         } else {
           $("#electricity-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbps-electricity-btn").click(function () {
     $(this).prop("disabled", true);
     var siteUrl = $("#siteUrl").val();
-    $("#electricity-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#electricity-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var str = $("#bbps-electricity-form").serialize();
     $.ajax({
       type: "POST",
@@ -818,32 +684,19 @@ $(document).ready(function () {
           document.getElementById("bbps-electricity-form").reset();
         } else {
           $("#bbps-electricity-btn").prop("disabled", false);
-          $("#electricity-loader").html(
-            '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-            data["msg"] +
-            "</div>"
-          );
+          $("#electricity-loader").html('<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + data["msg"] + "</div>");
         }
-      }
+      },
     });
   });
 
   $("#bbpsDTHOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#dth-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#dth-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        1,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 1,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#dth-loader").html("");
@@ -854,18 +707,14 @@ $(document).ready(function () {
         } else {
           $("#dth-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbps-dth-btn").click(function () {
     $(this).prop("disabled", true);
     var siteUrl = $("#siteUrl").val();
-    $("#dth-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#dth-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var str = $("#bbps-dth-form").serialize();
     $.ajax({
       type: "POST",
@@ -879,32 +728,19 @@ $(document).ready(function () {
           document.getElementById("bbps-dth-form").reset();
         } else {
           $("#bbps-dth-btn").prop("disabled", false);
-          $("#dth-loader").html(
-            '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-            data["msg"] +
-            "</div>"
-          );
+          $("#dth-loader").html('<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + data["msg"] + "</div>");
         }
-      }
+      },
     });
   });
 
   $("#bbpsBroadbandPostpaidOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#boradband-postpaid-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#boradband-postpaid-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        8,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 8,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#boradband-postpaid-loader").html("");
@@ -915,26 +751,17 @@ $(document).ready(function () {
         } else {
           $("#boradband-postpaid-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsLandlinePostpaidOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#landline-postpaid-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#landline-postpaid-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        2,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 2,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#landline-postpaid-loader").html("");
@@ -945,26 +772,17 @@ $(document).ready(function () {
         } else {
           $("#landline-postpaid-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsWaterOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#water-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#water-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        7,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 7,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#water-loader").html("");
@@ -975,26 +793,17 @@ $(document).ready(function () {
         } else {
           $("#water-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsGasOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#gas-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#gas-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        6,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 6,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#gas-loader").html("");
@@ -1005,26 +814,17 @@ $(document).ready(function () {
         } else {
           $("#gas-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsLPGGasOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#lpg-gas-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#lpg-gas-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        11,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 11,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#lpg-gas-loader").html("");
@@ -1035,26 +835,17 @@ $(document).ready(function () {
         } else {
           $("#lpg-gas-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsLoanOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#loan-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#loan-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        17,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 17,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#loan-loader").html("");
@@ -1065,26 +856,17 @@ $(document).ready(function () {
         } else {
           $("#loan-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsInsuranceOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#insurance-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#insurance-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        5,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 5,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#insurance-loader").html("");
@@ -1095,26 +877,17 @@ $(document).ready(function () {
         } else {
           $("#insurance-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsEmiPaymentOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#emi-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#emi-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        10,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 10,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#emi-loader").html("");
@@ -1125,26 +898,17 @@ $(document).ready(function () {
         } else {
           $("#emi-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsFastagOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#fastag-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#fastag-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        12,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 12,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#fastag-loader").html("");
@@ -1155,26 +919,17 @@ $(document).ready(function () {
         } else {
           $("#fastag-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsCableOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#cable-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#cable-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        9,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 9,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#cable-loader").html("");
@@ -1185,26 +940,17 @@ $(document).ready(function () {
         } else {
           $("#cable-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsHousingSocietyOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#housing-society-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#housing-society-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        17,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 17,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#housing-society-loader").html("");
@@ -1215,26 +961,17 @@ $(document).ready(function () {
         } else {
           $("#housing-society-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsMunicipalTaxesOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#municipal-taxes-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#municipal-taxes-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        18,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 18,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#municipal-taxes-loader").html("");
@@ -1245,26 +982,17 @@ $(document).ready(function () {
         } else {
           $("#municipal-taxes-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsMunicipalServicesOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#municipal-services-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#municipal-services-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        13,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 13,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#municipal-services-loader").html("");
@@ -1275,26 +1003,17 @@ $(document).ready(function () {
         } else {
           $("#municipal-services-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsSubscriptionOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#subscription-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#subscription-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        20,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 20,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#subscription-loader").html("");
@@ -1305,26 +1024,17 @@ $(document).ready(function () {
         } else {
           $("#subscription-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsHospitalOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#hospital-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#hospital-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        19,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 19,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#hospital-loader").html("");
@@ -1335,26 +1045,17 @@ $(document).ready(function () {
         } else {
           $("#hospital-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsCreditCardOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#credit-card-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#credit-card-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        22,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 22,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#credit-card-loader").html("");
@@ -1365,26 +1066,17 @@ $(document).ready(function () {
         } else {
           $("#credit-card-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsEntertainmentOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#entertainment-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#entertainment-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        9,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 9,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#entertainment-loader").html("");
@@ -1395,26 +1087,17 @@ $(document).ready(function () {
         } else {
           $("#entertainment-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsTravelOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#travel-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#travel-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        21,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 21,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#travel-loader").html("");
@@ -1425,26 +1108,17 @@ $(document).ready(function () {
         } else {
           $("#travel-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
   $("#bbpsClubOperator").change(function () {
     var siteUrl = $("#siteUrl").val();
-    $("#club-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#club-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var billerID = $(this).val();
     $.ajax({
       type: "POST",
-      url:
-        siteUrl +
-        "retailer/bbps/checkOperatorFetchOption/" +
-        billerID +
-        "/" +
-        24,
+      url: siteUrl + "retailer/bbps/checkOperatorFetchOption/" + billerID + "/" + 24,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         $("#club-loader").html("");
@@ -1455,7 +1129,7 @@ $(document).ready(function () {
         } else {
           $("#club-fetch-block").css("display", "none");
         }
-      }
+      },
     });
   });
 
@@ -1474,7 +1148,7 @@ $(document).ready(function () {
             $("#ben_account_no").val("");
             $("#ben_ifsc").val("");
           }
-        }
+        },
       });
     }
   });
@@ -1487,11 +1161,7 @@ function fetchMobilePostpaidBill() {
     return false;
   } else {
     var siteUrl = $("#siteUrl").val();
-    $("#mobile-postpaid-loader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#mobile-postpaid-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var str = $("#bbps-mobile-postpaid-form").serialize();
     $.ajax({
       type: "POST",
@@ -1506,18 +1176,14 @@ function fetchMobilePostpaidBill() {
           $("#mobile-postpaid-amount").val(data["amount"]);
           $("#mobile-postpaid-loader").html("");
         }
-      }
+      },
     });
   }
 }
 
 function fetchElectricityBill() {
   var siteUrl = $("#siteUrl").val();
-  $("#electricity-loader").html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/admin/images/large-loading.gif' width='100' /></center>"
-  );
+  $("#electricity-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
   var str = $("#bbps-electricity-form").serialize();
   $.ajax({
     type: "POST",
@@ -1529,9 +1195,7 @@ function fetchElectricityBill() {
         $("#electricity-amount").val(data["amount"]);
         $("#electricity-loader").html("");
         if (data["accountHolderName"] != "") {
-          $("#electricity-account-holder-name").html(
-            "<b>Account Holder Name - " + data["accountHolderName"] + "</b>"
-          );
+          $("#electricity-account-holder-name").html("<b>Account Holder Name - " + data["accountHolderName"] + "</b>");
         } else {
           $("#electricity-account-holder-name").html("");
         }
@@ -1540,17 +1204,13 @@ function fetchElectricityBill() {
         $("#electricity-loader").html("");
         $("#electricity-account-holder-name").html("");
       }
-    }
+    },
   });
 }
 
 function fetchDTHBill() {
   var siteUrl = $("#siteUrl").val();
-  $("#dth-loader").html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/admin/images/large-loading.gif' width='100' /></center>"
-  );
+  $("#dth-loader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
   var str = $("#bbps-dth-form").serialize();
   $.ajax({
     type: "POST",
@@ -1562,9 +1222,7 @@ function fetchDTHBill() {
         $("#dth-amount").val(data["amount"]);
         $("#dth-loader").html("");
         if (data["accountHolderName"] != "") {
-          $("#dth-account-holder-name").html(
-            "<b>Account Holder Name - " + data["accountHolderName"] + "</b>"
-          );
+          $("#dth-account-holder-name").html("<b>Account Holder Name - " + data["accountHolderName"] + "</b>");
         } else {
           $("#dth-account-holder-name").html("");
         }
@@ -1573,7 +1231,7 @@ function fetchDTHBill() {
         $("#dth-loader").html("");
         $("#dth-account-holder-name").html("");
       }
-    }
+    },
   });
 }
 
@@ -1692,11 +1350,7 @@ function fetchMasterBill(service_id) {
   // 	var accountHolderName = 'club-account-holder-name';
   // }
   var siteUrl = $("#siteUrl").val();
-  $("#" + loaderID).html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/admin/images/large-loading.gif' width='100' /></center>"
-  );
+  $("#" + loaderID).html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
   var str = $("#" + formID).serialize();
   $.ajax({
     type: "POST",
@@ -1708,9 +1362,7 @@ function fetchMasterBill(service_id) {
         $("#" + amountID).val(data["amount"]);
         $("#" + loaderID).html("");
         if (data["accountHolderName"] != "") {
-          $("#" + accountHolderName).html(
-            "<b>Account Holder Name - " + data["accountHolderName"] + "</b>"
-          );
+          $("#" + accountHolderName).html("<b>Account Holder Name - " + data["accountHolderName"] + "</b>");
         } else {
           $("#" + accountHolderName).html("");
         }
@@ -1719,7 +1371,7 @@ function fetchMasterBill(service_id) {
         $("#" + loaderID).html("");
         $("#" + accountHolderName).html("");
       }
-    }
+    },
   });
 }
 
@@ -1821,11 +1473,7 @@ function payMasterBill(service_id) {
   // }
   $("#" + btnID).prop("disabled", true);
   var siteUrl = $("#siteUrl").val();
-  $("#" + loaderID).html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/admin/images/large-loading.gif' width='100' /></center>"
-  );
+  $("#" + loaderID).html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
   var str = $("#" + formID).serialize();
   $.ajax({
     type: "POST",
@@ -1839,13 +1487,9 @@ function payMasterBill(service_id) {
         document.getElementById(formID).reset();
       } else {
         $("#" + btnID).prop("disabled", false);
-        $("#" + loaderID).html(
-          '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-          data["msg"] +
-          "</div>"
-        );
+        $("#" + loaderID).html('<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + data["msg"] + "</div>");
       }
-    }
+    },
   });
 }
 
@@ -1860,11 +1504,9 @@ function updatedmrModel(id) {
         $("#updateDMRModel").modal("show");
         $("#updateDMRBlock").html(data["str"]);
       } else {
-        $("#updateDMRBlock").html(
-          '<font color="red">' + data["msg"] + "</font>"
-        );
+        $("#updateDMRBlock").html('<font color="red">' + data["msg"] + "</font>");
       }
-    }
+    },
   });
 }
 
@@ -1879,22 +1521,16 @@ function updateaepsModel(id) {
         $("#updateDMRModel").modal("show");
         $("#updateDMRBlock").html(data["str"]);
       } else {
-        $("#updateDMRBlock").html(
-          '<font color="red">' + data["msg"] + "</font>"
-        );
+        $("#updateDMRBlock").html('<font color="red">' + data["msg"] + "</font>");
       }
-    }
+    },
   });
 }
 
 function showOfferModal() {
   var siteUrl = $("#siteUrl").val();
   $("#offerModal").modal("show");
-  $("#offerLoader").html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/admin/images/large-loading.gif' width='200' /></center>"
-  );
+  $("#offerLoader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='200' /></center>");
   var str = $("#offerFilterForm").serialize();
   $.ajax({
     type: "POST",
@@ -1905,11 +1541,9 @@ function showOfferModal() {
       if (data["status"] == 1) {
         $("#offerLoader").html(data["str"]);
       } else {
-        $("#offerLoader").html(
-          '<center><font color="red">' + data["msg"] + "</font></center>"
-        );
+        $("#offerLoader").html('<center><font color="red">' + data["msg"] + "</font></center>");
       }
-    }
+    },
   });
 }
 
@@ -1918,15 +1552,9 @@ function showDTHOfferModal() {
   var cardNumber = $("#cardNumber").val();
   var operator = $("#operator").val();
   if (cardNumber == "" || operator == "") {
-    $("#customerInfoLoader").html(
-      '<font color="red">Please Select Operator and Card Number.</font>'
-    );
+    $("#customerInfoLoader").html('<font color="red">Please Select Operator and Card Number.</font>');
   } else {
-    $("#customerInfoLoader").html(
-      "<center><img src='" +
-      siteUrl +
-      "skin/admin/images/large-loading.gif' width='100' /></center>"
-    );
+    $("#customerInfoLoader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
     var str = $("#admin_profile").serialize();
     $.ajax({
       type: "POST",
@@ -1938,15 +1566,11 @@ function showDTHOfferModal() {
           $("#customerInfoLoader").html("");
           $("#customerName").val(data["customerName"]);
           $("#amount").val(data["monthlyRechargeAmount"]);
-          $("#balanceInfo").html(
-            "Available Balance - &#8377; " + data["balance"]
-          );
+          $("#balanceInfo").html("Available Balance - &#8377; " + data["balance"]);
         } else {
-          $("#customerInfoLoader").html(
-            '<font color="red">' + data["msg"] + "</font>"
-          );
+          $("#customerInfoLoader").html('<font color="red">' + data["msg"] + "</font>");
         }
-      }
+      },
     });
   }
 }
@@ -1959,11 +1583,7 @@ function offerAmountPick(amount) {
 function showROfferModal() {
   var siteUrl = $("#siteUrl").val();
   $("#rofferModal").modal("show");
-  $("#rofferLoader").html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/admin/images/large-loading.gif' width='200' /></center>"
-  );
+  $("#rofferLoader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='200' /></center>");
   var str = $("#rofferFilterForm").serialize();
   $.ajax({
     type: "POST",
@@ -1974,11 +1594,9 @@ function showROfferModal() {
       if (data["status"] == 1) {
         $("#rofferLoader").html(data["str"]);
       } else {
-        $("#rofferLoader").html(
-          '<center><font color="red">' + data["msg"] + "</font></center>"
-        );
+        $("#rofferLoader").html('<center><font color="red">' + data["msg"] + "</font></center>");
       }
-    }
+    },
   });
 }
 
@@ -1987,11 +1605,7 @@ function showDTHROfferModal() {
   $("#rofferModal").modal("show");
   var cardNumber = $("#cardNumber").val();
   $("#roffermobile").val(cardNumber);
-  $("#rofferLoader").html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/admin/images/large-loading.gif' width='200' /></center>"
-  );
+  $("#rofferLoader").html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='200' /></center>");
   var str = $("#rofferFilterForm").serialize();
   $.ajax({
     type: "POST",
@@ -2002,11 +1616,9 @@ function showDTHROfferModal() {
       if (data["status"] == 1) {
         $("#rofferLoader").html(data["str"]);
       } else {
-        $("#rofferLoader").html(
-          '<center><font color="red">' + data["msg"] + "</font></center>"
-        );
+        $("#rofferLoader").html('<center><font color="red">' + data["msg"] + "</font></center>");
       }
-    }
+    },
   });
 }
 
@@ -2025,19 +1637,13 @@ function showComplainBox(id) {
       if (data["status"] == 1) {
         $("#recordID").val(id);
         $("#updateComplainModel").modal("show");
-        $("#complainRchgID").html(
-          "<p><b>Recharge ID - " + data["txnid"] + "</b></p>"
-        );
-        $("#complainAmount").html(
-          "<p><b>Amount - " + data["amount"] + "</b></p>"
-        );
+        $("#complainRchgID").html("<p><b>Recharge ID - " + data["txnid"] + "</b></p>");
+        $("#complainAmount").html("<p><b>Amount - " + data["amount"] + "</b></p>");
         $("#complainMsgBlock").html("");
       } else {
-        $("#complainMsgBlock").html(
-          '<font color="red">' + data["msg"] + "</font>"
-        );
+        $("#complainMsgBlock").html('<font color="red">' + data["msg"] + "</font>");
       }
-    }
+    },
   });
 }
 
@@ -2050,19 +1656,13 @@ function showBBPSComplainBox(id) {
       if (data["status"] == 1) {
         $("#recordID").val(id);
         $("#updateComplainModel").modal("show");
-        $("#complainRchgID").html(
-          "<p><b>Recharge ID - " + data["txnid"] + "</b></p>"
-        );
-        $("#complainAmount").html(
-          "<p><b>Amount - " + data["amount"] + "</b></p>"
-        );
+        $("#complainRchgID").html("<p><b>Recharge ID - " + data["txnid"] + "</b></p>");
+        $("#complainAmount").html("<p><b>Amount - " + data["amount"] + "</b></p>");
         $("#complainMsgBlock").html("");
       } else {
-        $("#complainMsgBlock").html(
-          '<font color="red">' + data["msg"] + "</font>"
-        );
+        $("#complainMsgBlock").html('<font color="red">' + data["msg"] + "</font>");
       }
-    }
+    },
   });
 }
 
@@ -2077,11 +1677,9 @@ function updateBenModel(id) {
         $("#updateDMRModel").modal("show");
         $("#updateDMRBlock").html(data["str"]);
       } else {
-        $("#updateDMRBlock").html(
-          '<font color="red">' + data["msg"] + "</font>"
-        );
+        $("#updateDMRBlock").html('<font color="red">' + data["msg"] + "</font>");
       }
-    }
+    },
   });
 }
 
@@ -2095,11 +1693,9 @@ function showAepsModal(id) {
         $("#updateDMRModel").modal("show");
         $("#updateDMRBlock").html(data["str"]);
       } else {
-        $("#updateDMRBlock").html(
-          '<font color="red">' + data["msg"] + "</font>"
-        );
+        $("#updateDMRBlock").html('<font color="red">' + data["msg"] + "</font>");
       }
-    }
+    },
   });
 }
 
@@ -2107,13 +1703,9 @@ function dmtVerifyIfsc() {
   var siteUrl = $("#siteUrl").val();
   var ifsc = $("#ifsc").val();
   if (ifsc == "") {
-    $(".ifsc-vefify-loader").html(
-      '<font color="red">Please enter IFSC.</font>'
-    );
+    $(".ifsc-vefify-loader").html('<font color="red">Please enter IFSC.</font>');
   } else {
-    $(".ifsc-vefify-loader").html(
-      "<img src='" + siteUrl + "skin/admin/images/small-loading.gif' />"
-    );
+    $(".ifsc-vefify-loader").html("<img src='" + siteUrl + "skin/admin/images/small-loading.gif' />");
     $.ajax({
       type: "POST",
       url: siteUrl + "retailer/dmt/verifyIfscCode/" + ifsc,
@@ -2138,11 +1730,9 @@ function dmtVerifyIfsc() {
             "</th></tr></table>"
           );
         } else {
-          $(".ifsc-vefify-loader").html(
-            '<font color="red">' + data["message"] + "</font>"
-          );
+          $(".ifsc-vefify-loader").html('<font color="red">' + data["message"] + "</font>");
         }
-      }
+      },
     });
   }
 }
@@ -2151,30 +1741,30 @@ function dmtVerifyIfsc() {
 $("#accountVerifyBtn").click(function () {
   var siteUrl = $("#siteUrl").val();
   var str = $("#account_verify_form").serialize();
-  $('#loader').show();
+  $("#loader").show();
   $.ajax({
     type: "POST",
     url: siteUrl + "retailer/bank/verifyAuth",
     data: str,
     dataType: "json",
     success: function (obj) {
-      $('#loader').hide();
-      $('.error').html('');
-      $('#benAlert').removeClass('show').addClass('hide').html('');
+      $("#loader").hide();
+      $(".error").html("");
+      $("#benAlert").removeClass("show").addClass("hide").html("");
       if (obj.error && obj.errors) {
         $.each(obj.errors, function (key, value) {
-          $('#' + key + '_error').html(value);
+          $("#" + key + "_error").html(value);
         });
       } else if (obj.error) {
-        $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
+        $("#benAlert").removeClass("hide alert-success").addClass("show alert-danger");
         if (obj.error && obj.apiresponse === "yes") {
-          $('#benAlert').html(`<b><strong>Error : </strong>(${obj.dataval.statuscode} - ${obj.dataval.statuscodemessage})</b>`);
+          $("#benAlert").html(`<b><strong>Error : </strong>(${obj.dataval.statuscode} - ${obj.dataval.statuscodemessage})</b>`);
         } else {
-          $('#benAlert').html(`<b><strong>Error : </strong>${obj.dataval}</b>`);
+          $("#benAlert").html(`<b><strong>Error : </strong>${obj.dataval}</b>`);
         }
         setTimeout(function () {
-          $('#benAlert').removeClass('show').addClass('hide');
-          $('#benAlert').empty();
+          $("#benAlert").removeClass("show").addClass("hide");
+          $("#benAlert").empty();
         }, 5000);
       } else {
         $("#account_holder_name").val(obj.account_holder_name);
@@ -2183,23 +1773,23 @@ $("#accountVerifyBtn").click(function () {
       }
     },
     error: function (xhr, status, error) {
-      $('#loader').hide();
+      $("#loader").hide();
       console.log("AJAX error: " + error);
-      $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger').html("An error occurred. Please try again.");
-    }
+      $("#benAlert").removeClass("hide alert-success").addClass("show alert-danger").html("An error occurred. Please try again.");
+    },
   });
 });
 
-$('#addBeneficiaryBtn').click(function (e) {
+$("#addBeneficiaryBtn").click(function (e) {
   e.preventDefault();
 
   // Serialize form data and prepare variables
-  var formData = $('#verify_beneficary_addon_form').serialize();
-  var dbTableName = $('#dbTableName').val();
+  var formData = $("#verify_beneficary_addon_form").serialize();
+  var dbTableName = $("#dbTableName").val();
   var actionUrl = "";
-  var siteUrl = $('#siteUrl').val();
+  var siteUrl = $("#siteUrl").val();
   const $button = $(this);
-  const $spinner = $button.find('.spinner-border');
+  const $spinner = $button.find(".spinner-border");
 
   if (dbTableName === "user_benificary") {
     actionUrl = siteUrl + "retailer/transfer/beneficiaryAuth";
@@ -2208,8 +1798,8 @@ $('#addBeneficiaryBtn').click(function (e) {
   }
 
   $spinner.show();
-  $button.prop('disabled', true);
-  $('.btnDisabled').prop('disabled', true);
+  $button.prop("disabled", true);
+  $(".btnDisabled").prop("disabled", true);
 
   $.ajax({
     url: actionUrl,
@@ -2219,71 +1809,81 @@ $('#addBeneficiaryBtn').click(function (e) {
     success: function (response) {
       if (response.error) {
         $spinner.hide();
-        $button.prop('disabled', false);
-        $('.btnDisabled').prop('disabled', false);
-        $('.benAddonMsg').html(`<strong>Error: </strong>${response.dataval}`);
+        $button.prop("disabled", false);
+        $(".btnDisabled").prop("disabled", false);
+        $(".benAddonMsg").html(`<strong>Error: </strong>${response.dataval}`);
       } else {
-        $('#verify_beneficary_addon_form')[0].reset();
-        $('.benAddonMsg').html(`<strong>Success: </strong>${response.dataval}`);
-        $button.prop('disabled', false);
-        $('.btnDisabled').prop('disabled', false);
+        $("#verify_beneficary_addon_form")[0].reset();
+        $(".benAddonMsg").html(`<strong>Success: </strong>${response.dataval}`);
+        $button.prop("disabled", false);
+        $(".btnDisabled").prop("disabled", false);
         setTimeout(function () {
-          $('.benAddonMsg').html("");
-          $('.benAddonMsg').empty();
+          $(".benAddonMsg").html("");
+          $(".benAddonMsg").empty();
           location.reload();
         }, 5000);
       }
-
     },
     error: function (xhr, status, error) {
       $spinner.hide();
-      $button.prop('disabled', false);
-      $('.btnDisabled').prop('disabled', false);
-      console.log('AJAX Error: ' + error);
-      $('.benAddonMsg').html(`<strong>Error: </strong>Failed to add beneficiary. Please try again.`);
+      $button.prop("disabled", false);
+      $(".btnDisabled").prop("disabled", false);
+      console.log("AJAX Error: " + error);
+      $(".benAddonMsg").html(`<strong>Error: </strong>Failed to add beneficiary. Please try again.`);
       setTimeout(function () {
-        $('.benAddonMsg').empty();
+        $(".benAddonMsg").empty();
       }, 5000);
-    }
+    },
   });
 });
 
-
-// $("#upiVerifyBtn").click(function () {
+// $("#accountUpiVerifyBtn").click(function () {
 //   var siteUrl = $("#siteUrl").val();
-//   $(".ajaxx-loader").html(
-//     "<center><img src='" +
-//     siteUrl +
-//     "skin/images/large-loading.gif' alt='loading' width='100' /></center>"
-//   );
 //   var str = $("#upi_verify_form").serialize();
+//   $(".ajaxx-loader").html("<center><img src='" + siteUrl + "skin/images/large-loading.gif' alt='loading' width='100' /></center>");
 //   $.ajax({
 //     type: "POST",
 //     url: siteUrl + "retailer/bank/upiVerifyAuth",
 //     data: str,
-//     success: function (r) {
-//       var data = JSON.parse($.trim(r));
-//       if (data["status"] == 1) {
-//         $(".ajaxx-loader").html("");
-//         $("#upi_account_holder_name").val(data["upi_account_holder_name"]);
-//         $("#bankUpiModal").modal("show");
-//         $("#bankUpiResponse").html(data["msg"]);
+//     dataType: "json",
+//     success: function (obj) {
+//       $(".ajaxx-loader").html("");
+//       $(".error").html("");
+//       $("#benAlert").removeClass("show").addClass("hide").html("");
+//       if (obj.error && obj.errors) {
+//         $.each(obj.errors, function (key, value) {
+//           $("#" + key + "_error").html(value);
+//         });
+//       } else if (obj.error) {
+//         $("#benAlert").removeClass("hide alert-success").addClass("show alert-danger");
+//         if (obj.error && obj.apiresponse === "yes") {
+//           $("#benAlert").html(`<b><strong>Error : </strong>(${obj.dataval.statuscode} - ${obj.dataval.statuscodemessage})</b>`);
+//         } else {
+//           $("#benAlert").html(`<b><strong>Error : </strong>${obj.dataval}</b>`);
+//         }
+//         setTimeout(function () {
+//           $("#benAlert").removeClass("show").addClass("hide");
+//           $("#benAlert").empty();
+//         }, 5000);
 //       } else {
-//         $(".ajaxx-loader").html(
-//           '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-//           data["msg"] +
-//           "</div>"
-//         );
+//         $("#account_holder_name").val(obj.account_holder_name);
+//         $("#bankUpiModal").modal("show");
+//         $("#bankResponse").html(obj.dataval);
 //       }
-//     }
+//     },
+//     error: function (xhr, status, error) {
+//       $(".ajaxx-loader").html("");
+//       console.log("AJAX error: " + error);
+//       $("#benAlert").removeClass("hide alert-success").addClass("show alert-danger").html("An error occurred. Please try again.");
+//     },
 //   });
 // });
 
 /** Money Transfer1 UPI Beneficiary Wroks*/
-$('#saveMT1UpiBeneficiaryBtn').click(function (e) {
+$("#saveMT1UpiBeneficiaryBtn").click(function (e) {
   e.preventDefault();
-  var formData = $('#upi_verify_form').serialize();
-  var siteUrl = $('#siteUrl').val();
+  var formData = $("#upi_verify_form").serialize();
+  var siteUrl = $("#siteUrl").val();
   $.ajax({
     url: siteUrl + "retailer/transfer/upiOpenPayoutBenificaryAuth",
     type: "POST",
@@ -2291,83 +1891,81 @@ $('#saveMT1UpiBeneficiaryBtn').click(function (e) {
     dataType: "json",
     success: function (response) {
       // Clear previous errors and success messages
-      $('.error').html('');
-      $('#benAlert').removeClass('show').addClass('hide').html('');
+      $(".error").html("");
+      $("#benAlert").removeClass("show").addClass("hide").html("");
       if (response.error && response.errors) {
         // Display validation errors
         $.each(response.errors, function (key, value) {
-          $('#' + key + '_error').html(value);
+          $("#" + key + "_error").html(value);
         });
       } else if (response.error) {
-        $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
-        $('#benAlert').html(`<strong>Error: </strong>${response.dataval}`);
+        $("#benAlert").removeClass("hide alert-success").addClass("show alert-danger");
+        $("#benAlert").html(`<strong>Error: </strong>${response.dataval}`);
         setTimeout(function () {
-          $('#benAlert').removeClass('show').addClass('hide');
-          $('#benAlert').empty();
+          $("#benAlert").removeClass("show").addClass("hide");
+          $("#benAlert").empty();
         }, 3000);
       } else {
-        $('#upi_verify_form')[0].reset();
-        $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
-        $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
+        $("#upi_verify_form")[0].reset();
+        $("#benAlert").removeClass("hide alert-danger").addClass("show alert-success");
+        $("#benAlert").html(`<strong>Success: </strong>${response.dataval}`);
         setTimeout(function () {
-          $('#benAlert').removeClass('show').addClass('hide');
-          $('#benAlert').empty();
+          $("#benAlert").removeClass("show").addClass("hide");
+          $("#benAlert").empty();
           location.reload();
         }, 3000);
       }
     },
     error: function (xhr, status, error) {
-      console.log('AJAX Error: ' + error);
-    }
+      console.log("AJAX Error: " + error);
+    },
   });
 });
 var delm1UpiBeneficiaryId;
-$('.benm1UpiDeletebtn').click(function (e) {
+$(".benm1UpiDeletebtn").click(function (e) {
   e.preventDefault();
-  delm1UpiBeneficiaryId = $(this).attr('benm1UpiDeleteID');
+  delm1UpiBeneficiaryId = $(this).attr("benm1UpiDeleteID");
 });
 
-$('#confirmUpiDeletem1').click(function () {
-  var benDeleteUrl = siteUrl + `retailer/transfer/deleteBeneficiary/${delm1UpiBeneficiaryId}`;
+$("#confirmUpiDeletem1").click(function () {
+  var benDeleteUrl = siteUrl + `retailer/transfer/deleteM1UpiBeneficiary/${delm1UpiBeneficiaryId}`;
   $.ajax({
     url: benDeleteUrl,
     type: "POST",
     dataType: "json",
     success: function (response) {
-      $('.error').html('');
-      $('#benAlert').removeClass('show').addClass('hide').html('');
-      $('#confirmModal').modal('hide');
+      $(".error").html("");
+      $("#benAlert").removeClass("show").addClass("hide").html("");
+      $("#confirmModal").modal("hide");
       if (response.error) {
-        $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
-        $('#benAlert').html(`<strong>Error: </strong>${response.dataval}`);
+        $("#benAlert").removeClass("hide alert-success").addClass("show alert-danger");
+        $("#benAlert").html(`<strong>Error: </strong>${response.dataval}`);
         setTimeout(function () {
-          $('#benAlert').removeClass('show').addClass('hide');
-          $('#benAlert').empty();
+          $("#benAlert").removeClass("show").addClass("hide");
+          $("#benAlert").empty();
         }, 3000);
       } else {
-        $('#account_verify_form')[0].reset();
-        $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
-        $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
+        $("#benAlert").removeClass("hide alert-danger").addClass("show alert-success");
+        $("#benAlert").html(`<strong>Success: </strong>${response.dataval}`);
         setTimeout(function () {
-          $('#benAlert').removeClass('show').addClass('hide');
-          $('#benAlert').empty();
+          $("#benAlert").removeClass("show").addClass("hide");
+          $("#benAlert").empty();
           location.reload();
         }, 3000);
       }
     },
     error: function (xhr, status, error) {
-      console.log('AJAX Error: ' + error);
-    }
+      console.log("AJAX Error: " + error);
+    },
   });
-
 });
 
 //Update Ben Money Transfer 1 UPI Benificary Details :
-$('#saveBenM1UpiChanges').click(function (e) {
+$("#saveBenM1UpiChanges").click(function (e) {
   e.preventDefault();
 
-  var formData = $('#updateBenM1UpiData').serialize();
-  var siteUrl = $('#siteUrl').val();
+  var formData = $("#updateBenM1UpiData").serialize();
+  var siteUrl = $("#siteUrl").val();
 
   $.ajax({
     url: siteUrl + "retailer/transfer/updateUpiBenificaryAuth",
@@ -2375,38 +1973,34 @@ $('#saveBenM1UpiChanges').click(function (e) {
     data: formData,
     dataType: "json",
     success: function (obj) {
-
       if (obj.error && obj.errors) {
         $.each(obj.errors, function (key, value) {
-          $('#' + key + '_error').html(value);
-
+          $("#" + key + "_error").html(value);
         });
       } else if (obj.error) {
-        $('#updateBenUpiAlert').removeClass('hide alert-success').addClass('show alert-danger');
-        $('#updateBenUpiAlert').html(`<strong>Error: </strong>${obj.dataval}`);
+        $("#updateBenUpiAlert").removeClass("hide alert-success").addClass("show alert-danger");
+        $("#updateBenUpiAlert").html(`<strong>Error: </strong>${obj.dataval}`);
         setTimeout(function () {
-          $('#updateBenUpiAlert').removeClass('show').addClass('hide');
-          $('#updateBenUpiAlert').empty();
+          $("#updateBenUpiAlert").removeClass("show").addClass("hide");
+          $("#updateBenUpiAlert").empty();
         }, 3000);
       } else {
-        $('#account_verify_form')[0].reset();
-        $('#updateBenUpiAlert').removeClass('hide alert-danger').addClass('show alert-success');
-        $('#updateBenUpiAlert').html(`<strong>Success: </strong>${obj.dataval}`);
+        $("#updateBenM1UpiData")[0].reset();
+        $("#updateBenUpiAlert").removeClass("hide alert-danger").addClass("show alert-success");
+        $("#updateBenUpiAlert").html(`<strong>Success: </strong>${obj.dataval}`);
         setTimeout(function () {
-          $('#updateBenUpiAlert').removeClass('show').addClass('hide');
-          $('#updateBenUpiAlert').empty();
+          $("#updateBenUpiAlert").removeClass("show").addClass("hide");
+          $("#updateBenUpiAlert").empty();
           location.reload();
         }, 3000);
       }
     },
     error: function (xhr, status, error) {
-      console.log('AJAX Error: ' + error);
-    }
+      console.log("AJAX Error: " + error);
+    },
   });
 });
-
-///////////////
-
+/**----------------------------------------- */
 $("#selDmtBankID").change(function () {
   var siteUrl = $("#siteUrl").val();
   var billerID = $(this).val();
@@ -2416,7 +2010,7 @@ $("#selDmtBankID").change(function () {
     success: function (r) {
       var data = JSON.parse($.trim(r));
       $("#defaultIfscTxt").val(data["ifsc"]);
-    }
+    },
   });
 });
 
@@ -2433,15 +2027,13 @@ function closeClubNoti(recordID = 0) {
   $.ajax({
     type: "POST",
     url: siteUrl + "retailer/saving/closeClubNotification/" + recordID,
-    success: function (r) { }
+    success: function (r) { },
   });
 }
 
 $("#to_bank").click(function () {
   var siteUrl = $("#siteUrl").val();
-  $(".recharge-comm-loader").html(
-    "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
-  );
+  $(".recharge-comm-loader").html("<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />");
   $.ajax({
     url: siteUrl + "retailer/transfer/getBankBeneficiary",
     success: function (r) {
@@ -2450,19 +2042,15 @@ $("#to_bank").click(function () {
         $(".recharge-comm-loader").html("");
         $("#recharge-comm-block").html(data["str"]);
       } else {
-        $(".recharge-comm-loader").html(
-          '<font color="red">' + data["str"] + "</font>"
-        );
+        $(".recharge-comm-loader").html('<font color="red">' + data["str"] + "</font>");
       }
-    }
+    },
   });
 });
 
 $("#to_upi").click(function () {
   var siteUrl = $("#siteUrl").val();
-  $(".recharge-comm-loader").html(
-    "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
-  );
+  $(".recharge-comm-loader").html("<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />");
   $.ajax({
     url: siteUrl + "retailer/transfer/getUpiBankBeneficiary",
     success: function (r) {
@@ -2471,11 +2059,9 @@ $("#to_upi").click(function () {
         $(".recharge-comm-loader").html("");
         $("#recharge-comm-block").html(data["str"]);
       } else {
-        $(".recharge-comm-loader").html(
-          '<font color="red">' + data["str"] + "</font>"
-        );
+        $(".recharge-comm-loader").html('<font color="red">' + data["str"] + "</font>");
       }
-    }
+    },
   });
 });
 
@@ -2502,7 +2088,7 @@ $("#coupon").keyup(function () {
         } else {
           $("#amount").html(data["amount"]);
         }
-      }
+      },
     });
   }
 });
@@ -2514,11 +2100,7 @@ function payCreditCardBill(service_id) {
 
   $("#" + btnID).prop("disabled", true);
   var siteUrl = $("#siteUrl").val();
-  $("#" + loaderID).html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/admin/images/large-loading.gif' width='100' /></center>"
-  );
+  $("#" + loaderID).html("<center><img src='" + siteUrl + "skin/admin/images/large-loading.gif' width='100' /></center>");
   var str = $("#" + formID).serialize();
   $.ajax({
     type: "POST",
@@ -2532,13 +2114,9 @@ function payCreditCardBill(service_id) {
         document.getElementById(formID).reset();
       } else {
         $("#" + btnID).prop("disabled", false);
-        $("#" + loaderID).html(
-          '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-          data["msg"] +
-          "</div>"
-        );
+        $("#" + loaderID).html('<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + data["msg"] + "</div>");
       }
-    }
+    },
   });
 }
 
@@ -2555,7 +2133,7 @@ function bbpsRecharge() {
         swal({
           title: data["msg"],
           icon: "success",
-          button: "OK!"
+          button: "OK!",
         });
 
         setTimeout(function () {
@@ -2565,22 +2143,20 @@ function bbpsRecharge() {
         swal({
           title: data["msg"],
           icon: "success",
-          button: "OK!"
+          button: "OK!",
         });
 
         setTimeout(function () {
           window.location.replace(siteUrl + "retailer/bbps");
         }, 10000);
       }
-    }
+    },
   });
 }
 
 $("#settlement_to_bank").click(function () {
   var siteUrl = $("#siteUrl").val();
-  $(".recharge-comm-loader").html(
-    "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
-  );
+  $(".recharge-comm-loader").html("<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />");
   $.ajax({
     url: siteUrl + "retailer/settlement/getBankBeneficiary",
     success: function (r) {
@@ -2589,19 +2165,15 @@ $("#settlement_to_bank").click(function () {
         $(".recharge-comm-loader").html("");
         $("#recharge-comm-block").html(data["str"]);
       } else {
-        $(".recharge-comm-loader").html(
-          '<font color="red">' + data["str"] + "</font>"
-        );
+        $(".recharge-comm-loader").html('<font color="red">' + data["str"] + "</font>");
       }
-    }
+    },
   });
 });
 
 $("#settlement_to_upi").click(function () {
   var siteUrl = $("#siteUrl").val();
-  $(".recharge-comm-loader").html(
-    "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
-  );
+  $(".recharge-comm-loader").html("<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />");
   $.ajax({
     url: siteUrl + "retailer/settlement/getUpiBankBeneficiary",
     success: function (r) {
@@ -2610,11 +2182,9 @@ $("#settlement_to_upi").click(function () {
         $(".recharge-comm-loader").html("");
         $("#recharge-comm-block").html(data["str"]);
       } else {
-        $(".recharge-comm-loader").html(
-          '<font color="red">' + data["str"] + "</font>"
-        );
+        $(".recharge-comm-loader").html('<font color="red">' + data["str"] + "</font>");
       }
-    }
+    },
   });
 });
 
@@ -2630,11 +2200,7 @@ $("#settlement_add_upi_account").click(function () {
 
 $("#settlementAccountVerifyBtn").click(function () {
   var siteUrl = $("#siteUrl").val();
-  $(".ajaxx-loader").html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/images/large-loading.gif' alt='loading' width='100' /></center>"
-  );
+  $(".ajaxx-loader").html("<center><img src='" + siteUrl + "skin/images/large-loading.gif' alt='loading' width='100' /></center>");
   var str = $("#account_verify_form").serialize();
   $.ajax({
     type: "POST",
@@ -2649,23 +2215,15 @@ $("#settlementAccountVerifyBtn").click(function () {
         $("#bankModal").modal("show");
         $("#bankResponse").html(data["msg"]);
       } else {
-        $(".ajaxx-loader").html(
-          '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-          data["msg"] +
-          "</div>"
-        );
+        $(".ajaxx-loader").html('<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + data["msg"] + "</div>");
       }
-    }
+    },
   });
 });
 
 $("#settlementUpiVerifyBtn").click(function () {
   var siteUrl = $("#siteUrl").val();
-  $(".ajaxx-loader").html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/images/large-loading.gif' alt='loading' width='100' /></center>"
-  );
+  $(".ajaxx-loader").html("<center><img src='" + siteUrl + "skin/images/large-loading.gif' alt='loading' width='100' /></center>");
   var str = $("#upi_verify_form").serialize();
   $.ajax({
     type: "POST",
@@ -2680,13 +2238,9 @@ $("#settlementUpiVerifyBtn").click(function () {
         $("#bankUpiModal").modal("show");
         $("#bankUpiResponse").html(data["msg"]);
       } else {
-        $(".ajaxx-loader").html(
-          '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-          data["msg"] +
-          "</div>"
-        );
+        $(".ajaxx-loader").html('<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + data["msg"] + "</div>");
       }
-    }
+    },
   });
 });
 
@@ -2716,26 +2270,25 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-
-  $('.moneyTransferdiv').on('click', function (event) {
+  $(".moneyTransferdiv").on("click", function (event) {
     event.preventDefault();
-    $('#moneyTransferModel').modal('show');
+    $("#moneyTransferModel").modal("show");
   });
 
-  $('.settlementMoneyTransferdiv').on('click', function (event) {
+  $(".settlementMoneyTransferdiv").on("click", function (event) {
     event.preventDefault();
-    $('#settlementMoneyTransferModel').modal('show');
+    $("#settlementMoneyTransferModel").modal("show");
   });
 
-  $('.eKycModeldiv').on('click', function (event) {
+  $(".eKycModeldiv").on("click", function (event) {
     event.preventDefault();
-    $('#eKycModel').modal('show');
+    $("#eKycModel").modal("show");
   });
   //Add Bank M1 Benificary
-  $('#saveMT1BeneficiaryBtn').click(function (e) {
+  $("#saveMT1BeneficiaryBtn").click(function (e) {
     e.preventDefault();
-    var formData = $('#account_verify_form').serialize();
-    var siteUrl = $('#siteUrl').val();
+    var formData = $("#account_verify_form").serialize();
+    var siteUrl = $("#siteUrl").val();
 
     $.ajax({
       url: siteUrl + "retailer/transfer/beneficiaryAuth",
@@ -2744,83 +2297,82 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         // Clear previous errors and success messages
-        $('.error').html('');
-        $('#benAlert').removeClass('show').addClass('hide').html('');
+        $(".error").html("");
+        $("#benAlert").removeClass("show").addClass("hide").html("");
         if (response.error && response.errors) {
           // Display validation errors
           $.each(response.errors, function (key, value) {
-            $('#' + key + '_error').html(value);
+            $("#" + key + "_error").html(value);
           });
         } else if (response.error) {
-          $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
-          $('#benAlert').html(`<strong>Error: </strong>${response.dataval}`);
+          $("#benAlert").removeClass("hide alert-success").addClass("show alert-danger");
+          $("#benAlert").html(`<strong>Error: </strong>${response.dataval}`);
           setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide');
-            $('#benAlert').empty();
+            $("#benAlert").removeClass("show").addClass("hide");
+            $("#benAlert").empty();
           }, 3000);
         } else {
-          $('#account_verify_form')[0].reset();
-          $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
-          $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
+          $("#account_verify_form")[0].reset();
+          $("#benAlert").removeClass("hide alert-danger").addClass("show alert-success");
+          $("#benAlert").html(`<strong>Success: </strong>${response.dataval}`);
           setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide');
-            $('#benAlert').empty();
+            $("#benAlert").removeClass("show").addClass("hide");
+            $("#benAlert").empty();
             location.reload();
           }, 3000);
         }
       },
       error: function (xhr, status, error) {
-        console.log('AJAX Error: ' + error);
-      }
+        console.log("AJAX Error: " + error);
+      },
     });
   });
   var delBeneficiaryId;
-  $('.benm1Deletebtn').click(function (e) {
+  $(".benm1Deletebtn").click(function (e) {
     e.preventDefault();
-    delBeneficiaryId = $(this).attr('benm1DeleteID');
+    delBeneficiaryId = $(this).attr("benm1DeleteID");
   });
 
-  $('#confirmDeletem1').click(function () {
+  $("#confirmDeletem1").click(function () {
     var benDeleteUrl = siteUrl + `retailer/transfer/deleteBeneficiary/${delBeneficiaryId}`;
     $.ajax({
       url: benDeleteUrl,
       type: "POST",
       dataType: "json",
       success: function (response) {
-        $('.error').html('');
-        $('#benAlert').removeClass('show').addClass('hide').html('');
-        $('#confirmModal').modal('hide');
+        $(".error").html("");
+        $("#benAlert").removeClass("show").addClass("hide").html("");
+        $("#confirmModal").modal("hide");
         if (response.error) {
-          $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
-          $('#benAlert').html(`<strong>Error: </strong>${response.dataval}`);
+          $("#benAlert").removeClass("hide alert-success").addClass("show alert-danger");
+          $("#benAlert").html(`<strong>Error: </strong>${response.dataval}`);
           setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide');
-            $('#benAlert').empty();
+            $("#benAlert").removeClass("show").addClass("hide");
+            $("#benAlert").empty();
           }, 3000);
         } else {
-          $('#account_verify_form')[0].reset();
-          $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
-          $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
+          $("#account_verify_form")[0].reset();
+          $("#benAlert").removeClass("hide alert-danger").addClass("show alert-success");
+          $("#benAlert").html(`<strong>Success: </strong>${response.dataval}`);
           setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide');
-            $('#benAlert').empty();
+            $("#benAlert").removeClass("show").addClass("hide");
+            $("#benAlert").empty();
             location.reload();
           }, 3000);
         }
       },
       error: function (xhr, status, error) {
-        console.log('AJAX Error: ' + error);
-      }
+        console.log("AJAX Error: " + error);
+      },
     });
-
   });
 
   //Update Ben Money Transfer 1 Benificary Bank Details :
-  $('#saveBenM1Changes').click(function (e) {
+  $("#saveBenM1Changes").click(function (e) {
     e.preventDefault();
 
-    var formData = $('#updateBenM2BankData').serialize();
-    var siteUrl = $('#siteUrl').val();
+    var formData = $("#updateBenM2BankData").serialize();
+    var siteUrl = $("#siteUrl").val();
 
     $.ajax({
       url: siteUrl + "retailer/transfer/updateBenificaryAuth",
@@ -2828,39 +2380,38 @@ $(document).ready(function () {
       data: formData,
       dataType: "json",
       success: function (obj) {
-
         if (obj.error && obj.errors) {
           $.each(obj.errors, function (key, value) {
-            $('#' + key + '_error').html(value);
+            $("#" + key + "_error").html(value);
           });
         } else if (obj.error) {
-          $('#updateBenAlert').removeClass('hide alert-success').addClass('show alert-danger');
-          $('#updateBenAlert').html(`<strong>Error: </strong>${obj.dataval}`);
+          $("#updateBenAlert").removeClass("hide alert-success").addClass("show alert-danger");
+          $("#updateBenAlert").html(`<strong>Error: </strong>${obj.dataval}`);
           setTimeout(function () {
-            $('#updateBenAlert').removeClass('show').addClass('hide');
-            $('#updateBenAlert').empty();
+            $("#updateBenAlert").removeClass("show").addClass("hide");
+            $("#updateBenAlert").empty();
           }, 3000);
         } else {
-          $('#account_verify_form')[0].reset();
-          $('#updateBenAlert').removeClass('hide alert-danger').addClass('show alert-success');
-          $('#updateBenAlert').html(`<strong>Success: </strong>${obj.dataval}`);
+          $("#account_verify_form")[0].reset();
+          $("#updateBenAlert").removeClass("hide alert-danger").addClass("show alert-success");
+          $("#updateBenAlert").html(`<strong>Success: </strong>${obj.dataval}`);
           setTimeout(function () {
-            $('#updateBenAlert').removeClass('show').addClass('hide');
-            $('#updateBenAlert').empty();
+            $("#updateBenAlert").removeClass("show").addClass("hide");
+            $("#updateBenAlert").empty();
             location.reload();
           }, 3000);
         }
       },
       error: function (xhr, status, error) {
-        console.log('AJAX Error: ' + error);
-      }
+        console.log("AJAX Error: " + error);
+      },
     });
   });
 
-  $('#saveBeneficiaryBtn').click(function (e) {
+  $("#saveBeneficiaryBtn").click(function (e) {
     e.preventDefault();
-    var formData = $('#account_verify_form').serialize();
-    var siteUrl = $('#siteUrl').val();
+    var formData = $("#account_verify_form").serialize();
+    var siteUrl = $("#siteUrl").val();
 
     $.ajax({
       url: siteUrl + "retailer/settlement/beneficiaryAuth",
@@ -2869,83 +2420,82 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         // Clear previous errors and success messages
-        $('.error').html('');
-        $('#benAlert').removeClass('show').addClass('hide').html('');
+        $(".error").html("");
+        $("#benAlert").removeClass("show").addClass("hide").html("");
         if (response.error && response.errors) {
           // Display validation errors
           $.each(response.errors, function (key, value) {
-            $('#' + key + '_error').html(value);
+            $("#" + key + "_error").html(value);
           });
         } else if (response.error) {
-          $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
-          $('#benAlert').html(`<strong>Error: </strong>${response.dataval}`);
+          $("#benAlert").removeClass("hide alert-success").addClass("show alert-danger");
+          $("#benAlert").html(`<strong>Error: </strong>${response.dataval}`);
           setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide');
-            $('#benAlert').empty();
+            $("#benAlert").removeClass("show").addClass("hide");
+            $("#benAlert").empty();
           }, 3000);
         } else {
-          $('#account_verify_form')[0].reset();
-          $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
-          $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
+          $("#account_verify_form")[0].reset();
+          $("#benAlert").removeClass("hide alert-danger").addClass("show alert-success");
+          $("#benAlert").html(`<strong>Success: </strong>${response.dataval}`);
           setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide');
-            $('#benAlert').empty();
+            $("#benAlert").removeClass("show").addClass("hide");
+            $("#benAlert").empty();
             location.reload();
           }, 3000);
         }
       },
       error: function (xhr, status, error) {
-        console.log('AJAX Error: ' + error);
-      }
+        console.log("AJAX Error: " + error);
+      },
     });
   });
   var delBeneficiaryId;
-  $('.benm2Deletebtn').click(function (e) {
+  $(".benm2Deletebtn").click(function (e) {
     e.preventDefault();
-    delBeneficiaryId = $(this).attr('benm2DeleteID');
+    delBeneficiaryId = $(this).attr("benm2DeleteID");
   });
 
-  $('#confirmDelete').click(function () {
+  $("#confirmDelete").click(function () {
     var benDeleteUrl = siteUrl + `retailer/settlement/deleteBeneficiary/${delBeneficiaryId}`;
     $.ajax({
       url: benDeleteUrl,
       type: "POST",
       dataType: "json",
       success: function (response) {
-        $('.error').html('');
-        $('#benAlert').removeClass('show').addClass('hide').html('');
-        $('#confirmModal').modal('hide');
+        $(".error").html("");
+        $("#benAlert").removeClass("show").addClass("hide").html("");
+        $("#confirmModal").modal("hide");
         if (response.error) {
-          $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
-          $('#benAlert').html(`<strong>Error: </strong>${response.dataval}`);
+          $("#benAlert").removeClass("hide alert-success").addClass("show alert-danger");
+          $("#benAlert").html(`<strong>Error: </strong>${response.dataval}`);
           setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide');
-            $('#benAlert').empty();
+            $("#benAlert").removeClass("show").addClass("hide");
+            $("#benAlert").empty();
           }, 3000);
         } else {
-          $('#account_verify_form')[0].reset();
-          $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
-          $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
+          $("#account_verify_form")[0].reset();
+          $("#benAlert").removeClass("hide alert-danger").addClass("show alert-success");
+          $("#benAlert").html(`<strong>Success: </strong>${response.dataval}`);
           setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide');
-            $('#benAlert').empty();
+            $("#benAlert").removeClass("show").addClass("hide");
+            $("#benAlert").empty();
             location.reload();
           }, 3000);
         }
       },
       error: function (xhr, status, error) {
-        console.log('AJAX Error: ' + error);
-      }
+        console.log("AJAX Error: " + error);
+      },
     });
-
   });
 
   //Update Ben Money Transfer 2 Benificary Bank Details :
-  $('#saveBenM2Changes').click(function (e) {
+  $("#saveBenM2Changes").click(function (e) {
     e.preventDefault();
 
-    var formData = $('#updateBenM2BankData').serialize();
-    var siteUrl = $('#siteUrl').val();
+    var formData = $("#updateBenM2BankData").serialize();
+    var siteUrl = $("#siteUrl").val();
 
     $.ajax({
       url: siteUrl + "retailer/settlement/updateBenificaryAuth",
@@ -2953,32 +2503,31 @@ $(document).ready(function () {
       data: formData,
       dataType: "json",
       success: function (obj) {
-
         if (obj.error && obj.errors) {
           $.each(obj.errors, function (key, value) {
-            $('#' + key + '_error').html(value);
+            $("#" + key + "_error").html(value);
           });
         } else if (obj.error) {
-          $('#updateBenAlert').removeClass('hide alert-success').addClass('show alert-danger');
-          $('#updateBenAlert').html(`<strong>Error: </strong>${obj.dataval}`);
+          $("#updateBenAlert").removeClass("hide alert-success").addClass("show alert-danger");
+          $("#updateBenAlert").html(`<strong>Error: </strong>${obj.dataval}`);
           setTimeout(function () {
-            $('#updateBenAlert').removeClass('show').addClass('hide');
-            $('#updateBenAlert').empty();
+            $("#updateBenAlert").removeClass("show").addClass("hide");
+            $("#updateBenAlert").empty();
           }, 3000);
         } else {
-          $('#account_verify_form')[0].reset();
-          $('#updateBenAlert').removeClass('hide alert-danger').addClass('show alert-success');
-          $('#updateBenAlert').html(`<strong>Success: </strong>${obj.dataval}`);
+          $("#account_verify_form")[0].reset();
+          $("#updateBenAlert").removeClass("hide alert-danger").addClass("show alert-success");
+          $("#updateBenAlert").html(`<strong>Success: </strong>${obj.dataval}`);
           setTimeout(function () {
-            $('#updateBenAlert').removeClass('show').addClass('hide');
-            $('#updateBenAlert').empty();
+            $("#updateBenAlert").removeClass("show").addClass("hide");
+            $("#updateBenAlert").empty();
             location.reload();
           }, 3000);
         }
       },
       error: function (xhr, status, error) {
-        console.log('AJAX Error: ' + error);
-      }
+        console.log("AJAX Error: " + error);
+      },
     });
   });
 });
@@ -2997,10 +2546,10 @@ function updateBenModel1(id) {
       } else {
         $.each(response.errors, function (key, value) {
           $("#updateBenModel1").modal("show");
-          $('#' + key + '_error').html(value);
+          $("#" + key + "_error").html(value);
         });
       }
-    }
+    },
   });
 }
 
@@ -3018,10 +2567,10 @@ function updateBenModel2(id) {
       } else {
         $.each(response.errors, function (key, value) {
           $("#updateBenModel2").modal("show");
-          $('#' + key + '_error').html(value);
+          $("#" + key + "_error").html(value);
         });
       }
-    }
+    },
   });
 }
 
@@ -3040,11 +2589,9 @@ function updateUpiBenModel1(id) {
       } else {
         $.each(response.errors, function (key, value) {
           $("#updateupiBenModel1").modal("show");
-          $('#' + key + '_error').html(value);
+          $("#" + key + "_error").html(value);
         });
       }
-    }
+    },
   });
 }
-
-

@@ -34,7 +34,7 @@ class Bank extends CI_Controller
 
     // save member
 
-     public function verifyAuth()
+    public function verifyAuth()
     {
         $response = [];
 
@@ -72,7 +72,7 @@ class Bank extends CI_Controller
 
         // Wallet and package logic
         $chk_wallet_balance = $this->db->get_where('users', ['account_id' => $account_id, 'id' => $loggedUser['id']])->row_array();
-        $wallet_balance =$this->User->getMemberWalletBalanceSP($loggedUser['id']);
+        $wallet_balance = $this->User->getMemberWalletBalanceSP($loggedUser['id']);
 
         $get_verification_charge = $this->db->get_where('tbl_dmr_account_verify_charge', ['account_id' => $account_id, 'package_id' => $chk_wallet_balance['package_id']])->row_array();
 
@@ -266,20 +266,20 @@ class Bank extends CI_Controller
                             <tr>
                                 <th>Account No.</th>
                                 <td>' .
-                                        htmlspecialchars($response_data['account']) .
-                                        '</td>
+                    htmlspecialchars($response_data['account']) .
+                    '</td>
                             </tr>
                             <tr>
                                 <th>Account Holder Name</th>
                                 <td>' .
-                                        htmlspecialchars($response_data['name']) .
-                                        '</td>
+                    htmlspecialchars($response_data['name']) .
+                    '</td>
                             </tr>
                              <tr>
                                 <th>IFSC</th>
                                 <td>' .
-                                        htmlspecialchars($response_data['ifsc']) .
-                                        '</td>
+                    htmlspecialchars($response_data['ifsc']) .
+                    '</td>
                             </tr>
                             <tr>
                                 <th>Status</th>
@@ -292,40 +292,40 @@ class Bank extends CI_Controller
                 $str .=
                     '<form name="verify_beneficary_addon_form" id="verify_beneficary_addon_form">
                         <input type="hidden" class="form-control" id="accountHolderName" name="account_holder_name" value="' .
-                                        htmlspecialchars($bene_data['account_holder_name']) .
-                                        '" >
+                    htmlspecialchars($bene_data['account_holder_name']) .
+                    '" >
 
                         <input type="hidden" class="form-control" id="ben_account_number" name="ben_account_number" value="' .
-                                        htmlspecialchars($bene_data['account_no']) .
-                                        '" >
+                    htmlspecialchars($bene_data['account_no']) .
+                    '" >
                         <input type="hidden" class="form-control" id="bankID" name="bankID" value="' .
-                                        htmlspecialchars($bene_data['bankID']) .
-                                        '" >
+                    htmlspecialchars($bene_data['bankID']) .
+                    '" >
                         <input type="hidden" class="form-control" id="benId" name="ben_id" value="' .
-                                        htmlspecialchars($bene_data['ben_id']) .
-                                        '" placeholder="Optional">
+                    htmlspecialchars($bene_data['ben_id']) .
+                    '" placeholder="Optional">
                         <input type="hidden" class="form-control" id="ifsc" name="ifsc" value="' .
-                                        htmlspecialchars($bene_data['ifsc']) .
-                                        '" >
+                    htmlspecialchars($bene_data['ifsc']) .
+                    '" >
                         <input type="hidden" class="form-control" id="mobile_no" name="mobile_no" value="' .
-                                        htmlspecialchars($bene_data['mobile']) .
-                                        '" >
+                    htmlspecialchars($bene_data['mobile']) .
+                    '" >
                         <input type="hidden" class="form-control" id="txnId" name="txn_id" value="' .
-                                        htmlspecialchars($bene_data['txn_id']) .
-                                        '" >
+                    htmlspecialchars($bene_data['txn_id']) .
+                    '" >
 
                         <input type="hidden" class="form-control" id="type" name="type" value="' .
-                                        htmlspecialchars($bene_data['type']) .
-                                        '" >
+                    htmlspecialchars($bene_data['type']) .
+                    '" >
                         <input type="hidden" name="isActive" id="isActive" value="' .
-                                        htmlspecialchars($bene_data['is_active']) .
-                                        '" >
+                    htmlspecialchars($bene_data['is_active']) .
+                    '" >
                         <input type="hidden" name="status" id="status" value="' .
-                                        htmlspecialchars($bene_data['status']) .
-                                        '" >
+                    htmlspecialchars($bene_data['status']) .
+                    '" >
                         <input type="hidden" name="dbTableName" id="dbTableName" value="' .
-                                        htmlspecialchars($bene_data['dbTableName']) .
-                                        '" >
+                    htmlspecialchars($bene_data['dbTableName']) .
+                    '" >
                     </form>';
 
                 $response = [
@@ -386,20 +386,27 @@ class Bank extends CI_Controller
         $post = $this->input->post();
 
         $this->load->library('form_validation');
+        $this->form_validation->set_rules('account_holder_name', 'Account Holder Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+        $this->form_validation->set_rules('ben_upi_id_account_number', 'UPI ID', 'required|trim|xss_clean');
+        $this->form_validation->set_rules('mobile_no', 'Mobile Number', 'required|trim|xss_clean|numeric|min_length[10]|max_length[10]');
+        $this->form_validation->set_message('regex_match', 'The %s field must contain only alphabetic characters and single spaces between names.');
 
-        $this->form_validation->set_rules('account_holder_name', 'Account Holder Name', 'required|xss_clean');
-        $this->form_validation->set_rules('account_number', 'Account No', 'required|xss_clean');
-        //$this->form_validation->set_rules('ifsc', 'IFSC', 'required|xss_clean');
-
-        if ($this->form_validation->run() == false) {
+        if ($this->form_validation->run() === false) {
             $response = [
-                'status' => 0,
-                'msg' => validation_errors(),
+                'error' => true,
+                'errors' => [
+                    'account_holder_name' => form_error('account_holder_name'),
+                    'bankID' => form_error('bankID'),
+                    'ben_account_number' => form_error('ben_account_number'),
+                    'ifsc' => form_error('ifsc'),
+                    'mobile_no' => form_error('mobile_no'),
+                ],
             ];
+            echo json_encode($response);
+            return;
         } else {
             $chk_wallet_balance = $this->db->get_where('users', ['account_id' => $account_id, 'id' => $loggedUser['id']])->row_array();
-
-            $wallet_balance = isset($chk_wallet_balance['wallet_balance']) ? $chk_wallet_balance['wallet_balance'] : 0;
+            $wallet_balance = $this->User->getMemberWalletBalanceSP($loggedUser['id']);
 
             $get_verification_charge = $this->db->get_where('tbl_dmr_account_verify_charge', ['account_id' => $account_id, 'package_id' => $chk_wallet_balance['package_id']])->row_array();
 
@@ -419,22 +426,26 @@ class Bank extends CI_Controller
 
             if ($admin_wallet_balance < $admin_verification_charge) {
                 $response = [
-                    'status' => 0,
-                    'msg' => 'Sorry!! insufficient balance in your admin wallet.',
+                    'error' => true,
+                    'dataval' => 'Sorry! Insufficient balance in admin wallet.',
                 ];
+                echo json_encode($response);
+                return;
             } else {
                 $wallet_balance = $this->User->getMemberWalletBalanceSP($loggedUser['id']);
                 if ($wallet_balance < $verification_charge) {
                     $response = [
-                        'status' => 0,
-                        'msg' => 'Sorry!! you have insufficient balance in your wallet.',
+                        'error' => true,
+                        'dataval' => 'Sorry!! you have insufficient balance in your wallet.',
                     ];
+                    echo json_encode($response);
+                    return;
                 } else {
                     $transid = rand(111111, 999999) . time();
                     $name = isset($post['account_holder_name']) ? $post['account_holder_name'] : '';
-                    $account_number = isset($post['account_number']) ? $post['account_number'] : '';
-
-                    $response = [];
+                    $account_number = isset($post['ben_upi_id_account_number']) ? $post['ben_upi_id_account_number'] : '';
+                    $mobile_no = isset($post['mobile_no']) ? $post['mobile_no'] : '';
+                    $dbTableName =  isset($post['dbTableName']) ? $post['dbTableName'] : '';
 
                     $enckey = '7153f272dbdc71b459c6b49551988767';
 
@@ -524,36 +535,60 @@ class Bank extends CI_Controller
 
                         $str =
                             '<table class="table table-bordered table-striped">
-				          <tbody>
-				            <tr>
-				              <th>Account No.</th>
-				              <td>' .
-                            $response_data[1] .
+                                <tbody>
+                                    <tr>
+                                        <th>UPI Account No.</th>
+                                        <td>' .
+                            htmlspecialchars($response_data[1]) .
                             '</td>
-				            </tr>
-
-				            <tr>
-				              <th>Account Holder Name</th>
-				              <td>' .
-                            $response_data[2] .
+                                    </tr>
+                                    <tr>
+                                        <th>Account Holder Name</th>
+                                        <td>' .
+                            htmlspecialchars($response_data[2]) .
                             '</td>
-				            </tr>
-
-				            <tr>
-				              <th>Status</th>
-				              <td><font color="green">' .
-                            $response_data[4] .
+                                    </tr>
+                                                                <tr>
+                                        <th>Status</th>
+                                        <td><font color="green">' .
+                            htmlspecialchars($response_data[4]) .
                             '</font></td>
-				            </tr>
+                                    </tr>
+                                </tbody>
+                            </table>';
 
-				          </tbody>
-				        </table>';
+                        // Adding the form below the table
+                        $str .=
+                            '<form name="verify_beneficary_addon_form" id="verify_beneficary_addon_form">
+                            <input type="hidden" class="form-control" id="accountHolderName" name="account_holder_name" value="' .
+                            htmlspecialchars($response_data[2]) .
+                            '" >
 
+                            <input type="hidden" class="form-control" id="ben_account_number" name="ben_account_number" value="' .
+                            htmlspecialchars($response_data[1]) .
+                            '" >
+
+                            <input type="hidden" class="form-control" id="mobile_no" name="mobile_no" value="' .
+                            $mobile_no .
+                            '" >
+                            <input type="hidden" class="form-control" id="txnId" name="txn_id" value="' .
+                            $txn_id .
+                            '" >
+
+                            <input type="hidden" class="form-control" id="type" name="type" value="2" >
+                            <input type="hidden" name="isActive" id="isActive" value="1" >
+                            <input type="hidden" name="status" id="status" value="1" >
+                            <input type="hidden" name="dbTableName" id="dbTableName" value="' .
+                            htmlspecialchars($bene_data['dbTableName']) .
+                            '" >
+                        </form>';
                         $response = [
-                            'status' => 1,
-                            'msg' => $str,
-                            'upi_account_holder_name' => $response_data[2],
+                            'error' => false,
+                            'dataval' => $str,
+                            'status' => $response_data[4],
                         ];
+                        echo json_encode($response);
+                        return;
                     } else {
                         $history = [
                             'account_id' => $account_id,
@@ -572,15 +607,16 @@ class Bank extends CI_Controller
                         $this->db->insert('bank_verification', $history);
 
                         $response = [
-                            'status' => 0,
-                            'msg' => $response_data[4],
+                            'error' => false,
+                            'dataval' => $str,
+                            'status' => $response_data[4],
                         ];
+                        echo json_encode($response);
+                        return;
                     }
                 }
             }
         }
-
-        echo json_encode($response);
     }
 
     public function openVerifyAuth()
@@ -717,21 +753,20 @@ class Bank extends CI_Controller
 
                         //New Benefeciray Details save in database :
                         $bene_data = [
-                           'account_id' => $account_id,
-                           'type' => 3,
-                           'email' => $responseData['email'],
-                           'mobile' => $responseData['phone'] ?? $post['mobile_no'],
-                           'txn_id' => $transaction_id,
-                           'user_id' => $loggedAccountID,
-                           'account_holder_name' => $responseData['name_of_account_holder'],
-                           'account_no' => $responseData['bank_account_number'],
-                           'ifsc' => $responseData['bank_ifsc_code'],
-                           'ben_id' => $responseData['id'],
-                           'is_active' => 1,
-                           'created' => date('Y-m-d H:i:s'),
-
-                       ];
-                       $this->db->insert('settlement_user_benificary', $bene_data);
+                            'account_id' => $account_id,
+                            'type' => 3,
+                            'email' => $responseData['email'],
+                            'mobile' => $responseData['phone'] ?? $post['mobile_no'],
+                            'txn_id' => $transaction_id,
+                            'user_id' => $loggedAccountID,
+                            'account_holder_name' => $responseData['name_of_account_holder'],
+                            'account_no' => $responseData['bank_account_number'],
+                            'ifsc' => $responseData['bank_ifsc_code'],
+                            'ben_id' => $responseData['id'],
+                            'is_active' => 1,
+                            'created' => date('Y-m-d H:i:s'),
+                        ];
+                        $this->db->insert('settlement_user_benificary', $bene_data);
 
                         //wallet deduct
 

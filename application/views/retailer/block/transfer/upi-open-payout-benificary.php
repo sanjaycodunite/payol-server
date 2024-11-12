@@ -12,18 +12,14 @@
                 <h3><b>Money Transfer Beneficiary</b></h3>
             </div>
             <div class="container">
-                <br />
-                <div id="loader" style="display: none;">
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Verifying account details, please wait...
-                </div>
-
+                <div class="ajaxx-loader"></div>
                 <div class="alert alert-success alert-dismissible fade hide" role="alert" id="benAlert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
             </div>
+
             <form id="upi_verify_form" method="post">
                 <input type="hidden" value="<?php echo $site_url; ?>" id="siteUrl">
                 <input type="hidden" id="dbTableName" name="dbTableName"
@@ -87,6 +83,7 @@
                                 <th>#</th>
                                 <th>Beneficiary Name</th>
                                 <th>Account No.</th>
+                                <th>Mobile No</th>
                                 <th>Added On</th>
                                 <th width="5%">Fund</th>
                                 <th>Action</th>
@@ -99,7 +96,9 @@
                                 <td class="align-middle"><?php echo $i; ?></td>
                                 <td class="align-middle"><?php echo $list['account_holder_name']; ?></td>
                                 <td class="align-middle"><?php echo $list['account_no']; ?></td>
-                                <td class="align-middle"><?php echo date('d-m-Y h:i A', strtotime($list['created'])); ?>
+                                <td class="align-middle"><?php echo $list['mobile']; ?></td>
+                                <td class="align-middle">
+                                    <?php echo date('d-m-Y <b>h:i A<b/>', strtotime($list['created'])); ?>
                                 </td>
                                 <td class="align-middle">
                                     <a
@@ -130,6 +129,7 @@
                                 <th>#</th>
                                 <th>Beneficiary Name</th>
                                 <th>Account No.</th>
+                                <th>Mobile No</th>
                                 <th>Added On</th>
                                 <th width="5%">Fund</th>
                                 <th>Action</th>
@@ -141,9 +141,29 @@
         </div>
     </div>
 </div>
-
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmUpiModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmUpiModalLabel">Confirm Deletion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this item?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-secondary" id="confirmUpiDeletem1">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal for Bank Verification -->
-<div class="modal fade" id="bankModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="bankUpiModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -153,7 +173,9 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id="bankResponse">
+            <div class="modal-body" id="bankUpiResponse">
+                <input type="hidden" value="<?php echo $site_url; ?>" id="siteUrl">
+                <input type="hidden" id="dbTableName" name="dbTableName" value="user_benificary">
                 <center><span class="benAddonMsg"></span></center>
             </div>
             <div class="card-footer">
@@ -163,7 +185,7 @@
                             data-dismiss="modal">Cancel</button>
                     </div>
                     <div class="col-sm-6 text-right">
-                        <button type="button" class="btn btn-success btn-sm" id="addBeneficiaryBtn">
+                        <button type="button" class="btn btn-success btn-sm" id="saveMT1UpiBeneficiaryBtn">
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                                 style="display: none;"></span>
                             Add Beneficiary
