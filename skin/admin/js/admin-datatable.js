@@ -1008,9 +1008,9 @@ function dashboardApiDataTable(keyword = "", date = "") {
     initComplete: function (settings, json) {}
   });
 
-  /*setInterval( function () {
+  setInterval( function () {
        dashboardApiDataTable.ajax.reload();
-   }, 60000 );*/
+   }, 60000 );
 }
 
 function topupHistoryDataTable(keyword = "", member_id = "", date = "") {
@@ -7852,7 +7852,7 @@ function refundOpenPayout(id)
 {
     if(confirm("Are you sure you want to refund this transaction?")){
         var siteUrl = $("#siteUrl").val();
-    
+
       $.ajax({
         type: "POST",
         url: siteUrl + "admin/report/refundOpenMoneyPayoutAjax/"+id,
