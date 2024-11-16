@@ -4,58 +4,63 @@
     <div class="card-header py-3">
         <div class="row">
             <div class="col-sm-6">
-                <h4><b> Employe List </b></h4>
-            </div>
-            <div class="col-sm-6  text-right">
-                <a href="{site_url}employe/employe/addEmploye" class="btn btn-primary">+ Add Employe</a>
+                <h4><b>Become A Partner Enquiry List </b></h4>
             </div>
         </div>
         <?php echo form_close(); ?>
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered table-striped" id="example" width="100%" cellspacing="0">
+            <table class="table table-bordered table-striped" id="example" cellspacing="0">
+                <input type="hidden" enquiryType="webBecomePartner" class="webFormData">
+                <input type="hidden" value="<?php echo $site_url; ?>" id="siteUrl">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Employe ID</th>
-                        <th>Role</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Mobile</th>
-                        <th>Password</th>
-                        <th>Status</th>
+                        <th>Enquiry Person</th>
+                        <th>Message <div class="enquiryResponseText text-center"></div>
+                        </th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                      $i = 1;
-                      foreach ($contactFormList as $value) {
-                    ?>
-                    <td><?php echo $i; ?></td>
-                    <td><?php echo $value['name']; ?></td>
-                    <td><?php echo $role['email']; ?></td>
-                    <td><?php echo $value['phone']; ?></td>
-                    <td><?php echo $value['message']; ?></td>
-                    <td><?php echo $value['created_at']; ?></td>
-                    <td><?php echo $value['from']; ?></td>
-                    <td>
-                        <a title="edit" class="btn btn-primary btn-sm"
-                            href="{site_url}employe/employe/editEmploye/<?= $value['id'] ?>"><i class="fa fa-edit"
-                                aria-hidden="true"></i></a>
-                        <a title="delete" class="btn btn-danger btn-sm" href="{site_url}employe/employe/deleteEmploye/<?= $value[
-                          'id'
-                      ] ?>" onclick="return confirm('Are you sure you want to delete?')"><i class="fa fa-trash"
-                                aria-hidden="true"></i></a>
-                    </td>
+              $i = 1;
+              foreach ($becomeAPatnerFormEnquiryList as $value) {
+            ?>
+                    <tr>
+                        <td><?php echo $i; ?></td>
+                        <td>
+                            <strong>Name:</strong> <?php echo $value['name']; ?><br>
+                            <strong>Email:</strong> <?php echo $value['email']; ?><br>
+                            <strong>Mobile:</strong> <?php echo $value['mobile']; ?><br>
+                            <strong>Partner Type:</strong> <?php echo $value['partner_type']; ?><br>
+                            <strong>Product Interest:</strong> <?php echo $value['product_intrest']; ?> <br>
+                            <strong>Created On :</strong>
+                            <?php echo date('d-m-Y <b> h:i A</b>', strtotime($value['created'])); ?>
+                        </td>
+                        <td><?php echo $value['message']; ?></td>
+
+                        <td>
+                            <button title="delete" class="btn btn-danger btn-sm" data-id="<?= $value['id'] ?>"
+                                onclick="confirmEquirynDelete(this)">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </td>
                     </tr>
-                    <?php $i++;
-                  }
-                  ?>
+                    <?php $i++; } ?>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th>#</th>
+                        <th>Enquiry Person</th>
+                        <th>Message</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
+
     </div>
 </div>
 </div>
