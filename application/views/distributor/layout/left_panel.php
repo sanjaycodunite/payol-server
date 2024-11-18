@@ -1,4 +1,4 @@
-<?php 
+<?php
 $account_id = $this->User->get_domain_account();
 $accountData = $this->User->get_account_data($account_id);
 $loggedUser = $this->User->getAdminLoggedUser(DISTRIBUTOR_SESSION_ID);
@@ -263,8 +263,8 @@ $activeGateway = $this->User->account_active_gateway();
 
 
 
-        <?php if(in_array(20, $activeService)){ 
-          
+        <?php if(in_array(20, $activeService)){
+
         ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
@@ -293,8 +293,8 @@ $activeGateway = $this->User->account_active_gateway();
 
 
 
-        <?php if(in_array(30, $activeService)){ 
-          
+        <?php if(in_array(30, $activeService)){
+
         ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
@@ -325,7 +325,7 @@ $activeGateway = $this->User->account_active_gateway();
 
 
 
-        <!--  <?php if(in_array(20, $activeService)){ 
+        <!--  <?php if(in_array(20, $activeService)){
           if($user_instantpay_aeps_status){
         ?>
       <hr class="sidebar-divider my-0">
@@ -338,14 +338,14 @@ $activeGateway = $this->User->account_active_gateway();
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">UPI Payout:</h6>
             <a class="collapse-item" href="{site_url}distributor/transfer/upiPayoutBeneficiaryList">Beneficiary List</a>
-              
+
               <a class="collapse-item" href="{site_url}distributor/transfer/upiPayoutFundTransfer">Transfer Now</a>
-              
+
               <a class="collapse-item" href="{site_url}distributor/transfer/upiPayoutReport">Payout Report</a>
 
 
-             
-               
+
+
             </div>
         </div>
       </li>
@@ -670,7 +670,7 @@ $activeGateway = $this->User->account_active_gateway();
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
             <a class="nav-link" href="{site_url}distributor/wallet/payolTransfer">
-                <i class="fa fa-dollar"></i>
+                <i class="fa fa-rupee"></i>
                 <span>Payol Transfer</span></a>
         </li>
         <hr class="sidebar-divider my-0">
@@ -703,10 +703,10 @@ $activeGateway = $this->User->account_active_gateway();
                     <a class="collapse-item" href="{site_url}distributor/wallet/myRequestList">My Fund Request</a>
                     <a class="collapse-item" href="{site_url}distributor/wallet/requestList">Member Request List</a>
 
-                    <?php 
+                    <?php
 
                           $get_upline_member = $this->db->get_where('users',array('id' =>$loggedUser['id']))->row_array();
-    
+
                          $get_upline_member_id = $get_upline_member['created_by'];
 
                          $get_member_list = $this->db->get_where('users',array('id'=>$get_upline_member_id))->row_array();
@@ -1009,7 +1009,7 @@ $activeGateway = $this->User->account_active_gateway();
 
                                     <marquee>
                                         <?php
-         $i=1; 
+         $i=1;
          foreach($news as $list){
          ?>
                                         <p> <?php echo $i; ?>. <?php echo $list['news']; ?> </p>

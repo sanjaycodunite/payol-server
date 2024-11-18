@@ -1,4 +1,4 @@
-<?php 
+<?php
 $account_id = $this->User->get_domain_account();
 $accountData = $this->User->get_account_data($account_id);
 $loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
@@ -141,7 +141,7 @@ $activeGateway = $this->User->account_active_gateway();
         </li>
 
         <?php } ?>
-        <?php if(in_array(2, $activeService)){ 
+        <?php if(in_array(2, $activeService)){
           if($user_aeps_status) {
         ?>
         <hr class="sidebar-divider my-0">
@@ -239,15 +239,15 @@ $activeGateway = $this->User->account_active_gateway();
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">AEPS Payout:</h6>
             <a class="collapse-item" href="{site_url}retailer/transfer/payoutBeneficiaryList">Beneficiary List</a>
-              
+
               <a class="collapse-item" href="{site_url}retailer/transfer/payoutFundTransfer">Transfer Now</a>
-              
+
               <a class="collapse-item" href="{site_url}retailer/transfer">Payout Report</a>
 
 
                <a class="collapse-item" href="{site_url}retailer/transfer/benificaryAccountList"> New Account Request</a>
 
-               
+
             </div>
         </div>
       </li>
@@ -284,8 +284,8 @@ $activeGateway = $this->User->account_active_gateway();
 
 
 
-        <?php if(in_array(20, $activeService)){ 
-          
+        <?php if(in_array(20, $activeService)){
+
         ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
@@ -301,7 +301,7 @@ $activeGateway = $this->User->account_active_gateway();
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Settlement:</h6>
                     <!-- <a class="collapse-item" href="{site_url}retailer/transfer/newPayoutBeneficiaryList">Beneficiary List</a>
-              
+
               <a class="collapse-item" href="{site_url}retailer/transfer/newPayoutFundTransfer">Transfer Now</a>
                -->
 
@@ -321,8 +321,8 @@ $activeGateway = $this->User->account_active_gateway();
 
 
 
-        <?php if(in_array(30, $activeService)){ 
-          
+        <?php if(in_array(30, $activeService)){
+
         ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
@@ -379,7 +379,7 @@ $activeGateway = $this->User->account_active_gateway();
 
 
 
-        <!--  <?php if(in_array(20, $activeService)){ 
+        <!--  <?php if(in_array(20, $activeService)){
           if($user_instantpay_aeps_status){
         ?>
       <hr class="sidebar-divider my-0">
@@ -392,12 +392,12 @@ $activeGateway = $this->User->account_active_gateway();
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">UPI Payout:</h6>
             <a class="collapse-item" href="{site_url}retailer/transfer/upiPayoutBeneficiaryList">Beneficiary List</a>
-              
+
               <a class="collapse-item" href="{site_url}retailer/transfer/upiPayoutFundTransfer">Transfer Now</a>
-              
+
               <a class="collapse-item" href="{site_url}retailer/transfer/upiPayoutReport">Payout Report</a>
 
-               
+
             </div>
         </div>
       </li>
@@ -695,7 +695,7 @@ $activeGateway = $this->User->account_active_gateway();
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
             <a class="nav-link" href="{site_url}retailer/wallet/payolTransfer">
-                <i class="fa fa-dollar"></i>
+                <i class="fa fa-rupee"></i>
                 <span>Payol Transfer</span></a>
         </li>
         <hr class="sidebar-divider my-0">
@@ -721,21 +721,21 @@ $activeGateway = $this->User->account_active_gateway();
                     <?php } ?>
 
                     <a class="collapse-item" href="{site_url}retailer/wallet/myWalletList">My Wallet</a>
-                    
-                    
-                     <?php if(in_array(32, $activeService)){ ?>
-                        
+
+
+                    <?php if(in_array(32, $activeService)){ ?>
+
                     <a class="collapse-item" href="{site_url}retailer/wallet/virtualAccount">Virtual Account</a>
                     <?php } ?>
 
-                    <?php 
+                    <?php
 
                           $get_upline_member = $this->db->get_where('users',array('id' =>$loggedUser['id']))->row_array();
-    
+
                          $get_upline_member_id = $get_upline_member['created_by'];
 
                          $get_member_list = $this->db->get_where('users',array('id'=>$get_upline_member_id))->row_array();
-                                
+
 
                           if($accountData['is_move_wallet'] == 1 && $get_member_list['role_id'] != 2 )  {?>
                     <a class="collapse-item" href="{site_url}retailer/wallet/moveWalletBalance">Wallet Transfer</a>
@@ -1002,11 +1002,11 @@ $activeGateway = $this->User->account_active_gateway();
                                     <h4>Notification</h4>
                                 </div>
 
-                                <?php 
+                                <?php
                     $domain_account_id = $this->User->get_domain_account();
                     $notification_list = $this->db->limit(5)->get_where('web_notification',array('account_id'=>$domain_account_id))->result_array();
                 foreach ($notification_list as $list) {
-                
+
              ?>
 
                                 <div class="card_notification_list">
@@ -1088,7 +1088,7 @@ $activeGateway = $this->User->account_active_gateway();
 
                                     <marquee>
                                         <?php
-         $i=1; 
+         $i=1;
          foreach($news as $list){
          ?>
                                         <p> <?php echo $i; ?>. <?php echo $list['news']; ?> </p>
