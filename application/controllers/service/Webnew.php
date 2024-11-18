@@ -947,17 +947,24 @@ class Webnew extends CI_Controller
             $post = $this->input->post();
             log_message('debug', 'Add Member Auth API Account ID - ' . $account_id . ' Post Data - ' . json_encode($post));
             $this->load->library('form_validation');
-
+            
             $this->form_validation->set_rules('user_id', 'User ID', 'required|xss_clean');
             $this->form_validation->set_rules('role_id', 'Member Type', 'required|xss_clean');
-            $this->form_validation->set_rules('name', 'Name', 'required|xss_clean');
-            $this->form_validation->set_rules('email', 'Email ', 'xss_clean|valid_email');
-            $this->form_validation->set_rules('mobile', 'Mobile Number', 'required|xss_clean|numeric|max_length[12]');
-            $this->form_validation->set_rules('password', 'Password', 'required|xss_clean');
-            $this->form_validation->set_rules('transaction_password', 'Transaction Password', 'required|xss_clean|max_length[6]|min_length[4]');
-            $this->form_validation->set_rules('country_id', 'Country', 'required|xss_clean');
-            $this->form_validation->set_rules('state_id', 'State', 'required|xss_clean');
-            $this->form_validation->set_rules('city', 'City', 'required|xss_clean');
+             $this->form_validation->set_rules('name', 'Name', 'required|min_length[3]|max_length[50]|xss_clean|trim');
+            $this->form_validation->set_rules('email', 'Email', 'required|valid_email|xss_clean|trim');
+            $this->form_validation->set_rules('mobile', 'Mobile', 'required|numeric|min_length[10]|max_length[15]|xss_clean|trim');
+            //$this->form_validation->set_rules('password', 'Password', 'required|xss_clean');
+            //$this->form_validation->set_rules('transaction_password', 'Transaction Password', 'required|xss_clean|max_length[6]|min_length[4]');
+            //$this->form_validation->set_rules('cityname', 'City', 'required|xss_clean|trim');
+            $this->form_validation->set_rules('district', 'District', 'required|xss_clean|trim');
+            $this->form_validation->set_rules('block', 'Block', 'required|xss_clean|trim');
+            $this->form_validation->set_rules('village', 'Village', 'required|xss_clean|trim');
+            $this->form_validation->set_rules('address', 'Address', 'required|xss_clean|trim');
+            $this->form_validation->set_rules('aadhar_num', 'Aadhar Number', 'required|numeric|exact_length[12]|xss_clean|trim');
+            $this->form_validation->set_rules('pan_card', 'PAN Card', 'required|alpha_numeric|exact_length[10]|xss_clean|trim');
+            $this->form_validation->set_rules('country_id', 'Country', 'required|numeric|xss_clean|trim');
+            $this->form_validation->set_rules('state_id', 'State', 'required|numeric|xss_clean|trim');
+            $this->form_validation->set_rules('city', 'City', 'required|xss_clean|trim');
 
             if ($this->form_validation->run() == false) {
                 $response = [
@@ -2724,11 +2731,11 @@ class Webnew extends CI_Controller
                                     $nsdl_pan_type = 2;
                                 }
 
-                                $plain_txt = $get_user_data['id'] . '|' . $get_user_data['password'] . '|' . $user_ip_address;
-                                $token = $this->User->generateAppToken('encrypt', $plain_txt);
+                              //  $plain_txt = $get_user_data['id'] . '|' . $get_user_data['password'] . '|' . $user_ip_address;
+                               // $token = $this->User->generateAppToken('encrypt', $plain_txt);
 
-                                log_message('debug', 'User Detail API Account ID - ' . $account_id . ' Token String - ' . $plain_txt);
-                                log_message('debug', 'Login Auth API Account ID - ' . $account_id . ' Token - ' . $token);
+                               // log_message('debug', 'User Detail API Account ID - ' . $account_id . ' Token String - ' . $plain_txt);
+                               // log_message('debug', 'Login Auth API Account ID - ' . $account_id . ' Token - ' . $token);
 
                                 $header_data = apache_request_headers();
 
@@ -19102,6 +19109,8 @@ qJSWl8+AA1uYYorA5jM9HkEPMVCaa940OMx1zWAfMiwHmqjtzNcKEy7i609meg==
 
     public function iciciOpenPayoutAuth()
     {
+
+
         $account_id = $this->User->get_domain_account();
         $accountData = $this->User->get_account_data($account_id);
         $user_ip_address = $this->User->get_user_ip();
@@ -19660,6 +19669,7 @@ qJSWl8+AA1uYYorA5jM9HkEPMVCaa940OMx1zWAfMiwHmqjtzNcKEy7i609meg==
 
     public function upiOpenPayoutBeneficiaryAuth()
     {
+         $response = [];
         $account_id = $this->User->get_domain_account();
         $accountData = $this->User->get_account_data($account_id);
         $response = [];
@@ -19684,7 +19694,7 @@ qJSWl8+AA1uYYorA5jM9HkEPMVCaa940OMx1zWAfMiwHmqjtzNcKEy7i609meg==
         } else {
             $userID = $post['userID'];
 
-            $chk_beneficiary = $this->db->get_where('settlement_user_vpa_benificary', [
+            $chk_beneficiary = $this->db->get_where('instantpay_upi_open_payout_user_benificary', [
                 'account_id' => $account_id,
                 'user_id' => $userID
             ])->row_array();
@@ -19704,11 +19714,10 @@ qJSWl8+AA1uYYorA5jM9HkEPMVCaa940OMx1zWAfMiwHmqjtzNcKEy7i609meg==
                     'account_no' => $post['account_number'],
                     'encode_ban_id' => do_hash($post['account_number']),
                     'status' => 1,
-                    'type'=> 2,
                     'created' => date('Y-m-d H:i:s'),
                 ];
 
-                if ($this->db->insert('settlement_user_vpa_benificary', $bene_data)) {
+                if ($this->db->insert('instantpay_upi_open_payout_user_benificary', $bene_data)) {
                     $response = [
                         'status' => 1,
                         'message' => 'Congratulations!! beneficiary added successfully.',
@@ -19729,6 +19738,7 @@ qJSWl8+AA1uYYorA5jM9HkEPMVCaa940OMx1zWAfMiwHmqjtzNcKEy7i609meg==
 
     public function upiOpenPayoutAuth()
     {
+
         $account_id = $this->User->get_domain_account();
         $accountData = $this->User->get_account_data($account_id);
         $response = [];
@@ -20037,7 +20047,7 @@ qJSWl8+AA1uYYorA5jM9HkEPMVCaa940OMx1zWAfMiwHmqjtzNcKEy7i609meg==
                 $conditions = ['account_id' => $account_id, 'user_id' => $userID, 'is_delete' => 0];
                 $beneficiaryList = $this->db
                     ->where($conditions)
-                    ->get('settlement_user_vpa_benificary')
+                    ->get('instantpay_upi_open_payout_user_benificary')
                     ->result_array();
                 $data = [];
                 if (is_array($beneficiaryList) && !empty($beneficiaryList)) {
@@ -24856,6 +24866,8 @@ qJSWl8+AA1uYYorA5jM9HkEPMVCaa940OMx1zWAfMiwHmqjtzNcKEy7i609meg==
 
     public function moneyTransferNewAuth()
     {
+
+
         $account_id = $this->User->get_domain_account();
         $accountData = $this->User->get_account_data($account_id);
         $user_ip_address = $this->User->get_user_ip();
@@ -25451,6 +25463,7 @@ qJSWl8+AA1uYYorA5jM9HkEPMVCaa940OMx1zWAfMiwHmqjtzNcKEy7i609meg==
 
     public function moneyTransferNewUpiPayoutAuth()
     {
+
         $account_id = $this->User->get_domain_account();
         $accountData = $this->User->get_account_data($account_id);
         $user_ip_address = $this->User->get_user_ip();
@@ -28927,7 +28940,7 @@ qJSWl8+AA1uYYorA5jM9HkEPMVCaa940OMx1zWAfMiwHmqjtzNcKEy7i609meg==
                     $chk_token_user = $this->db->get_where('users', ['id' => $tokenUserID, 'password' => $tokenPwd, 'is_active' => 1])->num_rows();
 
                     if ($chk_token_user && $tokenUserID == $userID && $tokenIP == $user_ip_address && $chk_user_token['status'] == 1 && $chk_user_token['is_login'] == 1) {
-                        $chk_beneficiary = $this->db->get_where('settlement_user_vpa_benificary', ['account_id' => $account_id, 'user_id' => $userID, 'id' => $post['beneID'],'is_delete'=>0])->num_rows();
+                        $chk_beneficiary = $this->db->get_where('instantpay_upi_open_payout_user_benificary', ['account_id' => $account_id, 'user_id' => $userID, 'id' => $post['beneID'],'is_delete'=>0])->num_rows();
 
                         if (!$chk_beneficiary) {
                             $response = [
@@ -28942,7 +28955,7 @@ qJSWl8+AA1uYYorA5jM9HkEPMVCaa940OMx1zWAfMiwHmqjtzNcKEy7i609meg==
                             $this->db->where('account_id', $account_id);
                             $this->db->where('user_id', $userID);
                             $this->db->where('id', $post['beneID']);
-                            $this->db->update('settlement_user_vpa_benificary', $data);
+                            $this->db->update('instantpay_upi_open_payout_user_benificary', $data);
 
                             $message = 'Beneficiary deleted successfully.';
 
