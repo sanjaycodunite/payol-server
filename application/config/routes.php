@@ -14,5 +14,5 @@ $route['tour'] = 'services/tour';
 $route['our-partner'] = 'page/ourPartner';
 $route['director'] = 'services/director';
 
-/* $route['event/(:any)'] = 'home/event/$1';
-$route['registration/(:any)'] = 'home/registration/$1'; */
+$route['admin/contactus-enquiry'] = 'admin/enquiry/contactFormEnquiryList';
+$route['admin/admin/become-a-partner-enquiry'] = 'admin/enquiry/becomeAPatnerFormEnquiryList';
