@@ -14,6 +14,7 @@ a:hover {text-decoration: none; color: #2d3436;}
 }
 .sidebar-dark .nav-item .nav-link i {
     color: #fff !important;
+    font-size:18px;
 }
 .btn-success, .btn-primary, .page-item.active .page-link {
     color: #fff;

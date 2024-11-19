@@ -448,8 +448,8 @@ $(document).ready(function () {
       var siteUrl = $("#siteUrl").val();
       $(".ajax-loader").html(
         "<img src='" +
-          siteUrl +
-          "skin/front/images/loading2.gif' alt='loading' />"
+        siteUrl +
+        "skin/front/images/loading2.gif' alt='loading' />"
       );
       $.ajax({
         type: "POST",
@@ -499,8 +499,8 @@ $(document).ready(function () {
       var siteUrl = $("#siteUrl").val();
       $(".ajax-loader").html(
         "<img src='" +
-          siteUrl +
-          "skin/front/images/loading2.gif' alt='loading' />"
+        siteUrl +
+        "skin/front/images/loading2.gif' alt='loading' />"
       );
       var str = $("#electricity-form").serialize();
       $.ajax({
@@ -1693,32 +1693,79 @@ function updateMemberRequest(member_id, role_id) {
 
 /*** Add on code for get users according to the user_type */
 
-$(document).ready(function() {
-    $('#user_type').on('change', function(e) {
-        e.preventDefault(); 
-        var userType = $(this).val();
-        $('#memberWise #user').empty();
-        
-        $.ajax({
-            type: "POST",
-            url: siteUrl + "admin/report/getUserByType",
-            data: { userType: userType },
-            success: function(response) {
-				$('#memberWise #user').empty();
-                var results = JSON.parse($.trim(response));
-                if (results.status == 1) {
-                    $('#memberWise #user').html(results.data);
-				
-                } else {
-                    $('#memberWise #user').html(results.defaultUsers);
-                }
-                
-				if ($('#memberWise #user').hasClass('selectpicker')) {
-                    $('#memberWise #user').selectpicker('refresh');
-					$('#memberWise #user').selectpicker('refresh');
-                }
-			}
-        });
-    });
-});
+$(document).ready(function () {
+  $('#user_type').on('change', function (e) {
+    e.preventDefault();
+    var userType = $(this).val();
+    $('#memberWise #user').empty();
 
+    $.ajax({
+      type: "POST",
+      url: siteUrl + "admin/report/getUserByType",
+      data: { userType: userType },
+      success: function (response) {
+        $('#memberWise #user').empty();
+        var results = JSON.parse($.trim(response));
+        if (results.status == 1) {
+          $('#memberWise #user').html(results.data);
+
+        } else {
+          $('#memberWise #user').html(results.defaultUsers);
+        }
+
+        if ($('#memberWise #user').hasClass('selectpicker')) {
+          $('#memberWise #user').selectpicker('refresh');
+          $('#memberWise #user').selectpicker('refresh');
+        }
+      }
+    });
+  });
+
+});
+function confirmEquirynDelete(button) {
+  var enquiryId = $(button).data('id');
+  var enquiryType = $('.webFormData').attr('enquiryType');
+  var siteUrl = $('#siteUrl').val();
+  var web_enquiry_url = siteUrl + 'admin/enquiry/deleteEnquiry';
+  var enquiryTableName = "";
+  if (confirm('Are you sure you want to delete. ?')) {
+    if (enquiryType == "webContactForm") {
+      enquiryTableName = "get_in_touch_contacts";
+    } else {
+      enquiryTableName = "user_register_request";
+    }
+    $.ajax({
+      url: web_enquiry_url,
+      type: "post",
+      data: {
+        tableName: enquiryTableName,
+        enquiryId: enquiryId,
+        enquiryType: enquiryType
+      },
+      dataType: "json",
+      success: function (response) {
+        handleEnquiryResponse(response.error, response.dataval);
+      },
+      error: function (xhr, status, error) {
+        handleEnquiryResponse(true, "Some technical error");
+      }
+    });
+  }
+}
+function handleEnquiryResponse(isError, message) {
+  const responseTextElement = $('.enquiryResponseText');
+  const alertClass = isError ? 'alert-danger' : 'alert-success';
+  const statusText = isError ? 'Error' : 'Success';
+
+  responseTextElement
+    .removeClass('hide alert-success alert-danger')
+    .addClass(`show ${alertClass}`)
+    .html(`<strong>${statusText}: </strong>${message}`);
+
+  setTimeout(() => {
+    responseTextElement.removeClass('show').addClass('hide').empty();
+    if (!isError) {
+      location.reload();
+    }
+  }, 4000);
+}

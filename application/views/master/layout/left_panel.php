@@ -6,7 +6,7 @@ $user_aeps_status = $this->User->get_member_aeps_status($loggedUser['id']);
 $user_new_aeps_status = $this->User->get_member_new_aeps_status($loggedUser['id']);
 $user_instantpay_aeps_status = $this->User->get_member_instantpay_aeps_status($loggedUser['id']);
 $user_aeps3_status = $this->User->get_member_fingpay_aeps_status($loggedUser['id']);
-$customLinkList = $this->db->get_where('custom_link',array('account_id'=>$account_id,'status'=>1))->result_array();
+$customLinkList = $this->db->get_where('custom_link', ['account_id' => $account_id, 'status' => 1])->result_array();
 $isInstantPayApiAllow = $this->User->get_account_instantpay_api_status($account_id);
 $member_dmt_status = $this->User->getMemberDMTStatus($loggedUser['id']);
 $isNsdlActive = $this->User->get_nsdl_pancard_status($loggedUser['id']);
@@ -32,7 +32,7 @@ $activeGateway = $this->User->account_active_gateway();
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
             <a class="nav-link" href="{site_url}master/home">
-                <i class="fas fa-fw fa-home"></i>
+                <i class="fas fa-fw fa-home" style="color: #f3baba !important;"></i>
                 <span>Home</span></a>
         </li>
 
@@ -42,7 +42,7 @@ $activeGateway = $this->User->account_active_gateway();
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
             <a class="nav-link" href="{site_url}master/dashboard">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <i class="fas fa-fw fa-tachometer-alt" style="color: #f3baba !important;"></i>
                 <span>Dashboard</span></a>
         </li>
 
@@ -52,12 +52,18 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
                 aria-expanded="true" aria-controls="collapseThree">
-                <i class="fa fa-users"></i>
+                <i class="fa fa-users" style="color: #f3baba !important;"></i>
                 <span>Members</span>
             </a>
-            <div id="collapseThree"
-                <?php if($content_block == 'member/memberList' || $content_block == 'member/addMember'  || $content_block == 'member/editMember'  || $content_block == 'member/mdMemberList' || $content_block == 'member/distributorList' || $content_block == 'member/retailerList' || $content_block == 'member/apiMemberList') { ?>
-                class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="headingThree"
+            <div id="collapseThree" <?php if (
+            $content_block == 'member/memberList' ||
+            $content_block == 'member/addMember' ||
+            $content_block == 'member/editMember' ||
+            $content_block == 'member/mdMemberList' ||
+            $content_block == 'member/distributorList' ||
+            $content_block == 'member/retailerList' ||
+            $content_block == 'member/apiMemberList'
+        ) { ?> class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="headingThree"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Member Management:</h6>
@@ -73,28 +79,34 @@ $activeGateway = $this->User->account_active_gateway();
         </li>
         <?php $activeService = $this->User->account_active_service($loggedUser['id']); ?>
         <?php $adminActiveService = $this->User->admin_active_service(); ?>
-        <?php if(in_array(1, $activeService)){ ?>
+        <?php if (in_array(1, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse5" aria-expanded="true"
                 aria-controls="collapseThree">
-                <i class="fa fa-mobile"></i>
+                <i class="fas fa-mobile" style="color: #f3baba !important;"></i>
                 <span>Recharge</span>
             </a>
-            <div id="collapse5"
-                <?php if($content_block == 'recharge/mobile-prepaid' || $content_block == 'recharge/mobile-postpaid' || $content_block == 'recharge/dth' || $content_block == 'recharge/electricity' || $content_block == 'recharge/datacard' || $content_block == 'recharge/landline' || $content_block == 'recharge/broadband' ) { ?>
-                class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading5"
+            <div id="collapse5" <?php if (
+            $content_block == 'recharge/mobile-prepaid' ||
+            $content_block == 'recharge/mobile-postpaid' ||
+            $content_block == 'recharge/dth' ||
+            $content_block == 'recharge/electricity' ||
+            $content_block == 'recharge/datacard' ||
+            $content_block == 'recharge/landline' ||
+            $content_block == 'recharge/broadband'
+        ) { ?> class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading5"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Recharge:</h6>
-                    <?php if($isInstantPayApiAllow){ ?>
-                    <a class="collapse-item <?php if($content_block == 'recharge/ekyc'){ ?> active <?php } ?> "
+                    <?php if ($isInstantPayApiAllow) { ?>
+                    <a class="collapse-item <?php if ($content_block == 'recharge/ekyc') { ?> active <?php } ?> "
                         href="{site_url}master/recharge/ekyc">Merchant eKyc</a>
                     <?php } ?>
-                    <a class="collapse-item <?php if($content_block == 'recharge/mobile-prepaid'){ ?> active <?php } ?> "
+                    <a class="collapse-item <?php if ($content_block == 'recharge/mobile-prepaid') { ?> active <?php } ?> "
                         href="{site_url}master/recharge/mobileprepaid">Mobile</a>
 
-                    <a class="collapse-item <?php if($content_block == 'recharge/dth'){ ?> active <?php } ?> "
+                    <a class="collapse-item <?php if ($content_block == 'recharge/dth') { ?> active <?php } ?> "
                         href="{site_url}master/recharge/dth">DTH</a>
 
 
@@ -102,20 +114,20 @@ $activeGateway = $this->User->account_active_gateway();
             </div>
         </li>
         <?php } ?>
-        <?php if(in_array(4, $activeService)){ ?>
+        <?php if (in_array(4, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link" href="{site_url}master/bbps">
-                <i class="fa fa-tv"></i>
+                <i class="fa fa-tv" style="color: #f3baba !important;"></i>
                 <span>BBPS Live</span></a>
         </li>
         <?php } ?>
-        <?php if(in_array(8, $activeService)){ ?>
+        <?php if (in_array(8, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDmt"
                 aria-expanded="true" aria-controls="collapseDmt">
-                <i class="fa fa-mobile"></i>
+                <i class="fa fa-mobile" style="color: #f3baba !important;"></i>
                 <span>DMT</span>
             </a>
             <div id="collapseDmt" class="collapse" aria-labelledby="heading5" data-parent="#accordionSidebar">
@@ -127,20 +139,20 @@ $activeGateway = $this->User->account_active_gateway();
             </div>
         </li>
         <?php } ?>
-        <?php if(in_array(3, $activeService)){ ?>
+        <?php if (in_array(3, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse16" aria-expanded="true"
                 aria-controls="collapse16">
-                <i class="fa fa-bullhorn"></i>
+                <i class="fa fa-bullhorn" style="color: #f3baba !important;"></i>
                 <span>AEPS1 Service</span>
             </a>
-            <div id="collapse16" <?php if($content_block == 'aeps/list' || $content_block == 'aeps/transfer') { ?>
+            <div id="collapse16" <?php if ($content_block == 'aeps/list' || $content_block == 'aeps/transfer') { ?>
                 class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading11"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">AEPS1 Service:</h6>
-                    <?php if(!$user_aeps_status){ ?>
+                    <?php if (!$user_aeps_status) { ?>
                     <a class="collapse-item" href="{site_url}master/aeps/activeAeps">Active AEPS</a>
                     <?php } else { ?>
                     <a class="collapse-item" href="{site_url}master/aeps">AEPS Now</a>
@@ -151,7 +163,7 @@ $activeGateway = $this->User->account_active_gateway();
         </li>
 
         <?php } ?>
-        <?php if(in_array(23, $activeService)){ ?>
+        <?php if (in_array(23, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse88" aria-expanded="true"
@@ -159,8 +171,10 @@ $activeGateway = $this->User->account_active_gateway();
                 <i class="fa fa-mobile"></i>
                 <span>Xpress Payout</span>
             </a>
-            <div id="collapse88" <?php if($content_block == 'payout/list' || $content_block == 'payout/transfer') { ?>
-                class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading5"
+            <div id="collapse88" <?php if (
+            $content_block == 'payout/list' ||
+            $content_block == 'payout/transfer'
+        ) { ?> class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading5"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">DMT:</h6>
@@ -171,17 +185,18 @@ $activeGateway = $this->User->account_active_gateway();
             </div>
         </li>
         <?php } ?>
-        <?php if(in_array(2, $activeService)){ ?>
+        <?php if (in_array(2, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse88" aria-expanded="true"
                 aria-controls="collapse88">
-                <i class="fa fa-mobile"></i>
+                <i class="fa fa-mobile" style="color: #f3baba !important;"></i>
                 <span>AEPS Payout</span>
             </a>
-            <div id="collapse88"
-                <?php if($content_block == 'transfer/list' || $content_block == 'transfer/transfer') { ?>
-                class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading5"
+            <div id="collapse88" <?php if (
+            $content_block == 'transfer/list' ||
+            $content_block == 'transfer/transfer'
+        ) { ?> class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading5"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">AEPS Payout:</h6>
@@ -202,21 +217,23 @@ $activeGateway = $this->User->account_active_gateway();
         <?php } ?>
 
 
-        <?php if(in_array(17, $activeService)){ ?>
+        <?php if (in_array(17, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAEPS"
                 aria-expanded="true" aria-controls="collapseAEPS">
-                <i class="fa fa-bullhorn"></i>
+                <i class="fa fa-bullhorn" style="color: #f3baba !important;"></i>
                 <span> <?php echo $this->User->getAepsTitle(); ?> AEPS Service</span>
             </a>
-            <div id="collapseAEPS"
-                <?php if($content_block == 'newaeps/list'  || $content_block == 'newaeps/member-activation' || $content_block == 'newaeps/transfer') { ?>
-                class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading11"
+            <div id="collapseAEPS" <?php if (
+            $content_block == 'newaeps/list' ||
+            $content_block == 'newaeps/member-activation' ||
+            $content_block == 'newaeps/transfer'
+        ) { ?> class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading11"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header"> <?php echo $this->User->getAepsTitle(); ?> AEPS Service:</h6>
-                    <?php if(!$user_new_aeps_status){ ?>
+                    <?php if (!$user_new_aeps_status) { ?>
                     <a class="collapse-item" href="{site_url}master/newaeps/activeAeps">Active AEPS</a>
                     <?php } else { ?>
                     <a class="collapse-item" href="{site_url}master/newaeps">AEPS Now</a>
@@ -230,17 +247,18 @@ $activeGateway = $this->User->account_active_gateway();
 
 
 
-        <?php if(in_array(18, $activeService)){ ?>
+        <?php if (in_array(18, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse898"
                 aria-expanded="true" aria-controls="collapse898">
-                <i class="fa fa-mobile"></i>
+                <i class="fa fa-mobile" style="color: #f3baba !important;"></i>
                 <span> <?php echo $this->User->getAepsTitle(); ?> AEPS Payout</span>
             </a>
-            <div id="collapse898"
-                <?php if($content_block == 'newaeps/list' || $content_block == 'newaeps/transfer') { ?>
-                class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading5"
+            <div id="collapse898" <?php if (
+            $content_block == 'newaeps/list' ||
+            $content_block == 'newaeps/transfer'
+        ) { ?> class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading5"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header"> <?php echo $this->User->getAepsTitle(); ?> AEPS Payout:</h6>
@@ -255,7 +273,7 @@ $activeGateway = $this->User->account_active_gateway();
 
         <hr class="sidebar-divider my-0">
 
-        <?php if(in_array(22, $activeService)){ ?>
+        <?php if (in_array(22, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link" href="{site_url}master/nsdl" target="_blank">
@@ -266,21 +284,22 @@ $activeGateway = $this->User->account_active_gateway();
 
 
 
-        <?php if(in_array(19, $activeService)){ ?>
+        <?php if (in_array(19, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInstant"
                 aria-expanded="true" aria-controls="collapseInstant">
-                <i class="fa fa-bullhorn"></i>
+                <i class="fas fa-user-lock" style="color: #f3baba !important;"></i>
                 <span>ICICI AEPS</span>
             </a>
-            <div id="collapseInstant"
-                <?php if($content_block == 'iciciaeps/list' || $content_block == 'aeps/transfer') { ?>
-                class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading11"
+            <div id="collapseInstant" <?php if (
+            $content_block == 'iciciaeps/list' ||
+            $content_block == 'aeps/transfer'
+        ) { ?> class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading11"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">ICICI AEPS:</h6>
-                    <?php if(!$user_instantpay_aeps_status){ ?>
+                    <?php if (!$user_instantpay_aeps_status) { ?>
                     <a class="collapse-item" href="{site_url}master/iciciaeps/activeAeps">Active AEPS</a>
                     <?php } else { ?>
                     <a class="collapse-item" href="{site_url}master/iciciaeps">AEPS Now</a>
@@ -295,19 +314,18 @@ $activeGateway = $this->User->account_active_gateway();
 
 
 
-        <?php if(in_array(20, $activeService)){
-
-        ?>
+        <?php if (in_array(20, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseinst"
                 aria-expanded="true" aria-controls="collapseinst">
-                <i class="fa fa-mobile"></i>
+                <i class="fas fa-cash-register" style="color: #f3baba !important;"></i>
                 <span>Settlement</span>
             </a>
-            <div id="collapseinst"
-                <?php if($content_block == 'transfer/newPayoutlist' || $content_block == 'transfer/transfer') { ?>
-                class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading5"
+            <div id="collapseinst" <?php if (
+            $content_block == 'transfer/newPayoutlist' ||
+            $content_block == 'transfer/transfer'
+        ) { ?> class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading5"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Settlement:</h6>
@@ -319,23 +337,22 @@ $activeGateway = $this->User->account_active_gateway();
                 </div>
             </div>
         </li>
-        <?php   } ?>
+        <?php } ?>
 
 
 
-        <?php if(in_array(30, $activeService)){
-
-        ?>
+        <?php if (in_array(30, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsesettlement"
                 aria-expanded="true" aria-controls="collapsesettlement">
-                <i class="fa fa-mobile"></i>
+                <i class="fas fa-cash-register" style="color: #f3baba !important;"></i>
                 <span>Settlement 2 </span>
             </a>
-            <div id="collapsesettlement"
-                <?php if($content_block == 'settlement/newPayoutlist' || $content_block == 'settlement/transfer') { ?>
-                class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading5"
+            <div id="collapsesettlement" <?php if (
+            $content_block == 'settlement/newPayoutlist' ||
+            $content_block == 'settlement/transfer'
+        ) { ?> class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading5"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Settlement:</h6>
@@ -349,21 +366,23 @@ $activeGateway = $this->User->account_active_gateway();
                 </div>
             </div>
         </li>
-        <?php   } ?>
+        <?php } ?>
 
 
 
 
-        <!-- <?php if(in_array(20, $activeService)){
-          if($user_instantpay_aeps_status){
-        ?>
+        <!-- <?php if (in_array(20, $activeService)) {
+           if ($user_instantpay_aeps_status) { ?>
       <hr class="sidebar-divider my-0">
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseupi" aria-expanded="true" aria-controls="collapseupi">
           <i class="fa fa-mobile"></i>
           <span>UPI Payout</span>
         </a>
-        <div id="collapseupi" <?php if($content_block == 'transfer/upiPayoutlist' || $content_block == 'transfer/transfer') { ?> class="collapse show" <?php } else { ?> class="collapse"<?php } ?> aria-labelledby="heading5" data-parent="#accordionSidebar">
+        <div id="collapseupi" <?php if (
+            $content_block == 'transfer/upiPayoutlist' ||
+            $content_block == 'transfer/transfer'
+        ) { ?> class="collapse show" <?php } else { ?> class="collapse"<?php } ?> aria-labelledby="heading5" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">UPI Payout:</h6>
             <a class="collapse-item" href="{site_url}master/transfer/upiPayoutBeneficiaryList">Beneficiary List</a>
@@ -378,27 +397,29 @@ $activeGateway = $this->User->account_active_gateway();
             </div>
         </div>
       </li>
-      <?php  } } ?> -->
+      <?php }
+       } ?> -->
 
 
 
 
 
-        <?php if(in_array(25, $activeService)){ ?>
+        <?php if (in_array(25, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse16" aria-expanded="true"
                 aria-controls="collapse16">
-                <i class="fa fa-bullhorn"></i>
+                <i class="fas fa-user-lock" style="color: #f3baba !important;"></i>
                 <span>AEPS 3 Service</span>
             </a>
-            <div id="collapse16"
-                <?php if($content_block == 'fingpayaeps/list' || $content_block == 'fingpayaeps/transfer') { ?>
-                class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading11"
+            <div id="collapse16" <?php if (
+            $content_block == 'fingpayaeps/list' ||
+            $content_block == 'fingpayaeps/transfer'
+        ) { ?> class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading11"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">AEPS3 Service:</h6>
-                    <?php if(!$user_aeps3_status){ ?>
+                    <?php if (!$user_aeps3_status) { ?>
                     <a class="collapse-item" href="{site_url}master/fingpayAeps/activeAeps">Active AEPS 3</a>
                     <?php } else { ?>
                     <a class="collapse-item" href="{site_url}master/fingpayAeps">AEPS Now</a>
@@ -413,12 +434,12 @@ $activeGateway = $this->User->account_active_gateway();
 
 
 
-        <?php if(in_array(6, $activeService)){ ?>
+        <?php if (in_array(6, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMoney"
                 aria-expanded="true" aria-controls="collapseMoney">
-                <i class="fa fa-mobile"></i>
+                <i class="fas fa-money-bill-alt" style="color: #f3baba !important;"></i>
                 <span>Money Transfer</span>
             </a>
             <div id="collapseMoney" class="collapse" aria-labelledby="heading5" data-parent="#accordionSidebar">
@@ -434,12 +455,12 @@ $activeGateway = $this->User->account_active_gateway();
         <?php } ?>
 
 
-        <?php if(in_array(30, $activeService)){ ?>
+        <?php if (in_array(30, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMoney2"
                 aria-expanded="true" aria-controls="collapseMoney2">
-                <i class="fa fa-mobile"></i>
+                <i class="fas fa-money-bill-alt" style="color: #f3baba !important;"></i>
                 <span>Money Transfer 2</span>
             </a>
             <div id="collapseMoney2" class="collapse" aria-labelledby="heading5" data-parent="#accordionSidebar">
@@ -455,12 +476,12 @@ $activeGateway = $this->User->account_active_gateway();
         </li>
         <?php } ?>
 
-        <?php if(in_array(9, $activeService)){ ?>
+        <?php if (in_array(9, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsepan"
                 aria-expanded="true" aria-controls="collapsepan">
-                <i class="fa fa-credit-card"></i>
+                <i class="fa fa-credit-card" style="color: #f3baba !important;"></i>
                 <span>UTI Pancard</span>
             </a>
             <div id="collapsepan" class="collapse" aria-labelledby="heading5" data-parent="#accordionSidebar">
@@ -479,16 +500,16 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsensdlpan"
                 aria-expanded="true" aria-controls="collapsensdlpan">
-                <i class="fa fa-credit-card"></i>
+                <i class="fa fa-credit-card" style="color: #f3baba !important;"></i>
                 <span>NSDL Pancard</span>
             </a>
             <div id="collapsensdlpan" class="collapse" aria-labelledby="heading5" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">NSDL Pancard:</h6>
-                    <?php if(in_array(16, $activeService)){ ?>
-                    <?php if(!$isNsdlActive){ ?>
+                    <?php if (in_array(16, $activeService)) { ?>
+                    <?php if (!$isNsdlActive) { ?>
                     <a class="collapse-item" href="{site_url}master/pancard/nsdlActive">Activate</a>
-                    <?php }  else { ?>
+                    <?php } else { ?>
                     <a class="collapse-item" href="{site_url}master/pancard/nsdlPan">New PAN</a>
                     <a class="collapse-item" href="{site_url}master/report/nsdlPanCardReport">PAN Report</a>
                     <?php } ?>
@@ -501,15 +522,15 @@ $activeGateway = $this->User->account_active_gateway();
         </li>
 
 
-        <?php if(in_array(10, $activeService)){ ?>
+        <?php if (in_array(10, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAccount"
                 aria-expanded="true" aria-controls="collapseAccount">
-                <i class="fa fa-home"></i>
+                <i class="fas fa-tasks" style="color: #f3baba !important;"></i>
                 <span>Account Management</span>
             </a>
-            <div id="collapseAccount" <?php if($content_block == '') { ?> class="collapse show" <?php } else { ?>
+            <div id="collapseAccount" <?php if ($content_block == '') { ?> class="collapse show" <?php } else { ?>
                 class="collapse" <?php } ?> aria-labelledby="heading8" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Account Management:</h6>
@@ -528,19 +549,19 @@ $activeGateway = $this->User->account_active_gateway();
             </div>
         </li>
         <?php } ?>
-        <?php if(in_array(5, $activeService) || in_array(7, $activeService)){ ?>
+        <?php if (in_array(5, $activeService) || in_array(7, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUpi"
                 aria-expanded="true" aria-controls="collapseUpi">
-                <i class="flaticon-life-insurance"></i>
+                <i class="flaticon-life-insurance" style="color: #f3baba !important;"></i>
                 <span>UPI Transaction</span>
             </a>
-            <div id="collapseUpi" <?php if($content_block == '') { ?> class="collapse show" <?php } else { ?>
+            <div id="collapseUpi" <?php if ($content_block == '') { ?> class="collapse show" <?php } else { ?>
                 class="collapse" <?php } ?> aria-labelledby="heading8" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">UPI Transaction:</h6>
-                    <?php if(in_array(5, $activeService)){ ?>
+                    <?php if (in_array(5, $activeService)) { ?>
                     <a class="collapse-item" href="{site_url}master/wallet/addFund">UPI Collection</a>
                     <?php } ?>
 
@@ -551,15 +572,15 @@ $activeGateway = $this->User->account_active_gateway();
         </li>
         <?php } ?>
 
-        <?php if(in_array(13, $activeService)){ ?>
+        <?php if (in_array(13, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTravel"
                 aria-expanded="true" aria-controls="collapseTravel">
-                <i class="fa fa-bus"></i>
+                <i class="fa fa-bus" style="color: #f3baba !important;"></i>
                 <span>Travel </span>
             </a>
-            <div id="collapseTravel" <?php if($content_block == '') { ?> class="collapse show" <?php } else { ?>
+            <div id="collapseTravel" <?php if ($content_block == '') { ?> class="collapse show" <?php } else { ?>
                 class="collapse" <?php } ?> aria-labelledby="heading8" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Travel :</h6>
@@ -569,21 +590,22 @@ $activeGateway = $this->User->account_active_gateway();
                     <a class="collapse-item" href="#">Hotel Booking</a>
 
 
+
                 </div>
             </div>
         </li>
         <?php } ?>
 
 
-        <?php if(in_array(14, $activeService)){ ?>
+        <?php if (in_array(14, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInsurance"
                 aria-expanded="true" aria-controls="collapseInsurance">
-                <i class="flaticon-life-insurance"></i>
+                <i class="flaticon-life-insurance" style="color: #f3baba !important;"></i>
                 <span>Insurance </span>
             </a>
-            <div id="collapseInsurance" <?php if($content_block == '') { ?> class="collapse show" <?php } else { ?>
+            <div id="collapseInsurance" <?php if ($content_block == '') { ?> class="collapse show" <?php } else { ?>
                 class="collapse" <?php } ?> aria-labelledby="heading8" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Insurance :</h6>
@@ -597,15 +619,15 @@ $activeGateway = $this->User->account_active_gateway();
         </li>
         <?php } ?>
 
-        <?php if(in_array(11, $activeService)){ ?>
+        <?php if (in_array(11, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link" href="https://www.capricorn.cash/login" target="_blank">
-                <i class="fa fa-file-signature"></i>
+                <i class="fa fa-file-signature" style="color: #f3baba !important;"></i>
                 <span>Digital Signature</span></a>
         </li>
         <?php } ?>
-        <?php if(in_array(12, $activeService)){ ?>
+        <?php if (in_array(12, $activeService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link" href="#" data-toggle="modal" data-target="#instantLoanModal">
@@ -614,23 +636,31 @@ $activeGateway = $this->User->account_active_gateway();
         </li>
         <?php } ?>
 
+
         <hr class="sidebar-divider my-0">
 
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse10" aria-expanded="true"
                 aria-controls="collapse10">
-                <i class="fa fa-list"></i>
+                <i class="fa fa-list" style="color: #f3baba !important;"></i>
                 <span>Reports</span>
             </a>
-            <div id="collapse10"
-                <?php if($content_block == 'report/recharge-history' || $content_block == 'payment/list' || $content_block == 'report/loan-list' || $content_block == 'report/loan-detail' || $content_block == 'report/bbps-list' || $content_block == 'report/money-transfer-list' || $content_block == 'report/recharge-commission-list' || $content_block == 'report/fund-transfer-commission-list') { ?>
-                class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading10"
+            <div id="collapse10" <?php if (
+            $content_block == 'report/recharge-history' ||
+            $content_block == 'payment/list' ||
+            $content_block == 'report/loan-list' ||
+            $content_block == 'report/loan-detail' ||
+            $content_block == 'report/bbps-list' ||
+            $content_block == 'report/money-transfer-list' ||
+            $content_block == 'report/recharge-commission-list' ||
+            $content_block == 'report/fund-transfer-commission-list'
+        ) { ?> class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading10"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Reports:</h6>
                     <a class="collapse-item" href="{site_url}master/report/recharge">Recharge History</a>
-                    <?php if(in_array(4, $activeService)){ ?>
+                    <?php if (in_array(4, $activeService)) { ?>
                     <a class="collapse-item" href="{site_url}master/report/bbpsHistory">BBPS History</a>
                     <?php } ?>
 
@@ -638,50 +668,50 @@ $activeGateway = $this->User->account_active_gateway();
                         Report</a>
 
 
-                    <?php if(in_array(5, $activeService)){ ?>
+                    <?php if (in_array(5, $activeService)) { ?>
                     <a class="collapse-item" href="{site_url}master/report/upiTxnReport">UPI Collection Report</a>
                     <?php } ?>
-                    <?php if(in_array(7, $activeService)){ ?>
+                    <?php if (in_array(7, $activeService)) { ?>
                     <a class="collapse-item" href="{site_url}master/report/upiCashTxnReport">UPI Cash Report</a>
                     <?php } ?>
-                    <?php if(in_array(15, $adminActiveService)){ ?>
+                    <?php if (in_array(15, $adminActiveService)) { ?>
                     <a class="collapse-item" href="{site_url}master/report/cashDepositeReport">Cash Deposite History</a>
                     <?php } ?>
-                    <?php if(in_array(1, $activeGateway)){ ?>
+                    <?php if (in_array(1, $activeGateway)) { ?>
                     <a class="collapse-item" href="{site_url}master/wallet/topupHistory">PG History</a>
                     <?php } ?>
 
-                    <?php if(in_array(17, $activeService)){ ?>
+                    <?php if (in_array(17, $activeService)) { ?>
                     <a class="collapse-item"
                         href="{site_url}master/newaeps/transactionHistory"><?php echo $this->User->getAepsTitle(); ?>
                         Txn History</a>
 
                     <?php } ?>
 
-                    <?php if(in_array(19, $activeService)){ ?>
+                    <?php if (in_array(19, $activeService)) { ?>
 
                     <a class="collapse-item" href="{site_url}master/iciciaeps/transactionHistory"> ICICI Txn History</a>
                     <a class="collapse-item" href="{site_url}master/transfer/newPayoutReport">ICICI Payout Report</a>
 
                     <?php } ?>
 
-                    <?php if(in_array(16, $activeService)){ ?>
+                    <?php if (in_array(16, $activeService)) { ?>
                     <a class="collapse-item" href="{site_url}master/report/nsdlPanCardReport"> NSDL PAN Report</a>
 
                     <?php } ?>
 
 
 
-                    <?php if(in_array(22, $activeService)){ ?>
+                    <?php if (in_array(22, $activeService)) { ?>
                     <a class="collapse-item" href="{site_url}master/report/nsdlPanReport">NSDL Pan History</a>
                     <?php } ?>
 
 
-                    <?php if(in_array(26, $activeService)){ ?>
+                    <?php if (in_array(26, $activeService)) { ?>
                     <a class="collapse-item" href="{site_url}master/report/utiBalanceReport">UTI Balance History</a>
                     <?php } ?>
 
-                    <?php if(in_array(5, $activeService)){ ?>
+                    <?php if (in_array(5, $activeService)) { ?>
                     <a class="collapse-item" href="{site_url}distributor/report/upiQrHistory">Qr History</a>
                     <?php } ?>
 
@@ -695,29 +725,36 @@ $activeGateway = $this->User->account_active_gateway();
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
             <a class="nav-link" href="{site_url}master/wallet/payolTransfer">
-                <i class="fa fa-rupee"></i>
+                <i class="fa fa-rupee" style="color: #f3baba !important;"></i>
                 <span>Payol Transfer</span></a>
         </li>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse8" aria-expanded="true"
                 aria-controls="collapse8">
-                <i class="fa fa-file"></i>
+                <i class="fas fa-wallet" style="color: #f3baba !important;"></i>
                 <span>Main Wallet</span>
             </a>
-            <div id="collapse8"
-                <?php if($content_block == 'wallet/walletList' || $content_block == 'wallet/addWallet' || $content_block == 'member/fundTransferList' || $content_block == 'wallet/fundRequest' || $content_block == 'wallet/requestList' || $content_block == 'wallet/myRequestList' || $content_block == 'wallet/creditList' || $content_block == 'wallet/debitList' || $content_block == 'wallet/myWalletList' ) { ?>
-                class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading8"
+            <div id="collapse8" <?php if (
+            $content_block == 'wallet/walletList' ||
+            $content_block == 'wallet/addWallet' ||
+            $content_block == 'member/fundTransferList' ||
+            $content_block == 'wallet/fundRequest' ||
+            $content_block == 'wallet/requestList' ||
+            $content_block == 'wallet/myRequestList' ||
+            $content_block == 'wallet/creditList' ||
+            $content_block == 'wallet/debitList' ||
+            $content_block == 'wallet/myWalletList'
+        ) { ?> class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading8"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Wallet Management:</h6>
-                    <?php if(in_array(1, $activeGateway)){ ?>
+                    <?php if (in_array(1, $activeGateway)) { ?>
                     <a class="collapse-item" href="{site_url}master/wallet/topup">Add Fund PG</a>
                     <?php } ?>
 
 
-                    <?php if(in_array(5, $activeService)){
-                         ?>
+                    <?php if (in_array(5, $activeService)) { ?>
                     <a class="collapse-item" href="{site_url}master/wallet/addFund">Add Fund</a>
                     <?php } ?>
 
@@ -736,7 +773,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSaving"
                 aria-expanded="true" aria-controls="collapseSaving">
-                <i class="fa fa-file"></i>
+                <i class="fas fa-piggy-bank" style="color: #f3baba !important;"></i>
                 <span>Saving</span>
             </a>
             <div id="collapseSaving" class="collapse" aria-labelledby="heading8" data-parent="#accordionSidebar">
@@ -758,17 +795,20 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse111"
                 aria-expanded="true" aria-controls="collapse111">
-                <i class="fa fa-list"></i>
+                <i class="fa fa-rupee" style="color: #f3baba !important;"></i>
                 <span>My Commision</span>
             </a>
-            <div id="collapse111"
-                <?php if($content_block == 'master/my-commission' || $content_block == 'master/my-bbpsCommission' || $content_block == 'master/my-transfer-commision' || $content_block == 'master/my-aeps-commision') { ?>
-                class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading10"
+            <div id="collapse111" <?php if (
+            $content_block == 'master/my-commission' ||
+            $content_block == 'master/my-bbpsCommission' ||
+            $content_block == 'master/my-transfer-commision' ||
+            $content_block == 'master/my-aeps-commision'
+        ) { ?> class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading10"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Master Setting:</h6>
                     <a class="collapse-item" href="{site_url}master/master/myCommission">Recharge Commission</a>
-                    <?php if(in_array(4, $activeService)){ ?>
+                    <?php if (in_array(4, $activeService)) { ?>
                     <a class="collapse-item" href="{site_url}master/master/myBbpsLiveCommission">BBPS Commission</a>
                     <?php } ?>
                     <a class="collapse-item" href="{site_url}master/master/myAccountVerifyCharge">Account Verify
@@ -778,11 +818,11 @@ $activeGateway = $this->User->account_active_gateway();
                     <a class="collapse-item" href="{site_url}master/master/myTransferCommision">AEPS Payout Charge</a>
                     <a class="collapse-item" href="{site_url}master/master/myMoneyTransferCommision">Open Payout
                         Charge</a>
-                    <?php if(in_array(9, $activeService)){ ?>
+                    <?php if (in_array(9, $activeService)) { ?>
                     <a class="collapse-item" href="{site_url}master/master/myUtiPancardCommission">UTI Pancard
                         Charge</a>
                     <?php } ?>
-                    <?php if(in_array(16, $activeService)){ ?>
+                    <?php if (in_array(16, $activeService)) { ?>
                     <a class="collapse-item" href="{site_url}master/master/myNsdlPancardCharge">NSDL Pancard Charge</a>
                     <?php } ?>
                     <a class="collapse-item" href="{site_url}master/master/myUpiCommision">UPI Collection Charge</a>
@@ -800,12 +840,14 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse9" aria-expanded="true"
                 aria-controls="collapse9">
-                <i class="fa fa-life-ring"></i>
+                <i class="fas fa-hands-helping" style="color: #f3baba !important;"></i>
                 <span>Support Ticket</span>
             </a>
-            <div id="collapse9"
-                <?php if($content_block == 'ticket/ticketList' || $content_block == 'ticket/create' || $content_block == 'ticket/ticketDetail') { ?>
-                class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading8"
+            <div id="collapse9" <?php if (
+            $content_block == 'ticket/ticketList' ||
+            $content_block == 'ticket/create' ||
+            $content_block == 'ticket/ticketDetail'
+        ) { ?> class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading8"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Support Ticket:</h6>
@@ -819,10 +861,10 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse99" aria-expanded="true"
                 aria-controls="collapse99">
-                <i class="fa fa-life-ring"></i>
+                <i class="fas fa-question" style="color: #f3baba !important;"></i>
                 <span>Complain</span>
             </a>
-            <div id="collapse99" <?php if($content_block == 'complain/list') { ?> class="collapse show"
+            <div id="collapse99" <?php if ($content_block == 'complain/list') { ?> class="collapse show"
                 <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading8"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
@@ -837,7 +879,7 @@ $activeGateway = $this->User->account_active_gateway();
 
 
 
-        <?php if(in_array(15, $adminActiveService)){ ?>
+        <?php if (in_array(15, $adminActiveService)) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDeposit"
@@ -845,7 +887,7 @@ $activeGateway = $this->User->account_active_gateway();
                 <i class="fa fa-money-bill-alt"></i>
                 <span>Cash Deposite </span>
             </a>
-            <div id="collapseDeposit" <?php if($content_block == '') { ?> class="collapse show" <?php } else { ?>
+            <div id="collapseDeposit" <?php if ($content_block == '') { ?> class="collapse show" <?php } else { ?>
                 class="collapse" <?php } ?> aria-labelledby="heading8" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Cash Deposite :</h6>
@@ -862,13 +904,20 @@ $activeGateway = $this->User->account_active_gateway();
 
 
 
-        <?php if($customLinkList){ ?>
-        <?php foreach($customLinkList as $linkList){ ?>
+        <?php if ($customLinkList) { ?>
+        <?php foreach ($customLinkList as $linkList) { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link" href="<?php echo $linkList['url']; ?>" target="_blank">
-                <i class="fa fa-link"></i>
-                <span><?php echo $linkList['title']; ?></span></a>
+
+                <?php if($linkList['title']=="UTI PAN CARD"){ ?>
+                <i class="fas fa-id-card" style="color: #f3baba !important;"></i>
+                <? } else{ ?>
+                <i class="fas fa-plane-departure" style="color: #f3baba !important;"></i>
+                <? } ?>
+                <span><?php echo $linkList['title']; ?></span>
+            </a>
+
         </li>
         <?php } ?>
         <?php } ?>
@@ -881,12 +930,13 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse13" aria-expanded="true"
                 aria-controls="collapse13">
-                <i class="fa fa-cog"></i>
+                <i class="fa fa-cog" style="color: #f3baba !important;"></i>
                 <span>Setting</span>
             </a>
-            <div id="collapse13"
-                <?php if($content_block == 'setting/profile' || $content_block == 'setting/change-password') { ?>
-                class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading8"
+            <div id="collapse13" <?php if (
+            $content_block == 'setting/profile' ||
+            $content_block == 'setting/change-password'
+        ) { ?> class="collapse show" <?php } else { ?> class="collapse" <?php } ?> aria-labelledby="heading8"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Setting:</h6>
@@ -932,13 +982,13 @@ $activeGateway = $this->User->account_active_gateway();
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
                         <li class="nav-item dropdown" style="padding-top: 25px; padding-right: 25px;">
                             <h6>
                                 <b>Main Wallet Balance - &#8377;
-                                    <?php echo number_format($this->User->getMemberWalletBalanceSP($loggedUser['id']),2); ?></b>
+                                    <?php echo number_format($this->User->getMemberWalletBalanceSP($loggedUser['id']), 2); ?></b>
                             </h6>
                         </li>
+
 
 
                         <div class="topbar-divider d-none d-sm-block"></div>
@@ -950,9 +1000,9 @@ $activeGateway = $this->User->account_active_gateway();
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                                     <?php
-                $data=$this->db->get_where('users',array('id'=>$loggedUser['id']))->row_array();
-                echo $data['name'].'</br>( '.$data['user_code'].' )';
-                ?>
+                  $data = $this->db->get_where('users', ['id' => $loggedUser['id']])->row_array();
+                  echo $data['name'] . '</br>( ' . $data['user_code'] . ' )';
+                  ?>
 
                                 </span>
                                 <img class="img-profile rounded-circle" src="{site_url}skin/admin/img/user.png">
@@ -989,22 +1039,23 @@ $activeGateway = $this->User->account_active_gateway();
                                     <h4><i class="fa fa-microphone"></i>Updates</h4>
                                 </div>
                                 <div style="display: flex;">
-                                    <?php  $news = $this->db->get_where('website_news',array('account_id'=>$account_id))->result_array();
-                    if($news){
-                   ?>
+                                    <?php
+                   $news = $this->db->get_where('website_news', ['account_id' => $account_id])->result_array();
+                   if ($news) { ?>
 
                                     <marquee>
                                         <?php
-         $i=1;
-         foreach($news as $list){
-         ?>
+                          $i = 1;
+                          foreach ($news as $list) { ?>
                                         <p> <?php echo $i; ?>. <?php echo $list['news']; ?> </p>
-                                        <?php } ?>
+                                        <?php }
+                          ?>
                                     </marquee>
 
 
 
-                                    <?php } ?>
+                                    <?php }
+                   ?>
                                 </div>
                             </div>
                         </div>
@@ -1015,17 +1066,18 @@ $activeGateway = $this->User->account_active_gateway();
 
 
             <?php $notificationList = $this->User->getClubNotification($loggedUser['id']); ?>
-            <?php if($notificationList){ ?>
+            <?php if ($notificationList) { ?>
             <div class="container-fluid">
-                <?php foreach($notificationList as $nlist){ ?>
-                <?php if($nlist['to_member_id'] == 0){ ?>
+                <?php foreach ($notificationList as $nlist) { ?>
+                <?php if ($nlist['to_member_id'] == 0) { ?>
                 <div class="alert alert-success alert-dismissable"><?php echo $nlist['msg']; ?> <a
                         href="{site_url}master/saving/clubList">Accept</a></div>
                 <?php } else { ?>
                 <div class="alert alert-success alert-dismissable"> <button type="button" class="close"
                         data-dismiss="alert" aria-hidden="true"
-                        onclick="closeClubNoti(<?php echo $nlist['id']; ?>);">&times;</button><?php echo $nlist['msg']; ?>
-                </div>
+                        onclick="closeClubNoti(<?php echo $nlist['id']; ?>);">&times;</button><?php echo $nlist[
+    'msg'
+]; ?></div>
                 <?php } ?>
                 <?php } ?>
 

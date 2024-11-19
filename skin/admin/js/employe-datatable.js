@@ -4672,7 +4672,7 @@ function openMoneyTransferHistoryDataTable(
     order: [[0, "desc"]],
     deferRender: true,
     ajax: {
-      url: "getOpenMoneyTransferListCombined",
+      url: siteUrl+"employe/report/getOpenMoneyTransferListCombined",
       data: function (d) {
         d.extra_search =
           keyword +
