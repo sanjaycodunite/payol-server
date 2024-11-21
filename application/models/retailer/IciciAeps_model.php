@@ -4,7 +4,7 @@ if (!defined('BASEPATH'))
 
 /*
  * Model used for setup default message and resize image
- * 
+ *
  * This one used for defined some methods accross all site.
  * this one used for show system message, errors.
  * this one used for image resizing
@@ -17,7 +17,7 @@ class IciciAeps_model extends CI_Model {
 
     public function __construct() {
         parent::__construct();
-        
+
     }
 
     public function activeAEPSMember($post,$aadhar_photo,$aadhar_back_photo,$pancard_photo)
@@ -26,37 +26,40 @@ class IciciAeps_model extends CI_Model {
         $accountData = $this->User->get_account_data($account_id);
         $loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
         $memberID = $loggedUser['id'];
-        
-        
+
+        $googleResponse = $this->User->get_lat_lon($post['pin_code']);
+        $lat = isset($googleResponse['lat']) ? $googleResponse['lat'] : '';
+        $lng = isset($googleResponse['lng']) ? $googleResponse['lng'] : '';
+
         $wallet_data = array(
-            'account_id' => $account_id,
-            'member_id'           => $memberID, 
-            'first_name'      => $post['first_name'],
-            'middle_name'      => $post['middle_name'],
-            'last_name'              => $post['last_name'],  
-            'mobile'       => $post['mobile'],      
-            'shop_name'              => $post['shop_name'],      
-            'state_id'                => $post['state_id'],       
-            'city_id'             => $post['city_id'],       
-            'address'         => $post['address'],
-            'pin_code'         => $post['pin_code'],
-            'aadhar'         => $post['aadhar_no'],
-            'pancard'         => $post['pancard_no'],
-            'aadhar_photo'         => $aadhar_photo,
-            'aadhar_back_photo'   =>$aadhar_back_photo,
-            'pancard_photo'         => $pancard_photo,
-            'is_otp_verify'  => 0,
-            'status'         => 0,
-            'father_name' =>$post['father_name'],
-            'mother_name'  =>$post['mother_name'],
-            'village'       =>$post['village'],
-            'post'              =>$post['post'],
-            'police_station'     =>$post['police_station'],
-            'block'                =>$post['block'],
-            'district'              =>$post['district'],
-            'account_no'                =>$post['account_no'],
-            'bank_ifsc'                 =>$post['bank_ifsc'],
-            'created'             => date('Y-m-d H:i:s'),      
+            'account_id'         => $account_id,
+            'member_id'          => $memberID,
+            'first_name'         => $post['first_name'],
+            'middle_name'        => $post['middle_name'],
+            'last_name'          => $post['last_name'],
+            'mobile'             => $post['mobile'],
+            'shop_name'          => $post['shop_name'],
+            'state_id'           => $post['state_id'],
+            'city_id'            => $post['city_id'],
+            'address'            => $post['address'],
+            'pin_code'           => $post['pin_code'],
+            'aadhar'             => $post['aadhar_no'],
+            'pancard'            => $post['pancard_no'],
+            'aadhar_photo'       => $aadhar_photo,
+            'aadhar_back_photo'  => $aadhar_back_photo,
+            'pancard_photo'      => $pancard_photo,
+            'is_otp_verify'      => 0,
+            'status'             => 0,
+            'father_name'        => $post['father_name'],
+            'mother_name'        => $post['mother_name'],
+            'village'            => $post['village'],
+            'post'               => $post['post'],
+            'police_station'     => $post['police_station'],
+            'block'              => $post['block'],
+            'district'           => $post['district'],
+            'account_no'         => $post['account_no'],
+            'bank_ifsc'          => $post['bank_ifsc'],
+            'created'            => date('Y-m-d H:i:s'),
             'created_by'         => $loggedUser['id'],
         );
 
@@ -75,69 +78,65 @@ class IciciAeps_model extends CI_Model {
         $get_city_name = $this->db->get_where('city',array('city_id'=>$post['city_id']))->row_array();
         $city_name = isset($get_city_name['city_name']) ? $get_city_name['city_name'] : '';
 
-          $api_url = INSTANTPAY_EKYC_URL;
+        $api_url = INSTANTPAY_EKYC_URL;
 
-
-                    $ivlen = openssl_cipher_iv_length('aes-256-cbc');
-                    $iv = openssl_random_pseudo_bytes($ivlen);
-                    $ciphertext = openssl_encrypt($post['aadhar_no'],'aes-256-cbc', $accountData['instant_encryption_key'], OPENSSL_RAW_DATA, $iv);
-                    $encryptedData = base64_encode($iv . $ciphertext);
-
+        $ivlen = openssl_cipher_iv_length('aes-256-cbc');
+        $iv = openssl_random_pseudo_bytes($ivlen);
+        $ciphertext = openssl_encrypt($post['aadhar_no'],'aes-256-cbc', $accountData['instant_encryption_key'], OPENSSL_RAW_DATA, $iv);
+        $encryptedData = base64_encode($iv . $ciphertext);
 
         $postData = array(
-            
-                        'mobile' => $post['mobile'],
-                        'pan' => $post['pancard_no'],
-                        'email' => $member_email,
-                        'aadhaar' => $encryptedData,
-                        "latitude"=>"22.9734229",
-                        "longitude"=>"78.6568942",
-                        "bankAccountNo"=>$post['account_no'],
-                        "bankIfsc" => $post['bank_ifsc'],
-                        'consent' => "Y"
+            'mobile' => $post['mobile'],
+            'pan' => $post['pancard_no'],
+            'email' => $member_email,
+            'aadhaar' => $encryptedData,
+            "latitude"=>$lat,
+            "longitude"=>$lng,
+            "bankAccountNo"=>$post['account_no'],
+            "bankIfsc" => $post['bank_ifsc'],
+            'consent' => "Y"
         );
 
-             $header = array(
-                        'X-Ipay-Auth-Code: 1',
-                        'X-Ipay-Client-Id: '.$accountData['instant_client_id'],
-                        'X-Ipay-Client-Secret: '.$accountData['instant_client_secret'],
-                        'X-Ipay-Endpoint-Ip: 103.129.97.70',
-                        'content-type: application/json'
-                    );
+        $header = array(
+            'X-Ipay-Auth-Code: 1',
+            'X-Ipay-Client-Id: '.$accountData['instant_client_id'],
+            'X-Ipay-Client-Secret: '.$accountData['instant_client_secret'],
+            'X-Ipay-Endpoint-Ip: 103.129.97.70',
+            'content-type: application/json'
+        );
 
+        $curl = curl_init();
+        // URL
+        curl_setopt($curl, CURLOPT_URL, $api_url);
 
-                    $curl = curl_init();
-                    // URL
-                    curl_setopt($curl, CURLOPT_URL, $api_url);
+        // Return Transfer
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-                    // Return Transfer
-                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        // SSL Verify Peer
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
-                    // SSL Verify Peer
-                    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+        // SSL Verify Host
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
 
-                    // SSL Verify Host
-                    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+        // Timeout
+        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
 
-                    // Timeout
-                    curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        // HTTP Version
+        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 
-                    // HTTP Version
-                    curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        // Request Method
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
 
-                    // Request Method
-                    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
 
-                    curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+        // Request Body
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($postData));
 
-                    // Request Body
-                    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($postData));
+        // Execute
+        $output = curl_exec($curl);
 
-                    // Execute
-                   $output = curl_exec($curl);
-
-                    // Close
-                    curl_close ($curl);
+        // Close
+        curl_close ($curl);
 
         $responseData = json_decode($output,true);
 
@@ -158,14 +157,10 @@ class IciciAeps_model extends CI_Model {
 
             $otpReferenceID =  $responseData['data']['otpReferenceID'];
             $hash = $responseData['data']['hash'];
-            // update aeps status
             $this->db->where('id',$recordID);
             $this->db->update('instantpay_ekyc',array('is_otp_verify'=>0,'otpReferenceID'=>$otpReferenceID,'hash'=>$hash));
-
             return array('status'=>1,'msg'=>$responseData['status'],'otpReferenceID'=>$otpReferenceID);
-        }
-        else
-        {
+        }else{
             return array('status'=>0,'msg'=>$responseData['status']);
         }
     }
@@ -199,13 +194,13 @@ class IciciAeps_model extends CI_Model {
         curl_setopt($ch, CURLOPT_POSTFIELDS,$api_otp_post_data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        
+
         $headers = [
             'username: '.$accountData['aeps_username'],
             'password: '.$accountData['aeps_password'],
             'Content-Type:application/x-www-form-urlencoded'
         ];
-        
+
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         $otp_output = curl_exec ($ch);
         curl_close ($ch);
@@ -247,7 +242,7 @@ class IciciAeps_model extends CI_Model {
 
         // check already kyc approved or not
         $get_kyc_data = $this->db->get_where('instantpay_ekyc',array('account_id'=>$account_id,'member_id'=>$memberID,'otpReferenceID'=>$otpReferenceID,'is_otp_verify'=>0))->row_array();
-        
+
         $recordID = isset($get_kyc_data['id']) ? $get_kyc_data['id'] : '';
 
         // send OTP API
@@ -258,14 +253,14 @@ class IciciAeps_model extends CI_Model {
                     $iv = openssl_random_pseudo_bytes($ivlen);
                     $ciphertext = openssl_encrypt($aadhar,'aes-256-cbc', $accountData['instant_encryption_key'], OPENSSL_RAW_DATA, $iv);
                     $encryptedData = base64_encode($iv . $ciphertext);
-                    
+
                     $request = array(
                         'otpReferenceID' => $otpReferenceID,
                         'hash' => $hash,
                         'otp' => $otp_code
                     );
 
-         
+
 
          $header = array(
                         'X-Ipay-Auth-Code: 1',
@@ -274,7 +269,7 @@ class IciciAeps_model extends CI_Model {
                         'X-Ipay-Endpoint-Ip: 164.52.219.77',
                         'content-type: application/json'
                     );
-                    
+
 
 
                      $curl = curl_init();
@@ -309,12 +304,12 @@ class IciciAeps_model extends CI_Model {
 
                     // Close
                     curl_close ($curl);
-                    
 
 
-        
-       
-       
+
+
+
+
         $otpResponseData = json_decode($output,true);
 
         $apiData = array(
@@ -329,7 +324,7 @@ class IciciAeps_model extends CI_Model {
         $this->db->insert('instantpay_api_response',$apiData);
         if(isset($otpResponseData['statuscode']) && $otpResponseData['statuscode'] == 'TXN' && $otpResponseData['status'] == 'Transaction Successful')
         {
-            
+
             $outlet_id = $otpResponseData['data']['outletId'];
             /*$primaryKeyId = isset($otpResponseData['Data'][0]['primaryKeyId']) ? $otpResponseData['Data'][0]['primaryKeyId'] : '';
             $encodeFPTxnId = isset($otpResponseData['Data'][0]['encodeFPTxnId']) ? $otpResponseData['Data'][0]['encodeFPTxnId'] : '';*/
@@ -349,7 +344,7 @@ class IciciAeps_model extends CI_Model {
     }
 
     public function addBalance($txnID,$aadharNumber,$iin,$amount,$recordID,$serviceType = '')
-    {       
+    {
         $account_id = $this->User->get_domain_account();
         $accountData = $this->User->get_account_data($account_id);
         $loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
@@ -375,7 +370,7 @@ class IciciAeps_model extends CI_Model {
         $is_surcharge = isset($commisionData['is_surcharge']) ? $commisionData['is_surcharge'] : 0 ;
 
         //get member wallet_balance
-        
+
         $before_wallet_balance = $this->User->getMemberWalletBalanceSP($memberID);
 
 
@@ -383,14 +378,14 @@ class IciciAeps_model extends CI_Model {
         $after_balance = $before_wallet_balance + $amount;
         $wallet_data = array(
             'account_id'          => $account_id,
-            'member_id'           => $memberID,    
+            'member_id'           => $memberID,
             'before_balance'      => $before_wallet_balance,
-            'amount'              => $amount,  
-            'after_balance'       => $after_balance,      
+            'amount'              => $amount,
+            'after_balance'       => $after_balance,
             'status'              => 1,
-            'type'                => 1,   
-            'wallet_type'         => 1,   
-            'created'             => date('Y-m-d H:i:s'),      
+            'type'                => 1,
+            'wallet_type'         => 1,
+            'created'             => date('Y-m-d H:i:s'),
             'description'         => 'AEPS Txn #'.$txnID.' Amount Credited.'
         );
 
@@ -409,13 +404,13 @@ class IciciAeps_model extends CI_Model {
                 'is_surcharge' => $is_surcharge,
                 'wallet_settle_amount' => $com_amount,
                 'status' => 1,
-                'created'             => date('Y-m-d H:i:s'),      
+                'created'             => date('Y-m-d H:i:s'),
                 'created_by'         => $memberID,
             );
             $this->db->insert('member_aeps_comm',$commData);
 
             //get member wallet_balance
-           
+
             $before_wallet_balance = $this->User->getMemberWalletBalanceSP($memberID);
 
             if($is_surcharge)
@@ -424,14 +419,14 @@ class IciciAeps_model extends CI_Model {
 
                 $wallet_data = array(
                     'account_id'          => $account_id,
-                    'member_id'           => $memberID,    
+                    'member_id'           => $memberID,
                     'before_balance'      => $before_wallet_balance,
-                    'amount'              => $com_amount,  
-                    'after_balance'       => $after_wallet_balance,      
+                    'amount'              => $com_amount,
+                    'after_balance'       => $after_wallet_balance,
                     'status'              => 1,
-                    'type'                => 2,   
-                    'wallet_type'         => 1,   
-                    'created'             => date('Y-m-d H:i:s'),      
+                    'type'                => 2,
+                    'wallet_type'         => 1,
+                    'created'             => date('Y-m-d H:i:s'),
                     'description'         => 'AEPS Txn #'.$txnID.' Charge Amount Debited.'
                 );
 
@@ -444,14 +439,14 @@ class IciciAeps_model extends CI_Model {
 
                 $wallet_data = array(
                     'account_id'          => $account_id,
-                    'member_id'           => $memberID,    
+                    'member_id'           => $memberID,
                     'before_balance'      => $before_wallet_balance,
-                    'amount'              => $com_amount,  
-                    'after_balance'       => $after_wallet_balance,      
+                    'amount'              => $com_amount,
+                    'after_balance'       => $after_wallet_balance,
                     'status'              => 1,
-                    'type'                => 1,   
-                    'wallet_type'         => 1,   
-                    'created'             => date('Y-m-d H:i:s'),      
+                    'type'                => 1,
+                    'wallet_type'         => 1,
+                    'created'             => date('Y-m-d H:i:s'),
                     'description'         => 'AEPS Txn #'.$txnID.' Commission Amount Credited.'
                 );
 
@@ -462,7 +457,7 @@ class IciciAeps_model extends CI_Model {
                 if($accountData['is_tds_amount'] == 1)
                             {
 
-                               
+
 
                                 $user_balance = $this->User->getMemberWalletBalanceSP($memberID);
 
@@ -475,32 +470,32 @@ class IciciAeps_model extends CI_Model {
 
                             $wallet_data = array(
                                 'account_id'          => $account_id,
-                                'member_id'           => $memberID,    
+                                'member_id'           => $memberID,
                                 'before_balance'      => $before_balance,
-                                'amount'              => $tds_amount,  
-                                'after_balance'       => $after_balance,      
+                                'amount'              => $tds_amount,
+                                'after_balance'       => $after_balance,
                                 'status'              => 1,
-                                'type'                => 2,  
-                                'wallet_type'         => 1,      
-                                'created'             => date('Y-m-d H:i:s'),      
+                                'type'                => 2,
+                                'wallet_type'         => 1,
+                                'created'             => date('Y-m-d H:i:s'),
                                 'credited_by'         => $memberID,
                                 'description'         => 'AEPS Txn  #'.$txnID.'  Commision tds amount deducted'
                             );
 
                             $this->db->insert('member_wallet',$wallet_data);
 
-                            //save tds entry 
+                            //save tds entry
 
 
                             $wallet_data = array(
                                 'account_id'          => $account_id,
-                                'member_id'           => $memberID,  
+                                'member_id'           => $memberID,
                                 'record_id'            =>$recordID,
                                 'com_amount'      => $com_amount,
-                                'tds_amount'              =>$tds_amount, 
+                                'tds_amount'              =>$tds_amount,
                                 'status'              => 1,
                                 'type'                => 2,
-                                'created'             => date('Y-m-d H:i:s'),      
+                                'created'             => date('Y-m-d H:i:s'),
                                 'credited_by'         => $memberID,
                                 'description'         => 'AEPS Txn  #'.$txnID.'  Commision tds amount deducted'
                             );
@@ -508,27 +503,27 @@ class IciciAeps_model extends CI_Model {
                             $this->db->insert('tds_report',$wallet_data);
 
                             }
-                            
+
                         }
            // }
         }
 
         //get member wallet_balance
-        
+
         $before_wallet_balance = $this->User->getMemberCollectionWalletBalanceSP($admin_id);
 
         $after_wallet_balance = $before_wallet_balance + $amount;
 
         $wallet_data = array(
             'account_id'          => $account_id,
-            'member_id'           => $admin_id,    
+            'member_id'           => $admin_id,
             'before_balance'      => $before_wallet_balance,
-            'amount'              => $amount,  
-            'after_balance'       => $after_wallet_balance,      
+            'amount'              => $amount,
+            'after_balance'       => $after_wallet_balance,
             'status'              => 1,
-            'type'                => 1,   
-            'wallet_type'         => 1,   
-            'created'             => date('Y-m-d H:i:s'),      
+            'type'                => 1,
+            'wallet_type'         => 1,
+            'created'             => date('Y-m-d H:i:s'),
             'description'         => 'AEPS Txn #'.$txnID.' Amount Credited.'
         );
 
@@ -552,13 +547,13 @@ class IciciAeps_model extends CI_Model {
                 'wallet_settle_amount' => $admin_com_amount,
                 'is_paid' => $is_paid,
                 'status' => 1,
-                'created'             => date('Y-m-d H:i:s'),      
+                'created'             => date('Y-m-d H:i:s'),
                 'created_by'         => $memberID,
             );
             $this->db->insert('member_aeps_comm',$commData);
 
             //get member wallet_balance
-           
+
             $before_wallet_balance =$this->User->getMemberCollectionWalletBalanceSP($admin_id);
             if($admin_is_surcharge)
             {
@@ -566,23 +561,23 @@ class IciciAeps_model extends CI_Model {
 
                 $wallet_data = array(
                     'account_id'          => $account_id,
-                    'member_id'           => $admin_id,    
+                    'member_id'           => $admin_id,
                     'before_balance'      => $before_wallet_balance,
-                    'amount'              => $admin_com_amount,  
-                    'after_balance'       => $after_wallet_balance,      
+                    'amount'              => $admin_com_amount,
+                    'after_balance'       => $after_wallet_balance,
                     'status'              => 1,
-                    'type'                => 2,   
-                    'wallet_type'         => 1,   
-                    'created'             => date('Y-m-d H:i:s'),      
+                    'type'                => 2,
+                    'wallet_type'         => 1,
+                    'created'             => date('Y-m-d H:i:s'),
                     'description'         => 'AEPS Txn #'.$txnID.' Charge Amount Debited.'
                 );
 
                 $this->db->insert('collection_wallet',$wallet_data);
 
             }
-            
+
         }
-            
+
 
         $log_msg = '['.date('d-m-Y H:i:s').' - DT('.$loggedUser['user_code'].') - ICICI AEPS - Distribute Commision/Surcharge Start]'.PHP_EOL;
         $this->User->generateLog($log_msg);
@@ -598,7 +593,7 @@ class IciciAeps_model extends CI_Model {
     }
 
     public function addStatementCom($txnID,$aadharNumber,$iin,$amount,$recordID)
-    {       
+    {
         $account_id = $this->User->get_domain_account();
         $accountData = $this->User->get_account_data($account_id);
         $loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
@@ -625,7 +620,7 @@ class IciciAeps_model extends CI_Model {
                 'is_surcharge' => $is_surcharge,
                 'wallet_settle_amount' => $com_amount,
                 'status' => 1,
-                'created'             => date('Y-m-d H:i:s'),      
+                'created'             => date('Y-m-d H:i:s'),
                 'created_by'         => $memberID,
             );
             $this->db->insert('member_aeps_comm',$commData);
@@ -640,14 +635,14 @@ class IciciAeps_model extends CI_Model {
 
                 $wallet_data = array(
                     'account_id'          => $account_id,
-                    'member_id'           => $memberID,    
+                    'member_id'           => $memberID,
                     'before_balance'      => $before_wallet_balance,
-                    'amount'              => $com_amount,  
-                    'after_balance'       => $after_wallet_balance,      
+                    'amount'              => $com_amount,
+                    'after_balance'       => $after_wallet_balance,
                     'status'              => 1,
-                    'type'                => 2,   
-                    'wallet_type'         => 1,   
-                    'created'             => date('Y-m-d H:i:s'),      
+                    'type'                => 2,
+                    'wallet_type'         => 1,
+                    'created'             => date('Y-m-d H:i:s'),
                     'description'         => 'AEPS Txn #'.$txnID.' Charge Amount Debited.'
                 );
 
@@ -660,14 +655,14 @@ class IciciAeps_model extends CI_Model {
 
                 $wallet_data = array(
                     'account_id'          => $account_id,
-                    'member_id'           => $memberID,    
+                    'member_id'           => $memberID,
                     'before_balance'      => $before_wallet_balance,
-                    'amount'              => $com_amount,  
-                    'after_balance'       => $after_wallet_balance,      
+                    'amount'              => $com_amount,
+                    'after_balance'       => $after_wallet_balance,
                     'status'              => 1,
-                    'type'                => 1,   
-                    'wallet_type'         => 1,   
-                    'created'             => date('Y-m-d H:i:s'),      
+                    'type'                => 1,
+                    'wallet_type'         => 1,
+                    'created'             => date('Y-m-d H:i:s'),
                     'description'         => 'AEPS Txn #'.$txnID.' Commission Amount Credited.'
                 );
 
@@ -684,31 +679,31 @@ class IciciAeps_model extends CI_Model {
 
                             $wallet_data = array(
                                 'account_id'          => $account_id,
-                                'member_id'           => $memberID,    
+                                'member_id'           => $memberID,
                                 'before_balance'      => $before_balance,
-                                'amount'              => $tds_amount,  
-                                'after_balance'       => $after_balance,      
+                                'amount'              => $tds_amount,
+                                'after_balance'       => $after_balance,
                                 'status'              => 1,
-                                'type'                => 2,  
-                                'wallet_type'         => 1,      
-                                'created'             => date('Y-m-d H:i:s'),      
+                                'type'                => 2,
+                                'wallet_type'         => 1,
+                                'created'             => date('Y-m-d H:i:s'),
                                 'credited_by'         => $memberID,
                                 'description'         => 'AEPS Txn  #'.$txnID.'  Commision tds amount deducted'
                             );
 
                             $this->db->insert('member_wallet',$wallet_data);
 
-                            //save tds entry 
+                            //save tds entry
 
                             $wallet_data = array(
                                 'account_id'          => $account_id,
-                                'member_id'           => $memberID,  
+                                'member_id'           => $memberID,
                                 'record_id'            =>$recordID,
                                 'com_amount'      => $com_amount,
-                                'tds_amount'              =>$tds_amount, 
+                                'tds_amount'              =>$tds_amount,
                                 'status'              => 1,
                                 'type'                => 2,
-                                'created'             => date('Y-m-d H:i:s'),      
+                                'created'             => date('Y-m-d H:i:s'),
                                 'credited_by'         => $memberID,
                                 'description'         => 'AEPS Txn  #'.$txnID.'  Commision tds amount deducted'
                             );
@@ -739,13 +734,13 @@ class IciciAeps_model extends CI_Model {
                 'wallet_settle_amount' => $admin_com_amount,
                 'is_paid' => $is_paid,
                 'status' => 1,
-                'created'             => date('Y-m-d H:i:s'),      
+                'created'             => date('Y-m-d H:i:s'),
                 'created_by'         => $memberID,
             );
             $this->db->insert('member_aeps_comm',$commData);
 
             //get member wallet_balance
-           
+
             $before_wallet_balance = $this->User->getMemberCollectionWalletBalanceSP($admin_id);
 
             if($admin_is_surcharge)
@@ -754,23 +749,23 @@ class IciciAeps_model extends CI_Model {
 
                 $wallet_data = array(
                     'account_id'          => $account_id,
-                    'member_id'           => $admin_id,    
+                    'member_id'           => $admin_id,
                     'before_balance'      => $before_wallet_balance,
-                    'amount'              => $admin_com_amount,  
-                    'after_balance'       => $after_wallet_balance,      
+                    'amount'              => $admin_com_amount,
+                    'after_balance'       => $after_wallet_balance,
                     'status'              => 1,
-                    'type'                => 2,   
-                    'wallet_type'         => 1,   
-                    'created'             => date('Y-m-d H:i:s'),      
+                    'type'                => 2,
+                    'wallet_type'         => 1,
+                    'created'             => date('Y-m-d H:i:s'),
                     'description'         => 'AEPS Txn #'.$txnID.' Charge Amount Debited.'
                 );
 
                 $this->db->insert('collection_wallet',$wallet_data);
 
             }
-            
+
         }
-            
+
               // save system log
         $log_msg = '['.date('d-m-Y H:i:s').' - DT('.$loggedUser['user_code'].') - AEPS - Distribute Commision/Surcharge Start]'.PHP_EOL;
         $this->User->generateLog($log_msg);
@@ -782,11 +777,11 @@ class IciciAeps_model extends CI_Model {
         $log_msg = '['.date('d-m-Y H:i:s').' - DT('.$loggedUser['user_code'].') - AEPS - Distribute Commision/Surcharge End]'.PHP_EOL;
         $this->User->generateLog($log_msg);
 
-        
+
         return true;
     }
 
-   
+
 
     public function saveAepsTxn($txnID,$service,$aadhar_no,$mobile,$amount,$iinno,$api_url,$api_response,$message,$status,$api_response_data = array(),$balanceAmount = '',$bankRRN = '',$transactionAmount = '')
     {
@@ -819,19 +814,19 @@ class IciciAeps_model extends CI_Model {
         );
         $this->db->insert('instantpay_aeps_transaction',$txnData);
         $recordID = $this->db->insert_id();
-        
+
          if($service == 'balwithdraw')
         {
                                     $this->db->where('account_id',$account_id);
 						        	$this->db->where('member_id',$memberID);
-						        	$this->db->update('instantpay_aeps_member_login_status',array('status'=>0));	
+						        	$this->db->update('instantpay_aeps_member_login_status',array('status'=>0));
         }
-        
-        
+
+
         return $recordID;
     }
-    
-    
+
+
 
 }
 

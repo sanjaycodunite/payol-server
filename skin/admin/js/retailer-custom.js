@@ -2900,5 +2900,59 @@ function updateBenModel2(id) {
   });
 }
 
+/**Activate AEPS 3  */
+$(document).ready(function () {
+  $(".aeps3btn").click(function (e) {
+    e.preventDefault();
+    var siteUrl = $("#siteUrl").val(); // Get the site URL
+    var formData = $("#aeps3_form").serialize(); // Serialize form data
+    $('#loader').show(); // Show loader
+
+    $.ajax({
+      type: "post",
+      url: siteUrl + "retailer/iciciaeps/activeAuth", 
+      data: formData,
+      dataType: "json",
+      success: function (response) {
+        $('#loader').hide(); // Hide loader on success
+        $('.error').html(''); // Clear any previous error messages
+        $('#benAlert').removeClass('show').addClass('hide').html(''); // Clear the alert box
+
+        if (response.error && response.errors) {
+          // Loop through errors and display them on the form
+          $.each(response.errors, function (key, value) {
+            $('#' + key + '_error').html(value);
+          });
+        } else if (response.error) {
+          // Display a generic error if the response has an error but no specific error details
+          $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
+          if (response.apiresponse === "yes") {
+            // Show specific API error details
+            $('#benAlert').html(`<b><strong>Error:</strong> (${response.dataval.statuscode} - ${response.dataval.statuscodemessage})</b>`);
+          } else {
+            $('#benAlert').html(`<b><strong>Error:</strong> ${response.dataval}</b>`);
+          }
+          setTimeout(function () {
+            $('#benAlert').removeClass('show').addClass('hide').empty(); // Hide alert after 5 seconds
+          }, 5000);
+        } else {
+          // If no error, populate modal and display success message
+          $("#account_holder_name").val(response.account_holder_name);
+          $("#bankModal").modal("show");
+          $("#bankResponse").html(response.dataval);
+          setTimeout(function () {
+            $('#benAlert').removeClass('show').addClass('hide').empty(); // Hide alert after 3 seconds
+          }, 3000);
+        }
+      },
+      error: function (xhr, status, error) {
+        $('#loader').hide(); // Hide loader on error
+        console.error("AJAX error: " + error); // Log the error
+        $('#benAlert').removeClass('hide').addClass('show').html("An error occurred. Please try again.");
+      }
+    });
+  });
+
+});
 
 

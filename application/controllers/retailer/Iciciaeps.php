@@ -1,29 +1,29 @@
-<?php 
-class Iciciaeps extends CI_Controller {    
-    
-    
-    public function __construct() 
+<?php
+class Iciciaeps extends CI_Controller {
+
+
+    public function __construct()
     {
         parent::__construct();
        	$this->User->checkRetailerPermission();
-        $this->load->model('retailer/IciciAeps_model');		
+        $this->load->model('retailer/IciciAeps_model');
         $this->lang->load('retailer/aeps', 'english');
-        
+
     }
 
 	public function index(){
-		
+
 
 		$account_id = $this->User->get_domain_account();
 	 	$loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
 	 	$memberID = $loggedUser['id'];
-	 
-        
+
+
 	 	$activeService = $this->User->account_active_service($loggedUser['id']);
 		if(!in_array(19, $activeService)){
 			$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AUTHORIZE_ERROR'));
 		}
-		
+
 		$user_instantpay_aeps_status = $this->User->get_member_instantpay_aeps_status($loggedUser['id']);
 		if(!$user_instantpay_aeps_status){
 			$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AEPS_ACTIVE_ERROR'));
@@ -32,14 +32,14 @@ class Iciciaeps extends CI_Controller {
 
 
 		$user_2fa_instantpay_aeps_status = $this->User->get_member_2fa_instantpay_aeps_status($loggedUser['id']);
-       
+
 		if(!$user_2fa_instantpay_aeps_status){
-		    
+
 			$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AEPS_ACTIVE_ERROR'));
 		}
-		
+
 		$user_2fa_instantpay_aeps_loginn_status = $this->User->get_member_2fa_instantpay_aeps_login_status($loggedUser['id']);
-       
+
 		if(!$user_2fa_instantpay_aeps_loginn_status){
 		    echo "safd";
 		    die;
@@ -47,11 +47,11 @@ class Iciciaeps extends CI_Controller {
 		}
 
 
-		
-  		$siteUrl = base_url();	
+
+  		$siteUrl = base_url();
 
   		// get bank list
-  		$bankList = $this->db->get('instantpay_aeps_bank_list')->result_array();	
+  		$bankList = $this->db->get('instantpay_aeps_bank_list')->result_array();
 
 		$data = array(
             'meta_title' => lang('SITE_NAME'),
@@ -67,8 +67,8 @@ class Iciciaeps extends CI_Controller {
             'content_block' => 'iciciaeps/list'
         );
         $this->parser->parse('retailer/layout/column-1' , $data);
-    
-	
+
+
 	}
 
 	public function activeAeps(){
@@ -81,9 +81,9 @@ class Iciciaeps extends CI_Controller {
 		if(!in_array(19, $activeService)){
 			$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AUTHORIZE_ERROR'));
 		}
-		
+
 		$user_instantpay_aeps_status = $this->User->get_member_instantpay_aeps_status($loggedUser['id']);
-		
+
 		if($user_instantpay_aeps_status)
 		{
 			$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AEPS_MEMBER_ERROR'));
@@ -102,10 +102,10 @@ class Iciciaeps extends CI_Controller {
         $memberData = $this->db->get_where('users',array('id'=>$memberID,'instantpay_aeps_status'=>0))->row_array();
 
         // get state list
-  		$stateList = $this->db->order_by('state','asc')->get('aeps_state')->result_array();	
-		
-		
-  		$siteUrl = base_url();	
+  		$stateList = $this->db->order_by('state','asc')->get('aeps_state')->result_array();
+
+
+  		$siteUrl = base_url();
 
 		$data = array(
             'meta_title' => lang('SITE_NAME'),
@@ -122,8 +122,8 @@ class Iciciaeps extends CI_Controller {
             'content_block' => 'iciciaeps/member-activation'
         );
         $this->parser->parse('retailer/layout/column-1' , $data);
-    
-	
+
+
 	}
 
 	// save member
@@ -132,146 +132,125 @@ class Iciciaeps extends CI_Controller {
 		//check for foem validation
 		$post = $this->input->post();
 		$memberID = $post['memberID'];
+		$response =  [];
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('mobile', 'Mobile Number', 'required|xss_clean|numeric|max_length[12]');
-        $this->form_validation->set_rules('aadhar_no', 'Aadhar No', 'required|xss_clean');
-        $this->form_validation->set_rules('pancard_no', 'Pancard No', 'required|xss_clean');
-        $this->form_validation->set_rules('first_name', 'First Name', 'required|xss_clean');
-        $this->form_validation->set_rules('last_name', 'Last Name', 'required|xss_clean');
-        $this->form_validation->set_rules('father_name', 'Father Name', 'required|xss_clean');
-        $this->form_validation->set_rules('mother_name', 'Mother Name', 'required|xss_clean');
-        $this->form_validation->set_rules('shop_name', 'Shop', 'required|xss_clean');
+
+		$this->form_validation->set_rules('first_name', 'First Name',  'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+        $this->form_validation->set_rules('middle_name', 'Middle Name',  'trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+        $this->form_validation->set_rules('last_name', 'Last Name',  'trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+        $this->form_validation->set_rules('father_name', 'Father Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+        $this->form_validation->set_rules('mother_name', 'Mother Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('person_dob', 'User Date Of Birth', 'required|trim|xss_clean');
+		$this->form_validation->set_rules('mobile', 'Mobile Number',  'required|trim|xss_clean|numeric|min_length[10]|max_length[10]');
+        $this->form_validation->set_rules('aadhar_no', 'Aadhar No',  'required|trim|xss_clean|numeric|min_length[12]|max_length[12]');
+        $this->form_validation->set_rules('pancard_no', 'Pancard No',  'required|xss_clean|regex_match[/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/]');
+        $this->form_validation->set_rules('shop_name', 'Shop', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
         $this->form_validation->set_rules('state_id', 'State', 'required|xss_clean');
         $this->form_validation->set_rules('city_id', 'City', 'required|xss_clean');
-        $this->form_validation->set_rules('pin_code', 'Pincode', 'required|xss_clean');
-        $this->form_validation->set_rules('village', 'village', 'required|xss_clean');
-        $this->form_validation->set_rules('post', 'Post', 'required|xss_clean');
-        $this->form_validation->set_rules('police_station', 'Police Station', 'required|xss_clean');
-        $this->form_validation->set_rules('block', 'Block', 'required|xss_clean');
+		$this->form_validation->set_rules('house_flat', 'House/Flat No', 'required|trim|xss_clean|alpha_numeric');
+        $this->form_validation->set_rules('pin_code', 'Pincode', 'required|trim|xss_clean|numeric|min_length[6]|max_length[6]');
+        $this->form_validation->set_rules('village', 'village', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+        $this->form_validation->set_rules('post', 'Post', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+        $this->form_validation->set_rules('police_station', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+        $this->form_validation->set_rules('block', 'Block', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
         $this->form_validation->set_rules('district', 'District', 'required|xss_clean');
-         $this->form_validation->set_rules('account_no', 'Bank Account', 'required|xss_clean');
-          $this->form_validation->set_rules('bank_ifsc', 'Bank Ifsc', 'required|xss_clean');
+        $this->form_validation->set_rules('account_no', 'Bank Account', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+        $this->form_validation->set_rules('bank_ifsc', 'Bank Ifsc', 'required|trim|xss_clean|alpha_numeric');
 
-        if(!isset($_FILES['aadhar_photo']['name']) || $_FILES['aadhar_photo']['name'] == ''){
-			$this->form_validation->set_rules('aadhar_photo', 'Aadhar Front Image', 'required|xss_clean');
-		}
-		 if(!isset($_FILES['aadhar_back_photo']['name']) || $_FILES['aadhar_back_photo']['name'] == ''){
-			$this->form_validation->set_rules('aadhar_back_photo', 'Aadhar Back Image', 'required|xss_clean');
-		}
-
-		if(!isset($_FILES['pancard_photo']['name']) || $_FILES['pancard_photo']['name'] == ''){
-			$this->form_validation->set_rules('pancard_photo', 'Pancard Image', 'required|xss_clean');
-		}
-
-        
-		if ($this->form_validation->run() == FALSE) {
-			
-			$this->activeAeps();
-		}
-		else
-		{	
+		$this->form_validation->set_rules('aadhar_photo', 'Aadhar Front Image', 'callback__validate_image');
+		$this->form_validation->set_rules('aadhar_back_photo', 'Aadhar Back Image', 'callback__validate_image');
+		$this->form_validation->set_rules('pancard_photo', 'Pancard Image', 'callback__validate_image');
+		$this->form_validation->set_message('regex_match', 'The %s field must contain only alphabetic characters and single spaces between names.');
+		if ($this->form_validation->run() === false) {
+			$response = [
+				'error' => true,
+				'errors' => [
+					'first_name'        => form_error('first_name'),
+					'middle_name'       => form_error('middle_name'),
+					'last_name'         => form_error('last_name'),
+					'father_name'       => form_error('father_name'),
+					'mother_name'       => form_error('mother_name'),
+					'mobile'            => form_error('mobile'),
+					'aadhar_no'         => form_error('aadhar_no'),
+					'pancard_no'        => form_error('pancard_no'),
+					'shop_name'         => form_error('shop_name'),
+					'state_id'          => form_error('state_id'),
+					'city_id'           => form_error('city_id'),
+					'pin_code'          => form_error('pin_code'),
+					'village'           => form_error('village'),
+					'post'              => form_error('post'),
+					'police_station'    => form_error('police_station'),
+					'block'             => form_error('block'),
+					'district'          => form_error('district'),
+					'account_no'        => form_error('account_no'),
+					'bank_ifsc'         => form_error('bank_ifsc'),
+					'aadhar_photo'      => form_error('aadhar_photo'),
+					'aadhar_back_photo' => form_error('aadhar_back_photo'),
+					'pancard_photo'     => form_error('pancard_photo')
+				],
+			];
+			echo json_encode($response);
+			return;
+		}else
+		{
 			$account_id = $this->User->get_domain_account();
 		 	$loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
 		 	$memberID = $loggedUser['id'];
 
 		 	$activeService = $this->User->account_active_service($loggedUser['id']);
 			if(!in_array(19, $activeService)){
-				$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AUTHORIZE_ERROR'));
+				$response = [
+                    'error' => true,
+                    'dataval' => 'Sorry ! You are not authorized to access this page.',
+                ];
+				echo json_encode($response);
+				return;
 			}
-			
+
 			$user_instantpay_aeps_status = $this->User->get_member_instantpay_aeps_status($loggedUser['id']);
-			
+
 			if($user_instantpay_aeps_status)
 			{
-				$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AEPS_MEMBER_ERROR'));
+				$response = [
+                    'error' => true,
+                    'dataval' => 'Sorry ! You are not authorized to access this page.',
+                ];
+				echo json_encode($response);
+				return;
+			}else{
+				$response = [
+                    'error' => false,
+                    'dataval' => 'Member has active InstantPay AEPS status.',
+                ];
+				echo json_encode($response);
+				return;
 			}
 
-			// upload front document
-			$aadhar_photo = '';
-			if(isset($_FILES['aadhar_photo']['name']) && $_FILES['aadhar_photo']['name']){
-				$config['upload_path'] = './media/aeps_kyc_doc/';
-				$config['allowed_types'] = 'jpg|png|jpeg';
-				$config['max_size'] = 2048;
-				$fileName = time().rand(111111,999999);
-				$config['file_name'] = $fileName;
-				$this->load->library('upload', $config);
-				$this->upload->do_upload('aadhar_photo');		
-				$uploadError = $this->upload->display_errors();
-				if($uploadError){
-					$this->Az->redirect('retailer/iciciaeps/activeAeps', 'system_message_error','<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'.$uploadError.'</div>');
-				}
-				else
-				{
-					$fileData = $this->upload->data();
-					//get uploaded file path
-					$aadhar_photo = substr($config['upload_path'] . $fileData['file_name'], 2);
-				}
-			}
+			// Uploading AdharCard , Pencard
 
-
-			$aadhar_back_photo = '';
-			if(isset($_FILES['aadhar_back_photo']['name']) && $_FILES['aadhar_back_photo']['name']){
-				$config['upload_path'] = './media/aeps_kyc_doc/';
-				$config['allowed_types'] = 'jpg|png|jpeg';
-				$config['max_size'] = 2048;
-				$fileName = time().rand(111111,999999);
-				$config['file_name'] = $fileName;
-				$this->load->library('upload', $config);
-				$this->upload->do_upload('aadhar_back_photo');		
-				$uploadError = $this->upload->display_errors();
-				if($uploadError){
-					$this->Az->redirect('retailer/iciciaeps/activeAeps', 'system_message_error','<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'.$uploadError.'</div>');
-				}
-				else
-				{
-					$fileData = $this->upload->data();
-					//get uploaded file path
-					$aadhar_back_photo = substr($config['upload_path'] . $fileData['file_name'], 2);
-				}
-			}
-
-			
-			
-			// upload back document
-			$pancard_photo = '';
-			if(isset($_FILES['pancard_photo']['name']) && $_FILES['pancard_photo']['name']){
-				$config02['upload_path'] = './media/aeps_kyc_doc/';
-				$config02['allowed_types'] = 'jpg|png|jpeg';
-				$config02['max_size'] = 2048;
-				$fileName = time().rand(111111,999999);
-				$config02['file_name'] = $fileName;
-				$this->load->library('upload', $config02);
-				$this->upload->do_upload('pancard_photo');		
-				$uploadError = $this->upload->display_errors();
-				if($uploadError){
-					$this->Az->redirect('retailer/iciciaeps/activeAeps', 'system_message_error','<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'.$uploadError.'</div>');
-				}
-				else
-				{
-					$fileData = $this->upload->data();
-					//get uploaded file path
-					$pancard_photo = substr($config02['upload_path'] . $fileData['file_name'], 2);
-				}
-			}
+			$aadhar_photo = $this->_upload_file('aadhar_photo');
+			$aadhar_back_photo = $this->_upload_file('aadhar_back_photo');
+			$pancard_photo = $this->_upload_file('pancard_photo');
 
 			$response = $this->IciciAeps_model->activeAEPSMember($post,$aadhar_photo,$aadhar_back_photo,$pancard_photo);
 			$status = $response['status'];
-			$err_msg= $response['status'];
-
-			if($status == 1)
-			{
+			$err_msg= $response['msg'];
+			if($status == 1){
 				$otpReferenceID = $response['otpReferenceID'];
-				$this->Az->redirect('retailer/iciciaeps/otpVerify/'.$otpReferenceID, 'system_message_error',lang('AEPS_OTP_SUCCESS'));
+				$response = [
+                    'error' => false,
+                    'dataval' => 'We have sent OTP on your registered mobile, please verfiy.',
+					'redirectUrl'=> 'retailer/iciciaeps/otpVerify/'.$otpReferenceID
+                ];
+			}else{
+				$response = [
+                    'error' => true,
+                    'dataval' => 'Sorry ! Activation failed due to'.$err_msg,
+					'redirectUrl'=> 'retailer/iciciaeps/activeAeps'
+                ];
 			}
-			else
-			{
-				$this->Az->redirect('retailer/iciciaeps/activeAeps', 'system_message_error',sprintf(lang('AEPS_ACTIVE_FAILED'),$err_msg));
-			}
-			
 		}
-	
 	}
-
 
 	public function otpVerify($otpReferenceID = ''){
 
@@ -283,9 +262,9 @@ class Iciciaeps extends CI_Controller {
 		if(!in_array(19, $activeService)){
 			$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AUTHORIZE_ERROR'));
 		}
-		
+
 		$user_instantpay_aeps_status = $this->User->get_member_instantpay_aeps_status($loggedUser['id']);
-		
+
 		if($user_instantpay_aeps_status)
 		{
 			$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AEPS_MEMBER_ERROR'));
@@ -304,7 +283,7 @@ class Iciciaeps extends CI_Controller {
         $hash_data = $get_data['hash'];
         $aadhar = $get_data['aadhar'];
 
-  		$siteUrl = base_url();	
+  		$siteUrl = base_url();
 
 		$data = array(
             'meta_title' => lang('SITE_NAME'),
@@ -323,8 +302,8 @@ class Iciciaeps extends CI_Controller {
             'content_block' => 'iciciaeps/otp-verify'
         );
         $this->parser->parse('retailer/layout/column-1' , $data);
-    
-	
+
+
 	}
 
 	// save member
@@ -333,7 +312,7 @@ class Iciciaeps extends CI_Controller {
 		//check for foem validation
 		$post = $this->input->post();
 		$memberID = $post['memberID'];
-		
+
 		$account_id = $this->User->get_domain_account();
 	 	$loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
 	 	$memberID = $loggedUser['id'];
@@ -342,9 +321,9 @@ class Iciciaeps extends CI_Controller {
 		if(!in_array(19, $activeService)){
 			$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AUTHORIZE_ERROR'));
 		}
-		
+
 		$user_instantpay_aeps_status = $this->User->get_member_instantpay_aeps_status($loggedUser['id']);
-		
+
 		if($user_instantpay_aeps_status)
 		{
 			$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AEPS_MEMBER_ERROR'));
@@ -359,7 +338,7 @@ class Iciciaeps extends CI_Controller {
 			$this->Az->redirect('retailer/iciciaeps/otpVerify/'.$otpReferenceID, 'system_message_error',lang('AEPS_OTP_ERROR'));
 		}
 
-		
+
 		$response = $this->IciciAeps_model->aepsOTPAuth($post,$memberID,$otpReferenceID,$hash,$aadhar);
 		$status = $response['status'];
 
@@ -371,9 +350,9 @@ class Iciciaeps extends CI_Controller {
 		{
 			$this->Az->redirect('retailer/iciciaeps/activeAeps', 'system_message_error',sprintf(lang('AEPS_ACTIVE_FAILED'),$response['msg']));
 		}
-			
-		
-	
+
+
+
 	}
 
 	public function resendOtp($encodeFPTxnId = ''){
@@ -386,9 +365,9 @@ class Iciciaeps extends CI_Controller {
 		if(!in_array(3, $activeService)){
 			$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AUTHORIZE_ERROR'));
 		}
-		
+
 		$user_aeps_status = $this->User->get_member_aeps_status($loggedUser['id']);
-		
+
 		if($user_aeps_status)
 		{
 			$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AEPS_MEMBER_ERROR'));
@@ -413,7 +392,7 @@ class Iciciaeps extends CI_Controller {
 			$this->Az->redirect('retailer/aeps/activeAeps', 'system_message_error',sprintf(lang('AEPS_ACTIVE_FAILED'),$response['msg']));
 		}
 
-	
+
 	}
 
 	public function capture($encodeFPTxnId = ''){
@@ -426,9 +405,9 @@ class Iciciaeps extends CI_Controller {
 		if(!in_array(3, $activeService)){
 			$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AUTHORIZE_ERROR'));
 		}
-		
+
 		$user_aeps_status = $this->User->get_member_aeps_status($loggedUser['id']);
-		
+
 		if($user_aeps_status)
 		{
 			$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AEPS_MEMBER_ERROR'));
@@ -444,8 +423,8 @@ class Iciciaeps extends CI_Controller {
 
         $memberData = $this->db->get_where('users',array('id'=>$memberID,'aeps_status'=>0))->row_array();
 
-        
-  		$siteUrl = base_url();	
+
+  		$siteUrl = base_url();
 
 		$data = array(
             'meta_title' => lang('SITE_NAME'),
@@ -462,8 +441,8 @@ class Iciciaeps extends CI_Controller {
             'content_block' => 'aeps/capture'
         );
         $this->parser->parse('retailer/layout/column-1' , $data);
-    
-	
+
+
 	}
 
 	public function getCityList($state_id = 0)
@@ -487,7 +466,7 @@ class Iciciaeps extends CI_Controller {
 		echo json_encode(array('status'=>1,'str'=>$str));
 	}
 
-	
+
 
 	public function apiAuth()
 	{
@@ -517,7 +496,7 @@ class Iciciaeps extends CI_Controller {
 				{
 					$serviceType = $post['ServiceType'];
 					$deviceIMEI = $post['deviceIMEI'];
-					
+
 					$ivlen = openssl_cipher_iv_length('aes-256-cbc');
                     $iv = openssl_random_pseudo_bytes($ivlen);
                     $ciphertext = openssl_encrypt($post['AadharNumber'],'aes-256-cbc', $accountData['instant_encryption_key'], OPENSSL_RAW_DATA, $iv);
@@ -527,21 +506,21 @@ class Iciciaeps extends CI_Controller {
 					$mobile = $post['mobileNumber'];
 					$biometricData = $post['BiometricData'];
 		    	 //  echo $biometricData;
-		    	   
-           
+
+
 					$amount = $post['Amount'];
 					$iin = $post['IIN'];
-					
+
 					$requestTime = date('Y-m-d H:i:s');
 					if($aadharNumber && $mobile && $biometricData && $iin)
-					{	
+					{
 
 						log_message('debug', 'ICICI AEPS api API Call');
 
 						if($serviceType == 'balinfo' || $serviceType == 'ministatement')
 						{
 
-						    
+
 							$txnID = 'IPIAB'.time();
 							$is_bal_info = 1;
 							$is_withdrawal = 0;
@@ -549,7 +528,7 @@ class Iciciaeps extends CI_Controller {
 							$api_url = INSTANTPAY_AEPS_BALANCE_ENQUIRY;
 							if($serviceType == 'ministatement')
 							{
-							    
+
 								$txnID = 'IPMS'.time();
 								$Servicestype = 'getministatment';
 								$is_bal_info = 0;
@@ -558,7 +537,7 @@ class Iciciaeps extends CI_Controller {
 							log_message('debug', 'ICICI AEPS api API Url - '.$api_url);
 							if($amount == 0)
 							{
-								
+
 
 								//convert biometric data xml to json
 
@@ -571,7 +550,7 @@ class Iciciaeps extends CI_Controller {
 
 
 								 $jsondata = json_encode($xmldata);
-								
+
 								$result = json_decode($jsondata, TRUE);
 
 								$sr_no = '';
@@ -599,8 +578,8 @@ class Iciciaeps extends CI_Controller {
 									'mi' => $result['DeviceInfo']['@attributes']['mi'],
 									'rdsId'=>$result['DeviceInfo']['@attributes']['rdsId'],
 									'pType'=>'',
-									
-										'srno' =>$sr_no,									
+
+										'srno' =>$sr_no,
 									'sysid'=>$result['DeviceInfo']['additional_info']['Param'][1]['@attributes']['value'],
 									'ts'=>$result['DeviceInfo']['additional_info']['Param'][2]['@attributes']['value'],
 									'pidData'=>$result['Data'],
@@ -627,8 +606,8 @@ class Iciciaeps extends CI_Controller {
 		            			);
 
 		            			log_message('debug', 'ICICI AEPS api post data - '.json_encode($request));
-                        
-                        
+
+
 
 								$header = array(
 				                'X-Ipay-Auth-Code: 1',
@@ -672,30 +651,30 @@ class Iciciaeps extends CI_Controller {
 
 		            // Execute
 		             $output = curl_exec($curl);
-		             
-		         
+
+
 
 		            // Close
 		            curl_close ($curl);
-                                              	
-                    log_message('debug', 'ICICI AEPS api response - '.json_encode($output));      
+
+                    log_message('debug', 'ICICI AEPS api response - '.json_encode($output));
 
 						        $responseData = json_decode($output,true);
-                               
+
 						        $apiData = array(
 						        	'account_id' => $account_id,
             						'user_id' => $memberID,
 						        	'api_url' => $api_url,
 						        	'post_data' =>json_encode($request),
 						        	'api_response' => json_encode($output),
-						        	'created' => date('Y-m-d H:i:s'),						        	
+						        	'created' => date('Y-m-d H:i:s'),
 						        	'created_by' => $memberID
 						        );
 						        $this->db->insert('aeps_api_response',$apiData);
 
 						        if(isset($responseData['statuscode']) && $responseData['statuscode'] == 'TXN' && $responseData['status'] == 'Transaction Successful')
-						        {	
-						            
+						        {
+
 						        	$statementList = $responseData['data']['miniStatement'];
 						        	$balanceAmount = $responseData['data']['bankAccountBalance'];
 							       	$bankRRN = $responseData['data']['ipayId'];
@@ -704,7 +683,7 @@ class Iciciaeps extends CI_Controller {
 						        	if($is_bal_info == 0)
 									{
 										$this->IciciAeps_model->addStatementCom($txnID,$post['AadharNumber'],$iin,$amount,$recordID);
-										
+
 										if($statementList)
 										{
 											$str = '<div class="table-responsive">';
@@ -760,8 +739,8 @@ class Iciciaeps extends CI_Controller {
 									);
 						        }
 
-						        
-						       
+
+
 							}
 							else
 							{
@@ -787,9 +766,9 @@ class Iciciaeps extends CI_Controller {
 							}
 
 							log_message('debug', 'ICICI AEPS api API Url - '.$api_url);
-							
+
 							if($amount >= 100 && $amount <= 10000)
-							{	
+							{
 						        $xmldata = simplexml_load_string($biometricData , "SimpleXMLElement", LIBXML_BIGLINES, FALSE);
 
 						        $get_ci_value = explode("<Skey",$biometricData);
@@ -800,7 +779,7 @@ class Iciciaeps extends CI_Controller {
 
 
 								 $jsondata = json_encode($xmldata);
-								
+
 								$result = json_decode($jsondata, TRUE);
 
 							  $sr_no = '';
@@ -857,9 +836,9 @@ class Iciciaeps extends CI_Controller {
 					                   'externalRef' =>$txnID,
 					                   'biometricData' =>$get_biometric_data
 			            			);
-                        				
+
                         				log_message('debug', 'ICICI AEPS api post data - '.json_encode($request));
-                        
+
 
 										$header = array(
 					                'X-Ipay-Auth-Code: 1',
@@ -935,7 +914,7 @@ class Iciciaeps extends CI_Controller {
 									$str.='<tr>';
 									$str.='<td>Txn Status</td><td><font color="green">Successful</font></td>';
 									$str.='</tr>';
-									
+
 									$str.='<tr>';
 									$str.='<td>Transfer Amount</td><td>INR '.$responseData['data']['transactionValue'].'/-</td>';
 									$str.='</tr>';
@@ -950,8 +929,8 @@ class Iciciaeps extends CI_Controller {
 
 									$str.='</table>';
 									$str.='</div>';
-									
-									
+
+
 						        	$response = array(
 										'status' => 1,
 										'msg' => $responseData['status'],
@@ -973,8 +952,8 @@ class Iciciaeps extends CI_Controller {
 									);
 						        }
 
-						        
-						       
+
+
 							}
 							else
 							{
@@ -989,7 +968,7 @@ class Iciciaeps extends CI_Controller {
 							$response = array(
 								'status' => 0,
 								'msg' => 'Somethis Wrong ! Please Try Again Later.'
-							);		
+							);
 						}
 					}
 					else
@@ -997,7 +976,7 @@ class Iciciaeps extends CI_Controller {
 						$response = array(
 							'status' => 0,
 							'msg' => 'Sorry ! Please enter required data.'
-						);		
+						);
 					}
 
 				}
@@ -1029,8 +1008,8 @@ class Iciciaeps extends CI_Controller {
 		if(!in_array(19, $activeService)){
 			$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AUTHORIZE_ERROR'));
 		}
-		
-  		$siteUrl = base_url();		
+
+  		$siteUrl = base_url();
 
 		$data = array(
             'meta_title' => lang('SITE_NAME'),
@@ -1044,22 +1023,22 @@ class Iciciaeps extends CI_Controller {
             'content_block' => 'iciciaeps/transaction-list'
         );
         $this->parser->parse('retailer/layout/column-1' , $data);
-    
-	
+
+
 	}
 
 
 	public function getTransactionList()
-	{	
+	{
 		$account_id = $this->User->get_domain_account();
         $loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
         $loggedAccountID = $loggedUser['id'];
 		$requestData= $this->input->get();
-		$extra_search = $requestData['extra_search'];	
+		$extra_search = $requestData['extra_search'];
 	   	$keyword = '';
 	   	$fromDate = '';
         $toDate = '';
-        $status = 0;        
+        $status = 0;
         $service = '';
 		if($extra_search)
 		{
@@ -1070,25 +1049,25 @@ class Iciciaeps extends CI_Controller {
             $status = isset($filterData[3]) ? trim($filterData[3]) : 0;
             $service = isset($filterData[4]) ? trim($filterData[4]) : '';
 		}
-		
-		$columns = array( 
+
+		$columns = array(
 		// datatable column index  => database column name
 			0 => 'a.created',
 		);
-		
-		
-		
+
+
+
 			// getting total number records without any search
 			$sql = "SELECT a.* FROM tbl_instantpay_aeps_transaction as a INNER JOIN tbl_users as b ON b.id = a.member_id where a.account_id = '$account_id' AND a.member_id = '$loggedAccountID'";
-			
+
 			$totalData = $this->db->query($sql)->num_rows();
 			$totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
-		
-		
+
+
 			$sql = "SELECT a.*,b.user_code as member_code,b.name as member_name FROM tbl_instantpay_aeps_transaction as a INNER JOIN tbl_users as b ON b.id = a.member_id where a.account_id = '$account_id' AND a.member_id = '$loggedAccountID'";
-			
-			if($keyword != '') {   
-				$sql.=" AND ( a.memberID LIKE '".$keyword."%' ";    
+
+			if($keyword != '') {
+				$sql.=" AND ( a.memberID LIKE '".$keyword."%' ";
 				$sql.=" OR a.account_holder_name LIKE '".$keyword."%'";
 				$sql.=" OR a.account_no LIKE '".$keyword."%'";
 				$sql.=" OR a.transaction_id LIKE '".$keyword."%'";
@@ -1101,9 +1080,9 @@ class Iciciaeps extends CI_Controller {
             }
 
              if($service != ''){
-            
-             $sql.=" AND service = '$service'";	
-            
+
+             $sql.=" AND service = '$service'";
+
             }
 
 			if($fromDate && $toDate)
@@ -1111,17 +1090,17 @@ class Iciciaeps extends CI_Controller {
                 $sql.=" AND DATE(a.created) >= '".date('Y-m-d',strtotime($fromDate))."' AND DATE(a.created) <= '".date('Y-m-d',strtotime($toDate))."'";
             }
 
-			
+
 			$order_type = $requestData['order'][0]['dir'];
 			//if($requestData['draw'] == 1)
 			//	$order_type = 'DESC';
-			
+
 			$order_no = isset($requestData['order'][0]['column']) ? ($requestData['order'][0]['column'] == 0) ? 0 : $requestData['order'][0]['column'] : 0;
 			$totalFiltered = $this->db->query($sql)->num_rows();
 			$sql.=" ORDER BY ". $columns[$order_no]."   ".$order_type."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
-		
-		
-		
+
+
+
 			$get_filter_data = $this->db->query($sql)->result_array();
 
 
@@ -1129,8 +1108,8 @@ class Iciciaeps extends CI_Controller {
 			$sql_summery = "SELECT x.*,SUM(amount) as totalAmount,count(*) as totalRecord FROM (SELECT a.*, b.user_code as user_code,b.name as user_name FROM tbl_instantpay_aeps_transaction as a INNER JOIN tbl_users as b ON b.id = a.member_id  where a.account_id = '$account_id' AND a.member_id = '$loggedAccountID'";
 
 
-			if($keyword != '') {   
-				$sql_summery.=" AND ( b.user_code LIKE '%".$keyword."%' ";    
+			if($keyword != '') {
+				$sql_summery.=" AND ( b.user_code LIKE '%".$keyword."%' ";
 				$sql_summery.=" OR b.name LIKE '%".$keyword."%'";
 				$sql_summery.=" OR a.mobile LIKE '%".$keyword."%'";
 				$sql_summery.=" OR a.aadhar_no LIKE '%".$keyword."%'";
@@ -1156,12 +1135,12 @@ class Iciciaeps extends CI_Controller {
             }
 
               if($service != ''){
-            
-             $sql_summery.=" AND service = '$service'";	
-            
+
+             $sql_summery.=" AND service = '$service'";
+
             }
 
-	
+
 
 
 			if($fromDate && $toDate)
@@ -1170,33 +1149,33 @@ class Iciciaeps extends CI_Controller {
             }
 
 
-            $sql_success_summery = $sql_summery;	
+            $sql_success_summery = $sql_summery;
 			$sql_success_summery.=" AND x.status = 2";
 
 
 
-			
+
 			$get_success_recharge = $this->db->query($sql_success_summery)->row_array();
-			
+
 
 
 			$successAmount = isset($get_success_recharge['totalAmount']) ? number_format($get_success_recharge['totalAmount'],2) : '0.00';
 	        $successRecord = isset($get_success_recharge['totalRecord']) ? $get_success_recharge['totalRecord'] : 0;
-	    	
-			
-			
-	    	
+
+
+
+
 
 	        $sql_failed_summery = $sql_summery;
-			$sql_failed_summery.=" AND x.status = 3";	
+			$sql_failed_summery.=" AND x.status = 3";
 			$get_failed_recharge = $this->db->query($sql_failed_summery)->row_array();
-			
-			
+
+
 	        $failedAmount = isset($get_failed_recharge['totalAmount']) ? number_format($get_failed_recharge['totalAmount'],2) : '0.00';
 	        $failedRecord = isset($get_failed_recharge['totalRecord']) ? $get_failed_recharge['totalRecord'] : 0;
 
 
-		
+
 		$data = array();
 		$totalrecord = 0;
 		if($get_filter_data){
@@ -1207,8 +1186,8 @@ class Iciciaeps extends CI_Controller {
 				    $bank_name = $get_bank_name['bank_name'];
 
 
-				
-				$nestedData=array(); 
+
+				$nestedData=array();
 				$nestedData[] = $i;
 				$nestedData[] = $list['member_code'];
 				$nestedData[] = $list['member_name'];
@@ -1228,7 +1207,7 @@ class Iciciaeps extends CI_Controller {
 				$nestedData[] = $list['mobile'];
 				$nestedData[] = $list['amount'].' /-';
 				$nestedData[] = $list['txnID'];
-				$nestedData[] = $bank_name;				
+				$nestedData[] = $bank_name;
 				if($list['status'] == 2) {
 					$nestedData[] = '<font color="green">Success</font>';
 				}
@@ -1240,7 +1219,7 @@ class Iciciaeps extends CI_Controller {
 				}
 
 				if($list['receipt_id']){
-					
+
 				 $nestedData[] = '<a href="'.base_url('retailer/report/iciciAepsInvoice/'.$list['id'].'').'" target="_blank">'.$list['receipt_id'].'</a>';
 
 				}
@@ -1249,28 +1228,28 @@ class Iciciaeps extends CI_Controller {
 					$nestedData[] = 'Not Available';
 				}
 
-				
+
 
 				$nestedData[] = date('d-M-Y H:i:s',strtotime($list['created']));
-				
-				
+
+
 				$data[] = $nestedData;
-				
-				
-				
+
+
+
 			$i++;}
 		}
 
 
 
 		$json_data = array(
-					"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
+					"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw.
 					"recordsTotal"    => intval( $totalData ),  // total number of records
 					"recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
 					"data"            => $data,   // total data array
 					//"total_selected_students" => $total_selected_students
 					"successAmount" => $successAmount,
-					"successRecord" => $successRecord,					
+					"successRecord" => $successRecord,
 					"failedAmount"  => $failedAmount,
 					"failedRecord"  => $failedRecord,
 					);
@@ -1281,29 +1260,29 @@ class Iciciaeps extends CI_Controller {
 
 	public function memberLogin(){
 
-			
+
 		$account_id = $this->User->get_domain_account();
 		$loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
     	$activeService = $this->User->account_active_service($loggedUser['id']);
-	    
-	   
-	
+
+
+
 		if(!in_array(19, $activeService)){
 			$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AUTHORIZE_ERROR'));
 		}
-		
+
 			$user_instantpay_aeps_status = $this->User->get_member_instantpay_aeps_status($loggedUser['id']);
-			
+
 			if(!$user_instantpay_aeps_status)
 			{
 				$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AEPS_MEMBER_ERROR'));
 			}
-		
-		$siteUrl = base_url();	
-		
+
+		$siteUrl = base_url();
+
   		$get_member_data  = $this->db->get_where('users',array('id'=>$loggedUser['id'],'account_id'=>$account_id))->row_array();
-  		
-  	
+
+
 		$data = array(
 			'meta_title' => lang('SITE_NAME'),
 			'meta_keywords' => lang('SITE_NAME'),
@@ -1319,7 +1298,7 @@ class Iciciaeps extends CI_Controller {
 			'content_block' => 'iciciaeps/member-login'
 		);
 		$this->parser->parse('retailer/layout/column-1' , $data);
-		
+
 	}
 
 
@@ -1354,14 +1333,14 @@ class Iciciaeps extends CI_Controller {
 
 				// check already kyc approved or not
 				$get_kyc_data =$this->db->get_where('instantpay_ekyc',array('member_id'=>$loggedUser['id'],'account_id'=>$account_id,'status'=>1))->row_array();
-				
+
 				$aadhar_no = isset($get_kyc_data['aadhar']) ? $get_kyc_data['aadhar'] : '';
 				$mobile = isset($get_kyc_data['mobile']) ? $get_kyc_data['mobile'] : '';
 				$agentID = $loggedUser['user_code'];
 				$outlet_id = $loggedUser['instantpay_outlet_id'];
 				$biometricData = $post['BiometricData'];
                $every_txn_auth =  $memberData['instantpay_every_aeps_status'];
-				
+
 				if($every_txn_auth == 1)
 				{
 					$txn_type = 'TXN_AUTH';
@@ -1372,9 +1351,9 @@ class Iciciaeps extends CI_Controller {
 					$txn_type = 'DAILY_LOGIN';
 					$iin_no = '';
 				}
-				
-                
-			
+
+
+
 				$api_url = INSTANTPAY_2FA_LOGIN_URL;
 
 
@@ -1395,7 +1374,7 @@ class Iciciaeps extends CI_Controller {
 
 
 								 $jsondata = json_encode($xmldata);
-								
+
 								$result = json_decode($jsondata, TRUE);
 
 								$sr_no = '';
@@ -1439,7 +1418,7 @@ class Iciciaeps extends CI_Controller {
                                     'pCount'=> 0,
 
 								);
-							
+
 								$request = array(
 								    "type" =>$txn_type,
 								    "bankiin" =>$iin_no,
@@ -1447,10 +1426,10 @@ class Iciciaeps extends CI_Controller {
 			                      "longitude"=>"78.6568942",
 				                   'biometricData' =>$get_biometric_data
 		            			);
-                        	
+
 
                         	log_message('debug', 'ICICI AEPS api post data - '.json_encode($request));
-                        
+
 
 								$header = array(
 					                'X-Ipay-Auth-Code: 1',
@@ -1498,7 +1477,7 @@ class Iciciaeps extends CI_Controller {
 		            // Close
 		            curl_close ($curl);
 
-		            log_message('debug', 'ICICI 2FA AEPS api response - '.json_encode($output)); 
+		            log_message('debug', 'ICICI 2FA AEPS api response - '.json_encode($output));
 
 
 						        $responseData = json_decode($output,true);
@@ -1509,24 +1488,24 @@ class Iciciaeps extends CI_Controller {
 						        	'api_url' => $api_url,
 						        	'post_data' =>json_encode($request),
 						        	'api_response' => json_encode($output),
-						        	'created' => date('Y-m-d H:i:s'),						        	
+						        	'created' => date('Y-m-d H:i:s'),
 						        	'created_by' => $memberID
 						        );
 						        $this->db->insert('aeps_api_response',$apiData);
 
 		        if(isset($responseData['statuscode']) && $responseData['statuscode'] == 'TXN' && $responseData['status'] == 'Transaction Successful')
 		        {
-		        	
+
 		        					$this->db->where('account_id',$account_id);
 						        	$this->db->where('member_id',$memberID);
-						        	$this->db->update('instantpay_aeps_member_login_status',array('status'=>1));	
-						        	
+						        	$this->db->update('instantpay_aeps_member_login_status',array('status'=>1));
+
 						        	$this->db->where('account_id',$account_id);
 						        	$this->db->where('id',$memberID);
-						        	$this->db->update('users',array('instantpay_every_aeps_status'=>1));	
-						        	
+						        	$this->db->update('users',array('instantpay_every_aeps_status'=>1));
 
-                	 			
+
+
 		        	$response = array(
 						'status' => true,
 						'msg' => $responseData['status']
@@ -1551,10 +1530,61 @@ class Iciciaeps extends CI_Controller {
 
 		echo json_encode($response);
 	}
-	
 
+	// Single function for validating multiple images
+	public function _validate_image($field_name)
+	{
+		// Check if file is uploaded
+		if (empty($_FILES[$field_name]['name'])) {
+			$this->form_validation->set_message($field_name, 'The %s is required.');
+			return FALSE;
+		}
 
+		// Allowed file types (jpg, jpeg, png)
+		$allowed_types = ['image/jpeg', 'image/png'];
+		$file_type = $_FILES[$field_name]['type'];
 
-	
-	
+		// Validate file type
+		if (!in_array($file_type, $allowed_types)) {
+			$this->form_validation->set_message($field_name, 'The %s must be a JPG, JPEG, or PNG image.');
+			return FALSE;
+		}
+
+		// Validate file size (Max 2MB)
+		$max_size = 2048; // 2MB in KB
+		$file_size = $_FILES[$field_name]['size'] / 1024; // File size in KB
+
+		if ($file_size > $max_size) {
+			$this->form_validation->set_message($field_name, 'The %s size must not exceed 2MB.');
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+
+	// Helper method to handle file upload
+	public function _upload_file($field_name)
+	{
+		if (!isset($_FILES[$field_name]['name']) || $_FILES[$field_name]['name'] == '') {
+			return '';
+		}
+
+		$config['upload_path'] = './media/aeps_kyc_doc/';
+		$config['allowed_types'] = 'jpg|jpeg|png';
+		$config['max_size'] = 2048;
+		$fileName = time().rand(111111,999999);
+		$config['file_name'] = $fileName;
+
+		$this->upload->initialize($config);
+
+		if ($this->upload->do_upload($field_name)) {
+			$fileData = $this->upload->data();
+			return true;
+		} else {
+			$uploadError = $this->upload->display_errors();
+			log_message('error', 'AEPS 3 Document File Upload Error: ' . $uploadError);
+			return false;
+		}
+	}
+
 }
