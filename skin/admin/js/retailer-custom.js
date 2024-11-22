@@ -1,4 +1,91 @@
 $(document).ready(function () {
+  $('.only-number-allowed').on('keypress', function (event) {
+    if (event.which < 48 || event.which > 57) {
+      event.preventDefault();
+    }
+  });
+
+  $('.only-alphabet-allowed').on('keypress', function (event) {
+    if (
+      (event.which < 65 || event.which > 90) && // Uppercase A-Z
+      (event.which < 97 || event.which > 122)  // Lowercase a-z
+    ) {
+      event.preventDefault();
+    }
+  });
+
+  $('.only-alphabet-number-allowed').on('keypress', function (event) {
+    if (
+      (event.which < 48 || event.which > 57) && // Numbers 0-9
+      (event.which < 65 || event.which > 90) && // Uppercase A-Z
+      (event.which < 97 || event.which > 122)   // Lowercase a-z
+    ) {
+      event.preventDefault();
+    }
+  });
+
+  $('.alpha-first-cap-num-sp-chars').on('keypress', function (event) {
+    // Get the current value of the input
+    let inputValue = $(this).val();
+
+    // Capitalize the first letter of each word and convert the rest to lowercase
+    let capitalizedValue = inputValue.toLowerCase().split(' ').map(function (word) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    }).join(' ');
+
+    // Update the input value with the capitalized text
+    $(this).val(capitalizedValue);
+
+    // Restrict characters while the user types
+    // Check if the last entered character is valid
+    let lastChar = capitalizedValue.charAt(capitalizedValue.length - 1);
+
+    if (
+      !(
+        (lastChar >= '0' && lastChar <= '9') ||  // Numbers 0-9
+        (lastChar >= 'A' && lastChar <= 'Z') ||  // Uppercase A-Z
+        (lastChar >= 'a' && lastChar <= 'z') ||  // Lowercase a-z
+        lastChar === ' ' ||  // Space
+        lastChar === '/' ||  // Slash ("/")
+        lastChar === '-' ||  // Hyphen ("-")
+        lastChar === '@' ||  // At symbol ("@")
+        lastChar === ':'     // Colon (":")
+      )
+    ) {
+      // If the last character is not valid, remove it
+      $(this).val(capitalizedValue.slice(0, -1));
+    }
+  });
+
+  $('.alpha-single-space').on('keypress', function (event) {
+    // Allow letters (A-Z, a-z) and a single space (ASCII 32)
+    if (
+      (event.which < 65 || event.which > 90) && // Uppercase A-Z
+      (event.which < 97 || event.which > 122) && // Lowercase a-z
+      event.which !== 32 // Space (ASCII code 32)
+    ) {
+      event.preventDefault(); // Prevent invalid character
+    }
+  });
+
+  $('.first-char-capitalize').on('input', function () {
+    // Split the value into words, capitalize each word, and rejoin with spaces
+    let words = $(this).val().toLowerCase().split(' ');
+    for (let i = 0; i < words.length; i++) {
+      if (words[i].length > 0) {
+        words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+      }
+    }
+    $(this).val(words.join(' '));
+  });
+
+  $('.each-char-capitalize').on('input', function () {
+    let inputValue = $(this).val().toUpperCase();
+    $(this).val(inputValue);
+  });
+  $('.pancard_no').on('input', function (event) {
+    this.value = this.value.toUpperCase();
+  });
   $("#submit-btn").click(function () {
     $("#admin_profile").submit();
     $("#submit-btn").prop("disabled", true);
@@ -1478,1481 +1565,1481 @@ $(document).ready(function () {
       });
     }
   });
-});
 
-function fetchMobilePostpaidBill() {
-  var mobile = $("#mobile-postpaid-number").val();
-  if (mobile == "") {
-    $("#mobile-postpaid-number").focus();
-    return false;
-  } else {
+
+  function fetchMobilePostpaidBill() {
+    var mobile = $("#mobile-postpaid-number").val();
+    if (mobile == "") {
+      $("#mobile-postpaid-number").focus();
+      return false;
+    } else {
+      var siteUrl = $("#siteUrl").val();
+      $("#mobile-postpaid-loader").html(
+        "<center><img src='" +
+        siteUrl +
+        "skin/admin/images/large-loading.gif' width='100' /></center>"
+      );
+      var str = $("#bbps-mobile-postpaid-form").serialize();
+      $.ajax({
+        type: "POST",
+        url: siteUrl + "retailer/bbps/fetchMobilePostpaidBill",
+        data: str,
+        success: function (r) {
+          var data = JSON.parse($.trim(r));
+          if (data["status"] == 1) {
+            $("#mobile-postpaid-amount").val(data["amount"]);
+            $("#mobile-postpaid-loader").html("");
+          } else {
+            $("#mobile-postpaid-amount").val(data["amount"]);
+            $("#mobile-postpaid-loader").html("");
+          }
+        }
+      });
+    }
+  }
+
+  function fetchElectricityBill() {
     var siteUrl = $("#siteUrl").val();
-    $("#mobile-postpaid-loader").html(
+    $("#electricity-loader").html(
       "<center><img src='" +
       siteUrl +
       "skin/admin/images/large-loading.gif' width='100' /></center>"
     );
-    var str = $("#bbps-mobile-postpaid-form").serialize();
+    var str = $("#bbps-electricity-form").serialize();
     $.ajax({
       type: "POST",
-      url: siteUrl + "retailer/bbps/fetchMobilePostpaidBill",
+      url: siteUrl + "retailer/bbps/fetchElectricityBill",
       data: str,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         if (data["status"] == 1) {
-          $("#mobile-postpaid-amount").val(data["amount"]);
-          $("#mobile-postpaid-loader").html("");
+          $("#electricity-amount").val(data["amount"]);
+          $("#electricity-loader").html("");
+          if (data["accountHolderName"] != "") {
+            $("#electricity-account-holder-name").html(
+              "<b>Account Holder Name - " + data["accountHolderName"] + "</b>"
+            );
+          } else {
+            $("#electricity-account-holder-name").html("");
+          }
         } else {
-          $("#mobile-postpaid-amount").val(data["amount"]);
-          $("#mobile-postpaid-loader").html("");
+          $("#electricity-amount").val(data["amount"]);
+          $("#electricity-loader").html("");
+          $("#electricity-account-holder-name").html("");
         }
       }
     });
   }
-}
 
-function fetchElectricityBill() {
-  var siteUrl = $("#siteUrl").val();
-  $("#electricity-loader").html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/admin/images/large-loading.gif' width='100' /></center>"
-  );
-  var str = $("#bbps-electricity-form").serialize();
-  $.ajax({
-    type: "POST",
-    url: siteUrl + "retailer/bbps/fetchElectricityBill",
-    data: str,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $("#electricity-amount").val(data["amount"]);
-        $("#electricity-loader").html("");
-        if (data["accountHolderName"] != "") {
-          $("#electricity-account-holder-name").html(
-            "<b>Account Holder Name - " + data["accountHolderName"] + "</b>"
-          );
-        } else {
-          $("#electricity-account-holder-name").html("");
-        }
-      } else {
-        $("#electricity-amount").val(data["amount"]);
-        $("#electricity-loader").html("");
-        $("#electricity-account-holder-name").html("");
-      }
-    }
-  });
-}
-
-function fetchDTHBill() {
-  var siteUrl = $("#siteUrl").val();
-  $("#dth-loader").html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/admin/images/large-loading.gif' width='100' /></center>"
-  );
-  var str = $("#bbps-dth-form").serialize();
-  $.ajax({
-    type: "POST",
-    url: siteUrl + "retailer/bbps/fetchDTHBill",
-    data: str,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $("#dth-amount").val(data["amount"]);
-        $("#dth-loader").html("");
-        if (data["accountHolderName"] != "") {
-          $("#dth-account-holder-name").html(
-            "<b>Account Holder Name - " + data["accountHolderName"] + "</b>"
-          );
-        } else {
-          $("#dth-account-holder-name").html("");
-        }
-      } else {
-        $("#dth-amount").val(data["amount"]);
-        $("#dth-loader").html("");
-        $("#dth-account-holder-name").html("");
-      }
-    }
-  });
-}
-
-function fetchMasterBill(service_id) {
-  var loaderID = "";
-  var formID = "";
-  var amountID = "";
-  var accountHolderName = "";
-  if (service_id == 19) {
-    var loaderID = "boradband-postpaid-loader";
-    var formID = "bbps-boradband-postpaid-form";
-    var amountID = "boradband-postpaid-amount";
-    var accountHolderName = "boradband-postpaid-account-holder-name";
-  } else if (service_id == 2) {
-    var loaderID = "landline-postpaid-loader";
-    var formID = "bbps-landline-postpaid-form";
-    var amountID = "landline-postpaid-amount";
-    var accountHolderName = "landline-postpaid-account-holder-name";
-  } else if (service_id == 7) {
-    var loaderID = "water-loader";
-    var formID = "bbps-water-form";
-    var amountID = "water-amount";
-    var accountHolderName = "water-account-holder-name";
-  } else if (service_id == 10) {
-    var loaderID = "emi-loader";
-    var formID = "bbps-emi-payment-form";
-    var amountID = "emi-amount";
-    var accountHolderName = "emi-account-holder-name";
-  } else if (service_id == 6) {
-    var loaderID = "gas-loader";
-    var formID = "bbps-gas-form";
-    var amountID = "gas-amount";
-    var accountHolderName = "gas-account-holder-name";
-  } else if (service_id == 11) {
-    var loaderID = "lpg-gas-loader";
-    var formID = "bbps-lpg-gas-form";
-    var amountID = "lpg-gas-amount";
-    var accountHolderName = "lpg-gas-account-holder-name";
-  } else if (service_id == 17) {
-    var loaderID = "loan-loader";
-    var formID = "bbps-loan-form";
-    var amountID = "loan-amount";
-    var accountHolderName = "loan-account-holder-name";
-  } else if (service_id == 5) {
-    var loaderID = "insurance-loader";
-    var formID = "bbps-insurance-form";
-    var amountID = "insurance-amount";
-    var accountHolderName = "insurance-account-holder-name";
-  } else if (service_id == 12) {
-    var loaderID = "fastag-loader";
-    var formID = "bbps-fastag-form";
-    var amountID = "fastag-amount";
-    var accountHolderName = "fastag-account-holder-name";
-  } else if (service_id == 9) {
-    var loaderID = "cable-loader";
-    var formID = "bbps-cable-form";
-    var amountID = "cable-amount";
-    var accountHolderName = "cable-account-holder-name";
-  }
-  // else if(service_id == 17)
-  // {
-  // 	var loaderID = 'housing-society-loader';
-  // 	var formID = 'bbps-housing-society-form';
-  // 	var amountID = 'housing-society-amount';
-  // 	var accountHolderName = 'housing-society-account-holder-name';
-  // }
-  else if (service_id == 18) {
-    var loaderID = "municipal-taxes-loader";
-    var formID = "bbps-municipal-taxes-form";
-    var amountID = "municipal-taxes-amount";
-    var accountHolderName = "municipal-taxes-account-holder-name";
-  } else if (service_id == 13) {
-    var loaderID = "municipal-services-loader";
-    var formID = "bbps-municipal-services-form";
-    var amountID = "municipal-services-amount";
-    var accountHolderName = "municipal-services-account-holder-name";
-  } else if (service_id == 22) {
-    var loaderID = "obi-credit-card-loader";
-    var formID = "bbps-credit-card-mobi-form";
-    var amountID = "cc_amount";
-    var accountHolderName = "credit-card-account-holder-name";
-  }
-  // else if(service_id == 19)
-  // {
-  // 	var loaderID = 'hospital-loader';
-  // 	var formID = 'bbps-hospital-form';
-  // 	var amountID = 'hospital-amount';
-  // 	var accountHolderName = 'hospital-account-holder-name';
-  // }
-  // else if(service_id == 22)
-  // {
-  // 	var loaderID = 'credit-card-loader';
-  // 	var formID = 'bbps-credit-card-form';
-  // 	var amountID = 'credit-card-amount';
-  // 	var accountHolderName = 'credit-card-account-holder-name';
-  // }
-  // else if(service_id == 9)
-  // {
-  // 	var loaderID = 'entertainment-loader';
-  // 	var formID = 'bbps-entertainment-form';
-  // 	var amountID = 'entertainment-amount';
-  // 	var accountHolderName = 'entertainment-account-holder-name';
-  // }
-  // else if(service_id == 21)
-  // {
-  // 	var loaderID = 'travel-loader';
-  // 	var formID = 'bbps-travel-form';
-  // 	var amountID = 'travel-amount';
-  // 	var accountHolderName = 'travel-account-holder-name';
-  // }
-  // else if(service_id == 24)
-  // {
-  // 	var loaderID = 'club-loader';
-  // 	var formID = 'bbps-club-form';
-  // 	var amountID = 'club-amount';
-  // 	var accountHolderName = 'club-account-holder-name';
-  // }
-  var siteUrl = $("#siteUrl").val();
-  $("#" + loaderID).html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/admin/images/large-loading.gif' width='100' /></center>"
-  );
-  var str = $("#" + formID).serialize();
-  $.ajax({
-    type: "POST",
-    url: siteUrl + "retailer/bbps/fetchMasterBill/" + service_id,
-    data: str,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $("#" + amountID).val(data["amount"]);
-        $("#" + loaderID).html("");
-        if (data["accountHolderName"] != "") {
-          $("#" + accountHolderName).html(
-            "<b>Account Holder Name - " + data["accountHolderName"] + "</b>"
-          );
-        } else {
-          $("#" + accountHolderName).html("");
-        }
-      } else {
-        $("#" + amountID).val(data["amount"]);
-        $("#" + loaderID).html("");
-        $("#" + accountHolderName).html("");
-      }
-    }
-  });
-}
-
-function payMasterBill(service_id) {
-  var btnID = "";
-  var loaderID = "";
-  var formID = "";
-  if (service_id == 19) {
-    var loaderID = "boradband-postpaid-loader";
-    var formID = "bbps-boradband-postpaid-form";
-    var btnID = "bbps-boradband-postpaid-btn";
-  } else if (service_id == 2) {
-    var loaderID = "landline-postpaid-loader";
-    var formID = "bbps-landline-postpaid-form";
-    var btnID = "bbps-landline-postpaid-btn";
-  } else if (service_id == 7) {
-    var loaderID = "water-loader";
-    var formID = "bbps-water-form";
-    var btnID = "bbps-water-btn";
-  } else if (service_id == 10) {
-    var loaderID = "emi-loader";
-    var formID = "bbps-emi-payment-form";
-    var btnID = "emi-payment-btn";
-  } else if (service_id == 6) {
-    var loaderID = "gas-loader";
-    var formID = "bbps-gas-form";
-    var btnID = "bbps-gas-btn";
-  } else if (service_id == 11) {
-    var loaderID = "lpg-gas-loader";
-    var formID = "bbps-lpg-gas-form";
-    var btnID = "bbps-lpg-gas-btn";
-  } else if (service_id == 17) {
-    var loaderID = "loan-loader";
-    var formID = "bbps-loan-form";
-    var btnID = "bbps-loan-btn";
-  } else if (service_id == 5) {
-    var loaderID = "insurance-loader";
-    var formID = "bbps-insurance-form";
-    var btnID = "bbps-insurance-btn";
-  } else if (service_id == 12) {
-    var loaderID = "fastag-loader";
-    var formID = "bbps-fastag-form";
-    var btnID = "bbps-fastag-btn";
-  } else if (service_id == 9) {
-    var loaderID = "cable-loader";
-    var formID = "bbps-cable-form";
-    var btnID = "bbps-cable-btn";
-  }
-  // else if(service_id == 17)
-  // {
-  // 	var loaderID = 'housing-society-loader';
-  // 	var formID = 'bbps-housing-society-form';
-  // 	var btnID = 'bbps-housing-society-btn';
-  // }
-  else if (service_id == 18) {
-    var loaderID = "municipal-taxes-loader";
-    var formID = "bbps-municipal-taxes-form";
-    var btnID = "bbps-municipal-taxes-btn";
-  } else if (service_id == 13) {
-    var loaderID = "municipal-services-loader";
-    var formID = "bbps-municipal-services-form";
-    var btnID = "bbps-municipal-services-btn";
-  }
-  // else if(service_id == 20)
-  // {
-  // 	var loaderID = 'subscription-loader';
-  // 	var formID = 'bbps-subscription-form';
-  // 	var btnID = 'bbps-subscription-btn';
-  // }
-  // else if(service_id == 19)
-  // {
-  // 	var loaderID = 'hospital-loader';
-  // 	var formID = 'bbps-hospital-form';
-  // 	var btnID = 'bbps-hospital-btn';
-  // }
-  // else if(service_id == 22)
-  // {
-  // 	var loaderID = 'credit-card-loader';
-  // 	var formID = 'bbps-credit-card-form';
-  // 	var btnID = 'bbps-credit-card-btn';
-  // }
-  // else if(service_id == 9)
-  // {
-  // 	var loaderID = 'entertainment-loader';
-  // 	var formID = 'bbps-entertainment-form';
-  // 	var btnID = 'bbps-entertainment-btn';
-  // }
-  // else if(service_id == 21)
-  // {
-  // 	var loaderID = 'travel-loader';
-  // 	var formID = 'bbps-travel-form';
-  // 	var btnID = 'bbps-travel-btn';
-  // }
-  // else if(service_id == 24)
-  // {
-  // 	var loaderID = 'club-loader';
-  // 	var formID = 'bbps-club-form';
-  // 	var btnID = 'bbps-club-btn';
-  // }
-  $("#" + btnID).prop("disabled", true);
-  var siteUrl = $("#siteUrl").val();
-  $("#" + loaderID).html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/admin/images/large-loading.gif' width='100' /></center>"
-  );
-  var str = $("#" + formID).serialize();
-  $.ajax({
-    type: "POST",
-    url: siteUrl + "retailer/bbps/payMasterBillAuth/" + service_id,
-    data: str,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $("#" + btnID).prop("disabled", false);
-        $("#" + loaderID).html(data["msg"]);
-        document.getElementById(formID).reset();
-      } else {
-        $("#" + btnID).prop("disabled", false);
-        $("#" + loaderID).html(
-          '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-          data["msg"] +
-          "</div>"
-        );
-      }
-    }
-  });
-}
-
-function updatedmrModel(id) {
-  var siteUrl = $("#siteUrl").val();
-  $.ajax({
-    url: siteUrl + "retailer/master/getDMRCommData/" + id,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $("#recordID").val(id);
-        $("#updateDMRModel").modal("show");
-        $("#updateDMRBlock").html(data["str"]);
-      } else {
-        $("#updateDMRBlock").html(
-          '<font color="red">' + data["msg"] + "</font>"
-        );
-      }
-    }
-  });
-}
-
-function updateaepsModel(id) {
-  var siteUrl = $("#siteUrl").val();
-  $.ajax({
-    url: siteUrl + "retailer/master/getAEPSCommData/" + id,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $("#recordID").val(id);
-        $("#updateDMRModel").modal("show");
-        $("#updateDMRBlock").html(data["str"]);
-      } else {
-        $("#updateDMRBlock").html(
-          '<font color="red">' + data["msg"] + "</font>"
-        );
-      }
-    }
-  });
-}
-
-function showOfferModal() {
-  var siteUrl = $("#siteUrl").val();
-  $("#offerModal").modal("show");
-  $("#offerLoader").html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/admin/images/large-loading.gif' width='200' /></center>"
-  );
-  var str = $("#offerFilterForm").serialize();
-  $.ajax({
-    type: "POST",
-    url: siteUrl + "retailer/recharge/getOperatorPlanList",
-    data: str,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $("#offerLoader").html(data["str"]);
-      } else {
-        $("#offerLoader").html(
-          '<center><font color="red">' + data["msg"] + "</font></center>"
-        );
-      }
-    }
-  });
-}
-
-function showDTHOfferModal() {
-  var siteUrl = $("#siteUrl").val();
-  var cardNumber = $("#cardNumber").val();
-  var operator = $("#operator").val();
-  if (cardNumber == "" || operator == "") {
-    $("#customerInfoLoader").html(
-      '<font color="red">Please Select Operator and Card Number.</font>'
-    );
-  } else {
-    $("#customerInfoLoader").html(
+  function fetchDTHBill() {
+    var siteUrl = $("#siteUrl").val();
+    $("#dth-loader").html(
       "<center><img src='" +
       siteUrl +
       "skin/admin/images/large-loading.gif' width='100' /></center>"
     );
-    var str = $("#admin_profile").serialize();
+    var str = $("#bbps-dth-form").serialize();
     $.ajax({
       type: "POST",
-      url: siteUrl + "retailer/recharge/getDTHOperatorPlanList",
+      url: siteUrl + "retailer/bbps/fetchDTHBill",
       data: str,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         if (data["status"] == 1) {
-          $("#customerInfoLoader").html("");
-          $("#customerName").val(data["customerName"]);
-          $("#amount").val(data["monthlyRechargeAmount"]);
-          $("#balanceInfo").html(
-            "Available Balance - &#8377; " + data["balance"]
-          );
+          $("#dth-amount").val(data["amount"]);
+          $("#dth-loader").html("");
+          if (data["accountHolderName"] != "") {
+            $("#dth-account-holder-name").html(
+              "<b>Account Holder Name - " + data["accountHolderName"] + "</b>"
+            );
+          } else {
+            $("#dth-account-holder-name").html("");
+          }
         } else {
-          $("#customerInfoLoader").html(
+          $("#dth-amount").val(data["amount"]);
+          $("#dth-loader").html("");
+          $("#dth-account-holder-name").html("");
+        }
+      }
+    });
+  }
+
+  function fetchMasterBill(service_id) {
+    var loaderID = "";
+    var formID = "";
+    var amountID = "";
+    var accountHolderName = "";
+    if (service_id == 19) {
+      var loaderID = "boradband-postpaid-loader";
+      var formID = "bbps-boradband-postpaid-form";
+      var amountID = "boradband-postpaid-amount";
+      var accountHolderName = "boradband-postpaid-account-holder-name";
+    } else if (service_id == 2) {
+      var loaderID = "landline-postpaid-loader";
+      var formID = "bbps-landline-postpaid-form";
+      var amountID = "landline-postpaid-amount";
+      var accountHolderName = "landline-postpaid-account-holder-name";
+    } else if (service_id == 7) {
+      var loaderID = "water-loader";
+      var formID = "bbps-water-form";
+      var amountID = "water-amount";
+      var accountHolderName = "water-account-holder-name";
+    } else if (service_id == 10) {
+      var loaderID = "emi-loader";
+      var formID = "bbps-emi-payment-form";
+      var amountID = "emi-amount";
+      var accountHolderName = "emi-account-holder-name";
+    } else if (service_id == 6) {
+      var loaderID = "gas-loader";
+      var formID = "bbps-gas-form";
+      var amountID = "gas-amount";
+      var accountHolderName = "gas-account-holder-name";
+    } else if (service_id == 11) {
+      var loaderID = "lpg-gas-loader";
+      var formID = "bbps-lpg-gas-form";
+      var amountID = "lpg-gas-amount";
+      var accountHolderName = "lpg-gas-account-holder-name";
+    } else if (service_id == 17) {
+      var loaderID = "loan-loader";
+      var formID = "bbps-loan-form";
+      var amountID = "loan-amount";
+      var accountHolderName = "loan-account-holder-name";
+    } else if (service_id == 5) {
+      var loaderID = "insurance-loader";
+      var formID = "bbps-insurance-form";
+      var amountID = "insurance-amount";
+      var accountHolderName = "insurance-account-holder-name";
+    } else if (service_id == 12) {
+      var loaderID = "fastag-loader";
+      var formID = "bbps-fastag-form";
+      var amountID = "fastag-amount";
+      var accountHolderName = "fastag-account-holder-name";
+    } else if (service_id == 9) {
+      var loaderID = "cable-loader";
+      var formID = "bbps-cable-form";
+      var amountID = "cable-amount";
+      var accountHolderName = "cable-account-holder-name";
+    }
+    // else if(service_id == 17)
+    // {
+    // 	var loaderID = 'housing-society-loader';
+    // 	var formID = 'bbps-housing-society-form';
+    // 	var amountID = 'housing-society-amount';
+    // 	var accountHolderName = 'housing-society-account-holder-name';
+    // }
+    else if (service_id == 18) {
+      var loaderID = "municipal-taxes-loader";
+      var formID = "bbps-municipal-taxes-form";
+      var amountID = "municipal-taxes-amount";
+      var accountHolderName = "municipal-taxes-account-holder-name";
+    } else if (service_id == 13) {
+      var loaderID = "municipal-services-loader";
+      var formID = "bbps-municipal-services-form";
+      var amountID = "municipal-services-amount";
+      var accountHolderName = "municipal-services-account-holder-name";
+    } else if (service_id == 22) {
+      var loaderID = "obi-credit-card-loader";
+      var formID = "bbps-credit-card-mobi-form";
+      var amountID = "cc_amount";
+      var accountHolderName = "credit-card-account-holder-name";
+    }
+    // else if(service_id == 19)
+    // {
+    // 	var loaderID = 'hospital-loader';
+    // 	var formID = 'bbps-hospital-form';
+    // 	var amountID = 'hospital-amount';
+    // 	var accountHolderName = 'hospital-account-holder-name';
+    // }
+    // else if(service_id == 22)
+    // {
+    // 	var loaderID = 'credit-card-loader';
+    // 	var formID = 'bbps-credit-card-form';
+    // 	var amountID = 'credit-card-amount';
+    // 	var accountHolderName = 'credit-card-account-holder-name';
+    // }
+    // else if(service_id == 9)
+    // {
+    // 	var loaderID = 'entertainment-loader';
+    // 	var formID = 'bbps-entertainment-form';
+    // 	var amountID = 'entertainment-amount';
+    // 	var accountHolderName = 'entertainment-account-holder-name';
+    // }
+    // else if(service_id == 21)
+    // {
+    // 	var loaderID = 'travel-loader';
+    // 	var formID = 'bbps-travel-form';
+    // 	var amountID = 'travel-amount';
+    // 	var accountHolderName = 'travel-account-holder-name';
+    // }
+    // else if(service_id == 24)
+    // {
+    // 	var loaderID = 'club-loader';
+    // 	var formID = 'bbps-club-form';
+    // 	var amountID = 'club-amount';
+    // 	var accountHolderName = 'club-account-holder-name';
+    // }
+    var siteUrl = $("#siteUrl").val();
+    $("#" + loaderID).html(
+      "<center><img src='" +
+      siteUrl +
+      "skin/admin/images/large-loading.gif' width='100' /></center>"
+    );
+    var str = $("#" + formID).serialize();
+    $.ajax({
+      type: "POST",
+      url: siteUrl + "retailer/bbps/fetchMasterBill/" + service_id,
+      data: str,
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $("#" + amountID).val(data["amount"]);
+          $("#" + loaderID).html("");
+          if (data["accountHolderName"] != "") {
+            $("#" + accountHolderName).html(
+              "<b>Account Holder Name - " + data["accountHolderName"] + "</b>"
+            );
+          } else {
+            $("#" + accountHolderName).html("");
+          }
+        } else {
+          $("#" + amountID).val(data["amount"]);
+          $("#" + loaderID).html("");
+          $("#" + accountHolderName).html("");
+        }
+      }
+    });
+  }
+
+  function payMasterBill(service_id) {
+    var btnID = "";
+    var loaderID = "";
+    var formID = "";
+    if (service_id == 19) {
+      var loaderID = "boradband-postpaid-loader";
+      var formID = "bbps-boradband-postpaid-form";
+      var btnID = "bbps-boradband-postpaid-btn";
+    } else if (service_id == 2) {
+      var loaderID = "landline-postpaid-loader";
+      var formID = "bbps-landline-postpaid-form";
+      var btnID = "bbps-landline-postpaid-btn";
+    } else if (service_id == 7) {
+      var loaderID = "water-loader";
+      var formID = "bbps-water-form";
+      var btnID = "bbps-water-btn";
+    } else if (service_id == 10) {
+      var loaderID = "emi-loader";
+      var formID = "bbps-emi-payment-form";
+      var btnID = "emi-payment-btn";
+    } else if (service_id == 6) {
+      var loaderID = "gas-loader";
+      var formID = "bbps-gas-form";
+      var btnID = "bbps-gas-btn";
+    } else if (service_id == 11) {
+      var loaderID = "lpg-gas-loader";
+      var formID = "bbps-lpg-gas-form";
+      var btnID = "bbps-lpg-gas-btn";
+    } else if (service_id == 17) {
+      var loaderID = "loan-loader";
+      var formID = "bbps-loan-form";
+      var btnID = "bbps-loan-btn";
+    } else if (service_id == 5) {
+      var loaderID = "insurance-loader";
+      var formID = "bbps-insurance-form";
+      var btnID = "bbps-insurance-btn";
+    } else if (service_id == 12) {
+      var loaderID = "fastag-loader";
+      var formID = "bbps-fastag-form";
+      var btnID = "bbps-fastag-btn";
+    } else if (service_id == 9) {
+      var loaderID = "cable-loader";
+      var formID = "bbps-cable-form";
+      var btnID = "bbps-cable-btn";
+    }
+    // else if(service_id == 17)
+    // {
+    // 	var loaderID = 'housing-society-loader';
+    // 	var formID = 'bbps-housing-society-form';
+    // 	var btnID = 'bbps-housing-society-btn';
+    // }
+    else if (service_id == 18) {
+      var loaderID = "municipal-taxes-loader";
+      var formID = "bbps-municipal-taxes-form";
+      var btnID = "bbps-municipal-taxes-btn";
+    } else if (service_id == 13) {
+      var loaderID = "municipal-services-loader";
+      var formID = "bbps-municipal-services-form";
+      var btnID = "bbps-municipal-services-btn";
+    }
+    // else if(service_id == 20)
+    // {
+    // 	var loaderID = 'subscription-loader';
+    // 	var formID = 'bbps-subscription-form';
+    // 	var btnID = 'bbps-subscription-btn';
+    // }
+    // else if(service_id == 19)
+    // {
+    // 	var loaderID = 'hospital-loader';
+    // 	var formID = 'bbps-hospital-form';
+    // 	var btnID = 'bbps-hospital-btn';
+    // }
+    // else if(service_id == 22)
+    // {
+    // 	var loaderID = 'credit-card-loader';
+    // 	var formID = 'bbps-credit-card-form';
+    // 	var btnID = 'bbps-credit-card-btn';
+    // }
+    // else if(service_id == 9)
+    // {
+    // 	var loaderID = 'entertainment-loader';
+    // 	var formID = 'bbps-entertainment-form';
+    // 	var btnID = 'bbps-entertainment-btn';
+    // }
+    // else if(service_id == 21)
+    // {
+    // 	var loaderID = 'travel-loader';
+    // 	var formID = 'bbps-travel-form';
+    // 	var btnID = 'bbps-travel-btn';
+    // }
+    // else if(service_id == 24)
+    // {
+    // 	var loaderID = 'club-loader';
+    // 	var formID = 'bbps-club-form';
+    // 	var btnID = 'bbps-club-btn';
+    // }
+    $("#" + btnID).prop("disabled", true);
+    var siteUrl = $("#siteUrl").val();
+    $("#" + loaderID).html(
+      "<center><img src='" +
+      siteUrl +
+      "skin/admin/images/large-loading.gif' width='100' /></center>"
+    );
+    var str = $("#" + formID).serialize();
+    $.ajax({
+      type: "POST",
+      url: siteUrl + "retailer/bbps/payMasterBillAuth/" + service_id,
+      data: str,
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $("#" + btnID).prop("disabled", false);
+          $("#" + loaderID).html(data["msg"]);
+          document.getElementById(formID).reset();
+        } else {
+          $("#" + btnID).prop("disabled", false);
+          $("#" + loaderID).html(
+            '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            data["msg"] +
+            "</div>"
+          );
+        }
+      }
+    });
+  }
+
+  function updatedmrModel(id) {
+    var siteUrl = $("#siteUrl").val();
+    $.ajax({
+      url: siteUrl + "retailer/master/getDMRCommData/" + id,
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $("#recordID").val(id);
+          $("#updateDMRModel").modal("show");
+          $("#updateDMRBlock").html(data["str"]);
+        } else {
+          $("#updateDMRBlock").html(
             '<font color="red">' + data["msg"] + "</font>"
           );
         }
       }
     });
   }
-}
 
-function offerAmountPick(amount) {
-  $("#amount").val(amount);
-  $("#offerModal").modal("hide");
-}
-
-function showROfferModal() {
-  var siteUrl = $("#siteUrl").val();
-  $("#rofferModal").modal("show");
-  $("#rofferLoader").html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/admin/images/large-loading.gif' width='200' /></center>"
-  );
-  var str = $("#rofferFilterForm").serialize();
-  $.ajax({
-    type: "POST",
-    url: siteUrl + "retailer/recharge/getRofferList",
-    data: str,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $("#rofferLoader").html(data["str"]);
-      } else {
-        $("#rofferLoader").html(
-          '<center><font color="red">' + data["msg"] + "</font></center>"
-        );
-      }
-    }
-  });
-}
-
-function showDTHROfferModal() {
-  var siteUrl = $("#siteUrl").val();
-  $("#rofferModal").modal("show");
-  var cardNumber = $("#cardNumber").val();
-  $("#roffermobile").val(cardNumber);
-  $("#rofferLoader").html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/admin/images/large-loading.gif' width='200' /></center>"
-  );
-  var str = $("#rofferFilterForm").serialize();
-  $.ajax({
-    type: "POST",
-    url: siteUrl + "retailer/recharge/getDthOperatorPlanList",
-    data: str,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $("#rofferLoader").html(data["str"]);
-      } else {
-        $("#rofferLoader").html(
-          '<center><font color="red">' + data["msg"] + "</font></center>"
-        );
-      }
-    }
-  });
-}
-
-function offerAmountPick(amount) {
-  $("#amount").val(amount);
-  $("#offerModal").modal("hide");
-  $("#DthOfferModal").modal("hide");
-  $("#rofferModal").modal("hide");
-}
-function showComplainBox(id) {
-  var siteUrl = $("#siteUrl").val();
-  $.ajax({
-    url: siteUrl + "retailer/recharge/getRechargeData/" + id,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $("#recordID").val(id);
-        $("#updateComplainModel").modal("show");
-        $("#complainRchgID").html(
-          "<p><b>Recharge ID - " + data["txnid"] + "</b></p>"
-        );
-        $("#complainAmount").html(
-          "<p><b>Amount - " + data["amount"] + "</b></p>"
-        );
-        $("#complainMsgBlock").html("");
-      } else {
-        $("#complainMsgBlock").html(
-          '<font color="red">' + data["msg"] + "</font>"
-        );
-      }
-    }
-  });
-}
-
-function showBBPSComplainBox(id) {
-  var siteUrl = $("#siteUrl").val();
-  $.ajax({
-    url: siteUrl + "retailer/recharge/getBBPSData/" + id,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $("#recordID").val(id);
-        $("#updateComplainModel").modal("show");
-        $("#complainRchgID").html(
-          "<p><b>Recharge ID - " + data["txnid"] + "</b></p>"
-        );
-        $("#complainAmount").html(
-          "<p><b>Amount - " + data["amount"] + "</b></p>"
-        );
-        $("#complainMsgBlock").html("");
-      } else {
-        $("#complainMsgBlock").html(
-          '<font color="red">' + data["msg"] + "</font>"
-        );
-      }
-    }
-  });
-}
-
-function updateBenModel(id) {
-  var siteUrl = $("#siteUrl").val();
-  $.ajax({
-    url: siteUrl + "retailer/transfer/getBenData/" + id,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $("#recordID").val(id);
-        $("#updateDMRModel").modal("show");
-        $("#updateDMRBlock").html(data["str"]);
-      } else {
-        $("#updateDMRBlock").html(
-          '<font color="red">' + data["msg"] + "</font>"
-        );
-      }
-    }
-  });
-}
-
-function showAepsModal(id) {
-  var siteUrl = $("#siteUrl").val();
-  $.ajax({
-    url: siteUrl + "retailer/aeps/getAepsData/" + id,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $("#updateDMRModel").modal("show");
-        $("#updateDMRBlock").html(data["str"]);
-      } else {
-        $("#updateDMRBlock").html(
-          '<font color="red">' + data["msg"] + "</font>"
-        );
-      }
-    }
-  });
-}
-
-function dmtVerifyIfsc() {
-  var siteUrl = $("#siteUrl").val();
-  var ifsc = $("#ifsc").val();
-  if (ifsc == "") {
-    $(".ifsc-vefify-loader").html(
-      '<font color="red">Please enter IFSC.</font>'
-    );
-  } else {
-    $(".ifsc-vefify-loader").html(
-      "<img src='" + siteUrl + "skin/admin/images/small-loading.gif' />"
-    );
+  function updateaepsModel(id) {
+    var siteUrl = $("#siteUrl").val();
     $.ajax({
-      type: "POST",
-      url: siteUrl + "retailer/dmt/verifyIfscCode/" + ifsc,
+      url: siteUrl + "retailer/master/getAEPSCommData/" + id,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         if (data["status"] == 1) {
-          $(".ifsc-vefify-loader").html(
-            '<table class="table table-bordered"><tr><th colspan="5"><center>' +
-            data["ifscDetails"] +
-            "</center></th></tr><tr><th>Bank</th><th>Branch</th><th>City</th><th>District</th><th>State</th></tr><tr><th>" +
-            data["bankName"] +
-            "</th><th>" +
-            data["branchName"] +
-            "</th><th>" +
-            data["city"] +
-            "</th><th>" +
-            data["district"] +
-            "</th><th>" +
-            data["state"] +
-            '</th></tr><tr><th colspan="5">' +
-            data["address"] +
-            "</th></tr></table>"
-          );
+          $("#recordID").val(id);
+          $("#updateDMRModel").modal("show");
+          $("#updateDMRBlock").html(data["str"]);
         } else {
-          $(".ifsc-vefify-loader").html(
-            '<font color="red">' + data["message"] + "</font>"
+          $("#updateDMRBlock").html(
+            '<font color="red">' + data["msg"] + "</font>"
           );
         }
       }
     });
   }
-}
 
-//----- Money Transfer 2
-$("#accountVerifyBtn").click(function () {
-  var siteUrl = $("#siteUrl").val();
-  var str = $("#account_verify_form").serialize();
-  $('#loader').show();
-  $.ajax({
-    type: "POST",
-    url: siteUrl + "retailer/bank/verifyAuth",
-    data: str,
-    dataType: "json",
-    success: function (obj) {
-      $('#loader').hide();
-      $('.error').html('');
-      $('#benAlert').removeClass('show').addClass('hide').html('');
-      if (obj.error && obj.errors) {
-        $.each(obj.errors, function (key, value) {
-          $('#' + key + '_error').html(value);
-        });
-      } else if (obj.error) {
-        $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
-        if (obj.error && obj.apiresponse === "yes") {
-          $('#benAlert').html(`<b><strong>Error : </strong>(${obj.dataval.statuscode} - ${obj.dataval.statuscodemessage})</b>`);
+  function showOfferModal() {
+    var siteUrl = $("#siteUrl").val();
+    $("#offerModal").modal("show");
+    $("#offerLoader").html(
+      "<center><img src='" +
+      siteUrl +
+      "skin/admin/images/large-loading.gif' width='200' /></center>"
+    );
+    var str = $("#offerFilterForm").serialize();
+    $.ajax({
+      type: "POST",
+      url: siteUrl + "retailer/recharge/getOperatorPlanList",
+      data: str,
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $("#offerLoader").html(data["str"]);
         } else {
-          $('#benAlert').html(`<b><strong>Error : </strong>${obj.dataval}</b>`);
+          $("#offerLoader").html(
+            '<center><font color="red">' + data["msg"] + "</font></center>"
+          );
         }
-        setTimeout(function () {
-          $('#benAlert').removeClass('show').addClass('hide');
-          $('#benAlert').empty();
-        }, 5000);
-      } else {
-        $("#account_holder_name").val(obj.account_holder_name);
-        $("#bankModal").modal("show");
-        $("#bankResponse").html(obj.dataval);
       }
-    },
-    error: function (xhr, status, error) {
-      $('#loader').hide();
-      console.log("AJAX error: " + error);
-      $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger').html("An error occurred. Please try again.");
-    }
-  });
-});
-
-$('#addBeneficiaryBtn').click(function (e) {
-  e.preventDefault();
-
-  // Serialize form data and prepare variables
-  var formData = $('#verify_beneficary_addon_form').serialize();
-  var dbTableName = $('#dbTableName').val();
-  var actionUrl = "";
-  var siteUrl = $('#siteUrl').val();
-  const $button = $(this);
-  const $spinner = $button.find('.spinner-border');
-
-  if (dbTableName === "user_benificary") {
-    actionUrl = siteUrl + "retailer/transfer/beneficiaryAuth";
-  } else {
-    actionUrl = siteUrl + "retailer/Settlement/beneficiaryAuth";
+    });
   }
 
-  $spinner.show();
-  $button.prop('disabled', true);
-  $('.btnDisabled').prop('disabled', true);
+  function showDTHOfferModal() {
+    var siteUrl = $("#siteUrl").val();
+    var cardNumber = $("#cardNumber").val();
+    var operator = $("#operator").val();
+    if (cardNumber == "" || operator == "") {
+      $("#customerInfoLoader").html(
+        '<font color="red">Please Select Operator and Card Number.</font>'
+      );
+    } else {
+      $("#customerInfoLoader").html(
+        "<center><img src='" +
+        siteUrl +
+        "skin/admin/images/large-loading.gif' width='100' /></center>"
+      );
+      var str = $("#admin_profile").serialize();
+      $.ajax({
+        type: "POST",
+        url: siteUrl + "retailer/recharge/getDTHOperatorPlanList",
+        data: str,
+        success: function (r) {
+          var data = JSON.parse($.trim(r));
+          if (data["status"] == 1) {
+            $("#customerInfoLoader").html("");
+            $("#customerName").val(data["customerName"]);
+            $("#amount").val(data["monthlyRechargeAmount"]);
+            $("#balanceInfo").html(
+              "Available Balance - &#8377; " + data["balance"]
+            );
+          } else {
+            $("#customerInfoLoader").html(
+              '<font color="red">' + data["msg"] + "</font>"
+            );
+          }
+        }
+      });
+    }
+  }
 
-  $.ajax({
-    url: actionUrl,
-    type: "POST",
-    data: formData,
-    dataType: "json",
-    success: function (response) {
+  function offerAmountPick(amount) {
+    $("#amount").val(amount);
+    $("#offerModal").modal("hide");
+  }
+
+  function showROfferModal() {
+    var siteUrl = $("#siteUrl").val();
+    $("#rofferModal").modal("show");
+    $("#rofferLoader").html(
+      "<center><img src='" +
+      siteUrl +
+      "skin/admin/images/large-loading.gif' width='200' /></center>"
+    );
+    var str = $("#rofferFilterForm").serialize();
+    $.ajax({
+      type: "POST",
+      url: siteUrl + "retailer/recharge/getRofferList",
+      data: str,
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $("#rofferLoader").html(data["str"]);
+        } else {
+          $("#rofferLoader").html(
+            '<center><font color="red">' + data["msg"] + "</font></center>"
+          );
+        }
+      }
+    });
+  }
+
+  function showDTHROfferModal() {
+    var siteUrl = $("#siteUrl").val();
+    $("#rofferModal").modal("show");
+    var cardNumber = $("#cardNumber").val();
+    $("#roffermobile").val(cardNumber);
+    $("#rofferLoader").html(
+      "<center><img src='" +
+      siteUrl +
+      "skin/admin/images/large-loading.gif' width='200' /></center>"
+    );
+    var str = $("#rofferFilterForm").serialize();
+    $.ajax({
+      type: "POST",
+      url: siteUrl + "retailer/recharge/getDthOperatorPlanList",
+      data: str,
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $("#rofferLoader").html(data["str"]);
+        } else {
+          $("#rofferLoader").html(
+            '<center><font color="red">' + data["msg"] + "</font></center>"
+          );
+        }
+      }
+    });
+  }
+
+  function offerAmountPick(amount) {
+    $("#amount").val(amount);
+    $("#offerModal").modal("hide");
+    $("#DthOfferModal").modal("hide");
+    $("#rofferModal").modal("hide");
+  }
+  function showComplainBox(id) {
+    var siteUrl = $("#siteUrl").val();
+    $.ajax({
+      url: siteUrl + "retailer/recharge/getRechargeData/" + id,
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $("#recordID").val(id);
+          $("#updateComplainModel").modal("show");
+          $("#complainRchgID").html(
+            "<p><b>Recharge ID - " + data["txnid"] + "</b></p>"
+          );
+          $("#complainAmount").html(
+            "<p><b>Amount - " + data["amount"] + "</b></p>"
+          );
+          $("#complainMsgBlock").html("");
+        } else {
+          $("#complainMsgBlock").html(
+            '<font color="red">' + data["msg"] + "</font>"
+          );
+        }
+      }
+    });
+  }
+
+  function showBBPSComplainBox(id) {
+    var siteUrl = $("#siteUrl").val();
+    $.ajax({
+      url: siteUrl + "retailer/recharge/getBBPSData/" + id,
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $("#recordID").val(id);
+          $("#updateComplainModel").modal("show");
+          $("#complainRchgID").html(
+            "<p><b>Recharge ID - " + data["txnid"] + "</b></p>"
+          );
+          $("#complainAmount").html(
+            "<p><b>Amount - " + data["amount"] + "</b></p>"
+          );
+          $("#complainMsgBlock").html("");
+        } else {
+          $("#complainMsgBlock").html(
+            '<font color="red">' + data["msg"] + "</font>"
+          );
+        }
+      }
+    });
+  }
+
+  function updateBenModel(id) {
+    var siteUrl = $("#siteUrl").val();
+    $.ajax({
+      url: siteUrl + "retailer/transfer/getBenData/" + id,
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $("#recordID").val(id);
+          $("#updateDMRModel").modal("show");
+          $("#updateDMRBlock").html(data["str"]);
+        } else {
+          $("#updateDMRBlock").html(
+            '<font color="red">' + data["msg"] + "</font>"
+          );
+        }
+      }
+    });
+  }
+
+  function showAepsModal(id) {
+    var siteUrl = $("#siteUrl").val();
+    $.ajax({
+      url: siteUrl + "retailer/aeps/getAepsData/" + id,
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $("#updateDMRModel").modal("show");
+          $("#updateDMRBlock").html(data["str"]);
+        } else {
+          $("#updateDMRBlock").html(
+            '<font color="red">' + data["msg"] + "</font>"
+          );
+        }
+      }
+    });
+  }
+
+  function dmtVerifyIfsc() {
+    var siteUrl = $("#siteUrl").val();
+    var ifsc = $("#ifsc").val();
+    if (ifsc == "") {
+      $(".ifsc-vefify-loader").html(
+        '<font color="red">Please enter IFSC.</font>'
+      );
+    } else {
+      $(".ifsc-vefify-loader").html(
+        "<img src='" + siteUrl + "skin/admin/images/small-loading.gif' />"
+      );
+      $.ajax({
+        type: "POST",
+        url: siteUrl + "retailer/dmt/verifyIfscCode/" + ifsc,
+        success: function (r) {
+          var data = JSON.parse($.trim(r));
+          if (data["status"] == 1) {
+            $(".ifsc-vefify-loader").html(
+              '<table class="table table-bordered"><tr><th colspan="5"><center>' +
+              data["ifscDetails"] +
+              "</center></th></tr><tr><th>Bank</th><th>Branch</th><th>City</th><th>District</th><th>State</th></tr><tr><th>" +
+              data["bankName"] +
+              "</th><th>" +
+              data["branchName"] +
+              "</th><th>" +
+              data["city"] +
+              "</th><th>" +
+              data["district"] +
+              "</th><th>" +
+              data["state"] +
+              '</th></tr><tr><th colspan="5">' +
+              data["address"] +
+              "</th></tr></table>"
+            );
+          } else {
+            $(".ifsc-vefify-loader").html(
+              '<font color="red">' + data["message"] + "</font>"
+            );
+          }
+        }
+      });
+    }
+  }
+
+  //----- Money Transfer 2
+  $("#accountVerifyBtn").click(function () {
+    var siteUrl = $("#siteUrl").val();
+    var str = $("#account_verify_form").serialize();
+    $('#loader').show();
+    $.ajax({
+      type: "POST",
+      url: siteUrl + "retailer/bank/verifyAuth",
+      data: str,
+      dataType: "json",
+      success: function (obj) {
+        $('#loader').hide();
+        $('.error').html('');
+        $('#benAlert').removeClass('show').addClass('hide').html('');
+        if (obj.error && obj.errors) {
+          $.each(obj.errors, function (key, value) {
+            $('#' + key + '_error').html(value);
+          });
+        } else if (obj.error) {
+          $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
+          if (obj.error && obj.apiresponse === "yes") {
+            $('#benAlert').html(`<b><strong>Error : </strong>(${obj.dataval.statuscode} - ${obj.dataval.statuscodemessage})</b>`);
+          } else {
+            $('#benAlert').html(`<b><strong>Error : </strong>${obj.dataval}</b>`);
+          }
+          setTimeout(function () {
+            $('#benAlert').removeClass('show').addClass('hide');
+            $('#benAlert').empty();
+          }, 5000);
+        } else {
+          $("#account_holder_name").val(obj.account_holder_name);
+          $("#bankModal").modal("show");
+          $("#bankResponse").html(obj.dataval);
+        }
+      },
+      error: function (xhr, status, error) {
+        $('#loader').hide();
+        console.log("AJAX error: " + error);
+        $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger').html("An error occurred. Please try again.");
+      }
+    });
+  });
+
+  $('#addBeneficiaryBtn').click(function (e) {
+    e.preventDefault();
+
+    // Serialize form data and prepare variables
+    var formData = $('#verify_beneficary_addon_form').serialize();
+    var dbTableName = $('#dbTableName').val();
+    var actionUrl = "";
+    var siteUrl = $('#siteUrl').val();
+    const $button = $(this);
+    const $spinner = $button.find('.spinner-border');
+
+    if (dbTableName === "user_benificary") {
+      actionUrl = siteUrl + "retailer/transfer/beneficiaryAuth";
+    } else {
+      actionUrl = siteUrl + "retailer/Settlement/beneficiaryAuth";
+    }
+
+    $spinner.show();
+    $button.prop('disabled', true);
+    $('.btnDisabled').prop('disabled', true);
+
+    $.ajax({
+      url: actionUrl,
+      type: "POST",
+      data: formData,
+      dataType: "json",
+      success: function (response) {
 
 
-      if (response.error) {
+        if (response.error) {
+          $spinner.hide();
+          $button.prop('disabled', false);
+          $('.btnDisabled').prop('disabled', false);
+          $('.benAddonMsg').html(`<strong>Error: </strong>${response.dataval}`);
+        } else {
+          $('#verify_beneficary_addon_form')[0].reset();
+          $('.benAddonMsg').html(`<strong>Success: </strong>${response.dataval}`);
+          $button.prop('disabled', false);
+          $('.btnDisabled').prop('disabled', false);
+          setTimeout(function () {
+            $('.benAddonMsg').html("");
+            $('.benAddonMsg').empty();
+            location.reload();
+          }, 5000);
+        }
+
+      },
+      error: function (xhr, status, error) {
         $spinner.hide();
         $button.prop('disabled', false);
         $('.btnDisabled').prop('disabled', false);
-        $('.benAddonMsg').html(`<strong>Error: </strong>${response.dataval}`);
-      } else {
-        $('#verify_beneficary_addon_form')[0].reset();
-        $('.benAddonMsg').html(`<strong>Success: </strong>${response.dataval}`);
-        $button.prop('disabled', false);
-        $('.btnDisabled').prop('disabled', false);
+        console.log('AJAX Error: ' + error);
+        $('.benAddonMsg').html(`<strong>Error: </strong>Failed to add beneficiary. Please try again.`);
         setTimeout(function () {
-          $('.benAddonMsg').html("");
           $('.benAddonMsg').empty();
-          location.reload();
         }, 5000);
       }
-
-    },
-    error: function (xhr, status, error) {
-      $spinner.hide();
-      $button.prop('disabled', false);
-      $('.btnDisabled').prop('disabled', false);
-      console.log('AJAX Error: ' + error);
-      $('.benAddonMsg').html(`<strong>Error: </strong>Failed to add beneficiary. Please try again.`);
-      setTimeout(function () {
-        $('.benAddonMsg').empty();
-      }, 5000);
-    }
+    });
   });
-});
 
 
-$("#upiVerifyBtn").click(function () {
-  var siteUrl = $("#siteUrl").val();
-  $(".ajaxx-loader").html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/images/large-loading.gif' alt='loading' width='100' /></center>"
-  );
-  var str = $("#upi_verify_form").serialize();
-  $.ajax({
-    type: "POST",
-    url: siteUrl + "retailer/bank/upiVerifyAuth",
-    data: str,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $(".ajaxx-loader").html("");
-        $("#upi_account_holder_name").val(data["upi_account_holder_name"]);
-        $("#bankUpiModal").modal("show");
-        $("#bankUpiResponse").html(data["msg"]);
-      } else {
-        $(".ajaxx-loader").html(
-          '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-          data["msg"] +
-          "</div>"
-        );
-      }
-    }
-  });
-});
-
-$("#selDmtBankID").change(function () {
-  var siteUrl = $("#siteUrl").val();
-  var billerID = $(this).val();
-  $.ajax({
-    type: "POST",
-    url: siteUrl + "retailer/dmt/getBankDefaultIfsc/" + billerID,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      $("#defaultIfscTxt").val(data["ifsc"]);
-    }
-  });
-});
-
-$("#is_default_ifsc").click(function () {
-  if ($("#is_default_ifsc").is(":checked")) {
-    $("#ifsc").val($("#defaultIfscTxt").val());
-  } else {
-    $("#ifsc").val("");
-  }
-});
-
-function closeClubNoti(recordID = 0) {
-  var siteUrl = $("#siteUrl").val();
-  $.ajax({
-    type: "POST",
-    url: siteUrl + "retailer/saving/closeClubNotification/" + recordID,
-    success: function (r) { }
-  });
-}
-
-$("#to_bank").click(function () {
-  var siteUrl = $("#siteUrl").val();
-  $(".recharge-comm-loader").html(
-    "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
-  );
-  $.ajax({
-    url: siteUrl + "retailer/transfer/getBankBeneficiary",
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $(".recharge-comm-loader").html("");
-        $("#recharge-comm-block").html(data["str"]);
-      } else {
-        $(".recharge-comm-loader").html(
-          '<font color="red">' + data["str"] + "</font>"
-        );
-      }
-    }
-  });
-});
-
-$("#to_upi").click(function () {
-  var siteUrl = $("#siteUrl").val();
-  $(".recharge-comm-loader").html(
-    "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
-  );
-  $.ajax({
-    url: siteUrl + "retailer/transfer/getUpiBankBeneficiary",
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $(".recharge-comm-loader").html("");
-        $("#recharge-comm-block").html(data["str"]);
-      } else {
-        $(".recharge-comm-loader").html(
-          '<font color="red">' + data["str"] + "</font>"
-        );
-      }
-    }
-  });
-});
-
-$("#add_bank_account").click(function () {
-  $("#show_bank_account").css("display", "block");
-  $("#show_upi_account").css("display", "none");
-});
-
-$("#add_upi_account").click(function () {
-  $("#show_upi_account").css("display", "block");
-  $("#show_bank_account").css("display", "none");
-});
-
-$("#coupon").keyup(function () {
-  var coupon = $("#coupon").val();
-
-  if (coupon) {
+  $("#upiVerifyBtn").click(function () {
+    var siteUrl = $("#siteUrl").val();
+    $(".ajaxx-loader").html(
+      "<center><img src='" +
+      siteUrl +
+      "skin/images/large-loading.gif' alt='loading' width='100' /></center>"
+    );
+    var str = $("#upi_verify_form").serialize();
     $.ajax({
-      url: siteUrl + "retailer/pancard/getCouponBalance/" + coupon,
+      type: "POST",
+      url: siteUrl + "retailer/bank/upiVerifyAuth",
+      data: str,
       success: function (r) {
         var data = JSON.parse($.trim(r));
         if (data["status"] == 1) {
-          $("#amount").html(data["amount"]);
+          $(".ajaxx-loader").html("");
+          $("#upi_account_holder_name").val(data["upi_account_holder_name"]);
+          $("#bankUpiModal").modal("show");
+          $("#bankUpiResponse").html(data["msg"]);
         } else {
-          $("#amount").html(data["amount"]);
+          $(".ajaxx-loader").html(
+            '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            data["msg"] +
+            "</div>"
+          );
         }
       }
     });
-  }
-});
-
-function payCreditCardBill(service_id) {
-  var loaderID = "mobi-credit-card-loader";
-  var formID = "bbps-credit-card-mobi-form";
-  var btnID = "bbps-credit-card-mobi-btn";
-
-  $("#" + btnID).prop("disabled", true);
-  var siteUrl = $("#siteUrl").val();
-  $("#" + loaderID).html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/admin/images/large-loading.gif' width='100' /></center>"
-  );
-  var str = $("#" + formID).serialize();
-  $.ajax({
-    type: "POST",
-    url: siteUrl + "retailer/bbps/payCreditCardBillAuth/" + service_id,
-    data: str,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $("#" + btnID).prop("disabled", false);
-        $("#" + loaderID).html(data["msg"]);
-        document.getElementById(formID).reset();
-      } else {
-        $("#" + btnID).prop("disabled", false);
-        $("#" + loaderID).html(
-          '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-          data["msg"] +
-          "</div>"
-        );
-      }
-    }
   });
-}
 
-function bbpsRecharge() {
-  var siteUrl = $("#siteUrl").val();
-  var str = $("#bbps_recharge").serialize();
-  $.ajax({
-    type: "POST",
-    url: siteUrl + "retailer/bbps/mobilePrepaidAuth",
-    data: str,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        swal({
-          title: data["msg"],
-          icon: "success",
-          button: "OK!"
-        });
-
-        setTimeout(function () {
-          window.location.replace(siteUrl + "retailer/bbps");
-        }, 10000);
-      } else {
-        swal({
-          title: data["msg"],
-          icon: "success",
-          button: "OK!"
-        });
-
-        setTimeout(function () {
-          window.location.replace(siteUrl + "retailer/bbps");
-        }, 10000);
-      }
-    }
-  });
-}
-
-$("#settlement_to_bank").click(function () {
-  var siteUrl = $("#siteUrl").val();
-  $(".recharge-comm-loader").html(
-    "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
-  );
-  $.ajax({
-    url: siteUrl + "retailer/settlement/getBankBeneficiary",
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $(".recharge-comm-loader").html("");
-        $("#recharge-comm-block").html(data["str"]);
-      } else {
-        $(".recharge-comm-loader").html(
-          '<font color="red">' + data["str"] + "</font>"
-        );
-      }
-    }
-  });
-});
-
-$("#settlement_to_upi").click(function () {
-  var siteUrl = $("#siteUrl").val();
-  $(".recharge-comm-loader").html(
-    "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
-  );
-  $.ajax({
-    url: siteUrl + "retailer/settlement/getUpiBankBeneficiary",
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $(".recharge-comm-loader").html("");
-        $("#recharge-comm-block").html(data["str"]);
-      } else {
-        $(".recharge-comm-loader").html(
-          '<font color="red">' + data["str"] + "</font>"
-        );
-      }
-    }
-  });
-});
-
-$("#settlement_add_bank_account").click(function () {
-  $("#show_settlement_bank_account").css("display", "block");
-  $("#show_settlement_upi_account").css("display", "none");
-});
-
-$("#settlement_add_upi_account").click(function () {
-  $("#show_settlement_upi_account").css("display", "block");
-  $("#show_settlement_bank_account").css("display", "none");
-});
-
-$("#settlementAccountVerifyBtn").click(function () {
-  var siteUrl = $("#siteUrl").val();
-  $(".ajaxx-loader").html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/images/large-loading.gif' alt='loading' width='100' /></center>"
-  );
-  var str = $("#account_verify_form").serialize();
-  $.ajax({
-    type: "POST",
-    url: siteUrl + "retailer/bank/openVerifyAuth",
-    data: str,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $(".ajaxx-loader").html("");
-        $("#account_holder_name").val(data["account_holder_name"]);
-        $("#account_ben_id").val(data["account_ben_id"]);
-        $("#bankModal").modal("show");
-        $("#bankResponse").html(data["msg"]);
-      } else {
-        $(".ajaxx-loader").html(
-          '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-          data["msg"] +
-          "</div>"
-        );
-      }
-    }
-  });
-});
-
-$("#settlementUpiVerifyBtn").click(function () {
-  var siteUrl = $("#siteUrl").val();
-  $(".ajaxx-loader").html(
-    "<center><img src='" +
-    siteUrl +
-    "skin/images/large-loading.gif' alt='loading' width='100' /></center>"
-  );
-  var str = $("#upi_verify_form").serialize();
-  $.ajax({
-    type: "POST",
-    url: siteUrl + "retailer/bank/openUpiVerifyAuth",
-    data: str,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      if (data["status"] == 1) {
-        $(".ajaxx-loader").html("");
-        $("#upi_account_holder_name").val(data["upi_account_holder_name"]);
-        $("#upi_ben_id").val(data["upi_ben_id"]);
-        $("#bankUpiModal").modal("show");
-        $("#bankUpiResponse").html(data["msg"]);
-      } else {
-        $(".ajaxx-loader").html(
-          '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-          data["msg"] +
-          "</div>"
-        );
-      }
-    }
-  });
-});
-
-$(document).ready(function () {
-  function searchH4Value(searchTerm) {
-    $(".master_list_col").hide();
-    var firstChar = searchTerm.charAt(0).toUpperCase();
-    var tail = searchTerm.substring(1);
-    var formattedSearchTerm = firstChar + tail;
-
-    $(".master_list_col").each(function () {
-      var h4Text = $(this).find("h4").text();
-      if (h4Text.toLowerCase().includes(formattedSearchTerm.toLowerCase())) {
-        $(this).show();
+  $("#selDmtBankID").change(function () {
+    var siteUrl = $("#siteUrl").val();
+    var billerID = $(this).val();
+    $.ajax({
+      type: "POST",
+      url: siteUrl + "retailer/dmt/getBankDefaultIfsc/" + billerID,
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        $("#defaultIfscTxt").val(data["ifsc"]);
       }
     });
-  }
+  });
 
-  $(".home_search").on("keyup", function () {
-    var searchTerm = $(this).val().trim();
-    if (searchTerm.length > 0) {
-      searchH4Value(searchTerm);
+  $("#is_default_ifsc").click(function () {
+    if ($("#is_default_ifsc").is(":checked")) {
+      $("#ifsc").val($("#defaultIfscTxt").val());
     } else {
-      $(".master_list_col").show();
+      $("#ifsc").val("");
     }
   });
-});
 
-$(document).ready(function () {
-
-  $('.moneyTransferdiv').on('click', function (event) {
-    event.preventDefault();
-    $('#moneyTransferModel').modal('show');
-  });
-
-  $('.settlementMoneyTransferdiv').on('click', function (event) {
-    event.preventDefault();
-    $('#settlementMoneyTransferModel').modal('show');
-  });
-
-  $('.eKycModeldiv').on('click', function (event) {
-    event.preventDefault();
-    $('#eKycModel').modal('show');
-  });
-  //Add Bank M1 Benificary
-  $('#saveMT1BeneficiaryBtn').click(function (e) {
-    e.preventDefault();
-    var formData = $('#account_verify_form').serialize();
-    var siteUrl = $('#siteUrl').val();
-
+  function closeClubNoti(recordID = 0) {
+    var siteUrl = $("#siteUrl").val();
     $.ajax({
-      url: siteUrl + "retailer/transfer/beneficiaryAuth",
       type: "POST",
-      data: formData,
-      dataType: "json",
-      success: function (response) {
-        // Clear previous errors and success messages
-        $('.error').html('');
-        $('#benAlert').removeClass('show').addClass('hide').html('');
-        if (response.error && response.errors) {
-          // Display validation errors
-          $.each(response.errors, function (key, value) {
-            $('#' + key + '_error').html(value);
+      url: siteUrl + "retailer/saving/closeClubNotification/" + recordID,
+      success: function (r) { }
+    });
+  }
+
+  $("#to_bank").click(function () {
+    var siteUrl = $("#siteUrl").val();
+    $(".recharge-comm-loader").html(
+      "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
+    );
+    $.ajax({
+      url: siteUrl + "retailer/transfer/getBankBeneficiary",
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $(".recharge-comm-loader").html("");
+          $("#recharge-comm-block").html(data["str"]);
+        } else {
+          $(".recharge-comm-loader").html(
+            '<font color="red">' + data["str"] + "</font>"
+          );
+        }
+      }
+    });
+  });
+
+  $("#to_upi").click(function () {
+    var siteUrl = $("#siteUrl").val();
+    $(".recharge-comm-loader").html(
+      "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
+    );
+    $.ajax({
+      url: siteUrl + "retailer/transfer/getUpiBankBeneficiary",
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $(".recharge-comm-loader").html("");
+          $("#recharge-comm-block").html(data["str"]);
+        } else {
+          $(".recharge-comm-loader").html(
+            '<font color="red">' + data["str"] + "</font>"
+          );
+        }
+      }
+    });
+  });
+
+  $("#add_bank_account").click(function () {
+    $("#show_bank_account").css("display", "block");
+    $("#show_upi_account").css("display", "none");
+  });
+
+  $("#add_upi_account").click(function () {
+    $("#show_upi_account").css("display", "block");
+    $("#show_bank_account").css("display", "none");
+  });
+
+  $("#coupon").keyup(function () {
+    var coupon = $("#coupon").val();
+
+    if (coupon) {
+      $.ajax({
+        url: siteUrl + "retailer/pancard/getCouponBalance/" + coupon,
+        success: function (r) {
+          var data = JSON.parse($.trim(r));
+          if (data["status"] == 1) {
+            $("#amount").html(data["amount"]);
+          } else {
+            $("#amount").html(data["amount"]);
+          }
+        }
+      });
+    }
+  });
+
+  function payCreditCardBill(service_id) {
+    var loaderID = "mobi-credit-card-loader";
+    var formID = "bbps-credit-card-mobi-form";
+    var btnID = "bbps-credit-card-mobi-btn";
+
+    $("#" + btnID).prop("disabled", true);
+    var siteUrl = $("#siteUrl").val();
+    $("#" + loaderID).html(
+      "<center><img src='" +
+      siteUrl +
+      "skin/admin/images/large-loading.gif' width='100' /></center>"
+    );
+    var str = $("#" + formID).serialize();
+    $.ajax({
+      type: "POST",
+      url: siteUrl + "retailer/bbps/payCreditCardBillAuth/" + service_id,
+      data: str,
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $("#" + btnID).prop("disabled", false);
+          $("#" + loaderID).html(data["msg"]);
+          document.getElementById(formID).reset();
+        } else {
+          $("#" + btnID).prop("disabled", false);
+          $("#" + loaderID).html(
+            '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            data["msg"] +
+            "</div>"
+          );
+        }
+      }
+    });
+  }
+
+  function bbpsRecharge() {
+    var siteUrl = $("#siteUrl").val();
+    var str = $("#bbps_recharge").serialize();
+    $.ajax({
+      type: "POST",
+      url: siteUrl + "retailer/bbps/mobilePrepaidAuth",
+      data: str,
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          swal({
+            title: data["msg"],
+            icon: "success",
+            button: "OK!"
           });
-        } else if (response.error) {
-          $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
-          $('#benAlert').html(`<strong>Error: </strong>${response.dataval}`);
+
           setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide');
-            $('#benAlert').empty();
-          }, 3000);
+            window.location.replace(siteUrl + "retailer/bbps");
+          }, 10000);
         } else {
-          $('#account_verify_form')[0].reset();
-          $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
-          $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
-          setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide');
-            $('#benAlert').empty();
-            location.reload();
-          }, 3000);
-        }
-      },
-      error: function (xhr, status, error) {
-        console.log('AJAX Error: ' + error);
-      }
-    });
-  });
-  var delBeneficiaryId;
-  $('.benm1Deletebtn').click(function (e) {
-    e.preventDefault();
-    delBeneficiaryId = $(this).attr('benm1DeleteID');
-  });
-
-  $('#confirmDeletem1').click(function () {
-    var benDeleteUrl = siteUrl + `retailer/transfer/deleteBeneficiary/${delBeneficiaryId}`;
-    $.ajax({
-      url: benDeleteUrl,
-      type: "POST",
-      dataType: "json",
-      success: function (response) {
-        $('.error').html('');
-        $('#benAlert').removeClass('show').addClass('hide').html('');
-        $('#confirmModal').modal('hide');
-        if (response.error) {
-          $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
-          $('#benAlert').html(`<strong>Error: </strong>${response.dataval}`);
-          setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide');
-            $('#benAlert').empty();
-          }, 3000);
-        } else {
-          $('#account_verify_form')[0].reset();
-          $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
-          $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
-          setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide');
-            $('#benAlert').empty();
-            location.reload();
-          }, 3000);
-        }
-      },
-      error: function (xhr, status, error) {
-        console.log('AJAX Error: ' + error);
-      }
-    });
-
-  });
-
-  //Update Ben Money Transfer 2 Benificary Bank Details :
-  $('#saveBenM1Changes').click(function (e) {
-    e.preventDefault();
-
-    var formData = $('#updateBenM2BankData').serialize();
-    var siteUrl = $('#siteUrl').val();
-
-    $.ajax({
-      url: siteUrl + "retailer/transfer/updateBenificaryAuth",
-      type: "POST",
-      data: formData,
-      dataType: "json",
-      success: function (obj) {
-
-        if (obj.error && obj.errors) {
-          $.each(obj.errors, function (key, value) {
-            $('#' + key + '_error').html(value);
+          swal({
+            title: data["msg"],
+            icon: "success",
+            button: "OK!"
           });
-        } else if (obj.error) {
-          $('#updateBenAlert').removeClass('hide alert-success').addClass('show alert-danger');
-          $('#updateBenAlert').html(`<strong>Error: </strong>${obj.dataval}`);
+
           setTimeout(function () {
-            $('#updateBenAlert').removeClass('show').addClass('hide');
-            $('#updateBenAlert').empty();
-          }, 3000);
-        } else {
-          $('#account_verify_form')[0].reset();
-          $('#updateBenAlert').removeClass('hide alert-danger').addClass('show alert-success');
-          $('#updateBenAlert').html(`<strong>Success: </strong>${obj.dataval}`);
-          setTimeout(function () {
-            $('#updateBenAlert').removeClass('show').addClass('hide');
-            $('#updateBenAlert').empty();
-            location.reload();
-          }, 3000);
+            window.location.replace(siteUrl + "retailer/bbps");
+          }, 10000);
         }
-      },
-      error: function (xhr, status, error) {
-        console.log('AJAX Error: ' + error);
       }
     });
-  });
+  }
 
-  //Add Bank M2 Benificary
-  $('#saveBeneficiaryBtn').click(function (e) {
-    e.preventDefault();
-    var formData = $('#account_verify_form').serialize();
-    var siteUrl = $('#siteUrl').val();
-
+  $("#settlement_to_bank").click(function () {
+    var siteUrl = $("#siteUrl").val();
+    $(".recharge-comm-loader").html(
+      "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
+    );
     $.ajax({
-      url: siteUrl + "retailer/settlement/beneficiaryAuth",
-      type: "POST",
-      data: formData,
-      dataType: "json",
-      success: function (response) {
-        // Clear previous errors and success messages
-        $('.error').html('');
-        $('#benAlert').removeClass('show').addClass('hide').html('');
-        if (response.error && response.errors) {
-          // Display validation errors
-          $.each(response.errors, function (key, value) {
-            $('#' + key + '_error').html(value);
-          });
-        } else if (response.error) {
-          $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
-          $('#benAlert').html(`<strong>Error: </strong>${response.dataval}`);
-          setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide');
-            $('#benAlert').empty();
-          }, 3000);
+      url: siteUrl + "retailer/settlement/getBankBeneficiary",
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $(".recharge-comm-loader").html("");
+          $("#recharge-comm-block").html(data["str"]);
         } else {
-          $('#account_verify_form')[0].reset();
-          $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
-          $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
-          setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide');
-            $('#benAlert').empty();
-            location.reload();
-          }, 3000);
+          $(".recharge-comm-loader").html(
+            '<font color="red">' + data["str"] + "</font>"
+          );
         }
-      },
-      error: function (xhr, status, error) {
-        console.log('AJAX Error: ' + error);
       }
     });
   });
-  var delBeneficiaryId;
-  $('.benm2Deletebtn').click(function (e) {
-    e.preventDefault();
-    delBeneficiaryId = $(this).attr('benm2DeleteID');
-  });
 
-  $('#confirmDelete').click(function () {
-    var benDeleteUrl = siteUrl + `retailer/settlement/deleteBeneficiary/${delBeneficiaryId}`;
+  $("#settlement_to_upi").click(function () {
+    var siteUrl = $("#siteUrl").val();
+    $(".recharge-comm-loader").html(
+      "<img src='" + siteUrl + "skin/images/loading2.gif' alt='loading' />"
+    );
     $.ajax({
-      url: benDeleteUrl,
-      type: "POST",
-      dataType: "json",
-      success: function (response) {
-        $('.error').html('');
-        $('#benAlert').removeClass('show').addClass('hide').html('');
-        $('#confirmModal').modal('hide');
-        if (response.error) {
-          $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
-          $('#benAlert').html(`<strong>Error: </strong>${response.dataval}`);
-          setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide');
-            $('#benAlert').empty();
-          }, 3000);
+      url: siteUrl + "retailer/settlement/getUpiBankBeneficiary",
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $(".recharge-comm-loader").html("");
+          $("#recharge-comm-block").html(data["str"]);
         } else {
-          $('#account_verify_form')[0].reset();
-          $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
-          $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
-          setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide');
-            $('#benAlert').empty();
-            location.reload();
-          }, 3000);
+          $(".recharge-comm-loader").html(
+            '<font color="red">' + data["str"] + "</font>"
+          );
         }
-      },
-      error: function (xhr, status, error) {
-        console.log('AJAX Error: ' + error);
       }
     });
-
   });
 
-  //Update Ben Money Transfer 2 Benificary Bank Details :
-  $('#saveBenM2Changes').click(function (e) {
-    e.preventDefault();
+  $("#settlement_add_bank_account").click(function () {
+    $("#show_settlement_bank_account").css("display", "block");
+    $("#show_settlement_upi_account").css("display", "none");
+  });
 
-    var formData = $('#updateBenM2BankData').serialize();
-    var siteUrl = $('#siteUrl').val();
+  $("#settlement_add_upi_account").click(function () {
+    $("#show_settlement_upi_account").css("display", "block");
+    $("#show_settlement_bank_account").css("display", "none");
+  });
 
+  $("#settlementAccountVerifyBtn").click(function () {
+    var siteUrl = $("#siteUrl").val();
+    $(".ajaxx-loader").html(
+      "<center><img src='" +
+      siteUrl +
+      "skin/images/large-loading.gif' alt='loading' width='100' /></center>"
+    );
+    var str = $("#account_verify_form").serialize();
     $.ajax({
-      url: siteUrl + "retailer/settlement/updateBenificaryAuth",
       type: "POST",
-      data: formData,
-      dataType: "json",
-      success: function (obj) {
-
-        if (obj.error && obj.errors) {
-          $.each(obj.errors, function (key, value) {
-            $('#' + key + '_error').html(value);
-          });
-        } else if (obj.error) {
-          $('#updateBenAlert').removeClass('hide alert-success').addClass('show alert-danger');
-          $('#updateBenAlert').html(`<strong>Error: </strong>${obj.dataval}`);
-          setTimeout(function () {
-            $('#updateBenAlert').removeClass('show').addClass('hide');
-            $('#updateBenAlert').empty();
-          }, 3000);
+      url: siteUrl + "retailer/bank/openVerifyAuth",
+      data: str,
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $(".ajaxx-loader").html("");
+          $("#account_holder_name").val(data["account_holder_name"]);
+          $("#account_ben_id").val(data["account_ben_id"]);
+          $("#bankModal").modal("show");
+          $("#bankResponse").html(data["msg"]);
         } else {
-          $('#account_verify_form')[0].reset();
-          $('#updateBenAlert').removeClass('hide alert-danger').addClass('show alert-success');
-          $('#updateBenAlert').html(`<strong>Success: </strong>${obj.dataval}`);
-          setTimeout(function () {
-            $('#updateBenAlert').removeClass('show').addClass('hide');
-            $('#updateBenAlert').empty();
-            location.reload();
-          }, 3000);
+          $(".ajaxx-loader").html(
+            '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            data["msg"] +
+            "</div>"
+          );
         }
-      },
-      error: function (xhr, status, error) {
-        console.log('AJAX Error: ' + error);
       }
     });
   });
-});
-//------------- Money Transfer 2 --------
-function updateBenModel1(id) {
-  var siteUrl = $("#siteUrl").val();
-  $.ajax({
-    url: siteUrl + "retailer/transfer/getBenData/" + id,
-    success: function (response) {
-      var data = JSON.parse($.trim(response));
-      if (data["status"] == 1) {
-        $("#recordID").val(id);
-        $("#updateBenModel1").modal("show");
-        $("#updatebenBlock1").html(data["dataval"]);
-        return false;
+
+  $("#settlementUpiVerifyBtn").click(function () {
+    var siteUrl = $("#siteUrl").val();
+    $(".ajaxx-loader").html(
+      "<center><img src='" +
+      siteUrl +
+      "skin/images/large-loading.gif' alt='loading' width='100' /></center>"
+    );
+    var str = $("#upi_verify_form").serialize();
+    $.ajax({
+      type: "POST",
+      url: siteUrl + "retailer/bank/openUpiVerifyAuth",
+      data: str,
+      success: function (r) {
+        var data = JSON.parse($.trim(r));
+        if (data["status"] == 1) {
+          $(".ajaxx-loader").html("");
+          $("#upi_account_holder_name").val(data["upi_account_holder_name"]);
+          $("#upi_ben_id").val(data["upi_ben_id"]);
+          $("#bankUpiModal").modal("show");
+          $("#bankUpiResponse").html(data["msg"]);
+        } else {
+          $(".ajaxx-loader").html(
+            '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            data["msg"] +
+            "</div>"
+          );
+        }
+      }
+    });
+  });
+
+  $(document).ready(function () {
+    function searchH4Value(searchTerm) {
+      $(".master_list_col").hide();
+      var firstChar = searchTerm.charAt(0).toUpperCase();
+      var tail = searchTerm.substring(1);
+      var formattedSearchTerm = firstChar + tail;
+
+      $(".master_list_col").each(function () {
+        var h4Text = $(this).find("h4").text();
+        if (h4Text.toLowerCase().includes(formattedSearchTerm.toLowerCase())) {
+          $(this).show();
+        }
+      });
+    }
+
+    $(".home_search").on("keyup", function () {
+      var searchTerm = $(this).val().trim();
+      if (searchTerm.length > 0) {
+        searchH4Value(searchTerm);
       } else {
-        $.each(response.errors, function (key, value) {
+        $(".master_list_col").show();
+      }
+    });
+  });
+
+  $(document).ready(function () {
+
+    $('.moneyTransferdiv').on('click', function (event) {
+      event.preventDefault();
+      $('#moneyTransferModel').modal('show');
+    });
+
+    $('.settlementMoneyTransferdiv').on('click', function (event) {
+      event.preventDefault();
+      $('#settlementMoneyTransferModel').modal('show');
+    });
+
+    $('.eKycModeldiv').on('click', function (event) {
+      event.preventDefault();
+      $('#eKycModel').modal('show');
+    });
+    //Add Bank M1 Benificary
+    $('#saveMT1BeneficiaryBtn').click(function (e) {
+      e.preventDefault();
+      var formData = $('#account_verify_form').serialize();
+      var siteUrl = $('#siteUrl').val();
+
+      $.ajax({
+        url: siteUrl + "retailer/transfer/beneficiaryAuth",
+        type: "POST",
+        data: formData,
+        dataType: "json",
+        success: function (response) {
+          // Clear previous errors and success messages
+          $('.error').html('');
+          $('#benAlert').removeClass('show').addClass('hide').html('');
+          if (response.error && response.errors) {
+            // Display validation errors
+            $.each(response.errors, function (key, value) {
+              $('#' + key + '_error').html(value);
+            });
+          } else if (response.error) {
+            $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
+            $('#benAlert').html(`<strong>Error: </strong>${response.dataval}`);
+            setTimeout(function () {
+              $('#benAlert').removeClass('show').addClass('hide');
+              $('#benAlert').empty();
+            }, 3000);
+          } else {
+            $('#account_verify_form')[0].reset();
+            $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
+            $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
+            setTimeout(function () {
+              $('#benAlert').removeClass('show').addClass('hide');
+              $('#benAlert').empty();
+              location.reload();
+            }, 3000);
+          }
+        },
+        error: function (xhr, status, error) {
+          console.log('AJAX Error: ' + error);
+        }
+      });
+    });
+    var delBeneficiaryId;
+    $('.benm1Deletebtn').click(function (e) {
+      e.preventDefault();
+      delBeneficiaryId = $(this).attr('benm1DeleteID');
+    });
+
+    $('#confirmDeletem1').click(function () {
+      var benDeleteUrl = siteUrl + `retailer/transfer/deleteBeneficiary/${delBeneficiaryId}`;
+      $.ajax({
+        url: benDeleteUrl,
+        type: "POST",
+        dataType: "json",
+        success: function (response) {
+          $('.error').html('');
+          $('#benAlert').removeClass('show').addClass('hide').html('');
+          $('#confirmModal').modal('hide');
+          if (response.error) {
+            $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
+            $('#benAlert').html(`<strong>Error: </strong>${response.dataval}`);
+            setTimeout(function () {
+              $('#benAlert').removeClass('show').addClass('hide');
+              $('#benAlert').empty();
+            }, 3000);
+          } else {
+            $('#account_verify_form')[0].reset();
+            $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
+            $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
+            setTimeout(function () {
+              $('#benAlert').removeClass('show').addClass('hide');
+              $('#benAlert').empty();
+              location.reload();
+            }, 3000);
+          }
+        },
+        error: function (xhr, status, error) {
+          console.log('AJAX Error: ' + error);
+        }
+      });
+
+    });
+
+    //Update Ben Money Transfer 2 Benificary Bank Details :
+    $('#saveBenM1Changes').click(function (e) {
+      e.preventDefault();
+
+      var formData = $('#updateBenM2BankData').serialize();
+      var siteUrl = $('#siteUrl').val();
+
+      $.ajax({
+        url: siteUrl + "retailer/transfer/updateBenificaryAuth",
+        type: "POST",
+        data: formData,
+        dataType: "json",
+        success: function (obj) {
+
+          if (obj.error && obj.errors) {
+            $.each(obj.errors, function (key, value) {
+              $('#' + key + '_error').html(value);
+            });
+          } else if (obj.error) {
+            $('#updateBenAlert').removeClass('hide alert-success').addClass('show alert-danger');
+            $('#updateBenAlert').html(`<strong>Error: </strong>${obj.dataval}`);
+            setTimeout(function () {
+              $('#updateBenAlert').removeClass('show').addClass('hide');
+              $('#updateBenAlert').empty();
+            }, 3000);
+          } else {
+            $('#account_verify_form')[0].reset();
+            $('#updateBenAlert').removeClass('hide alert-danger').addClass('show alert-success');
+            $('#updateBenAlert').html(`<strong>Success: </strong>${obj.dataval}`);
+            setTimeout(function () {
+              $('#updateBenAlert').removeClass('show').addClass('hide');
+              $('#updateBenAlert').empty();
+              location.reload();
+            }, 3000);
+          }
+        },
+        error: function (xhr, status, error) {
+          console.log('AJAX Error: ' + error);
+        }
+      });
+    });
+
+    //Add Bank M2 Benificary
+    $('#saveBeneficiaryBtn').click(function (e) {
+      e.preventDefault();
+      var formData = $('#account_verify_form').serialize();
+      var siteUrl = $('#siteUrl').val();
+
+      $.ajax({
+        url: siteUrl + "retailer/settlement/beneficiaryAuth",
+        type: "POST",
+        data: formData,
+        dataType: "json",
+        success: function (response) {
+          // Clear previous errors and success messages
+          $('.error').html('');
+          $('#benAlert').removeClass('show').addClass('hide').html('');
+          if (response.error && response.errors) {
+            // Display validation errors
+            $.each(response.errors, function (key, value) {
+              $('#' + key + '_error').html(value);
+            });
+          } else if (response.error) {
+            $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
+            $('#benAlert').html(`<strong>Error: </strong>${response.dataval}`);
+            setTimeout(function () {
+              $('#benAlert').removeClass('show').addClass('hide');
+              $('#benAlert').empty();
+            }, 3000);
+          } else {
+            $('#account_verify_form')[0].reset();
+            $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
+            $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
+            setTimeout(function () {
+              $('#benAlert').removeClass('show').addClass('hide');
+              $('#benAlert').empty();
+              location.reload();
+            }, 3000);
+          }
+        },
+        error: function (xhr, status, error) {
+          console.log('AJAX Error: ' + error);
+        }
+      });
+    });
+    var delBeneficiaryId;
+    $('.benm2Deletebtn').click(function (e) {
+      e.preventDefault();
+      delBeneficiaryId = $(this).attr('benm2DeleteID');
+    });
+
+    $('#confirmDelete').click(function () {
+      var benDeleteUrl = siteUrl + `retailer/settlement/deleteBeneficiary/${delBeneficiaryId}`;
+      $.ajax({
+        url: benDeleteUrl,
+        type: "POST",
+        dataType: "json",
+        success: function (response) {
+          $('.error').html('');
+          $('#benAlert').removeClass('show').addClass('hide').html('');
+          $('#confirmModal').modal('hide');
+          if (response.error) {
+            $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
+            $('#benAlert').html(`<strong>Error: </strong>${response.dataval}`);
+            setTimeout(function () {
+              $('#benAlert').removeClass('show').addClass('hide');
+              $('#benAlert').empty();
+            }, 3000);
+          } else {
+            $('#account_verify_form')[0].reset();
+            $('#benAlert').removeClass('hide alert-danger').addClass('show alert-success');
+            $('#benAlert').html(`<strong>Success: </strong>${response.dataval}`);
+            setTimeout(function () {
+              $('#benAlert').removeClass('show').addClass('hide');
+              $('#benAlert').empty();
+              location.reload();
+            }, 3000);
+          }
+        },
+        error: function (xhr, status, error) {
+          console.log('AJAX Error: ' + error);
+        }
+      });
+
+    });
+
+    //Update Ben Money Transfer 2 Benificary Bank Details :
+    $('#saveBenM2Changes').click(function (e) {
+      e.preventDefault();
+
+      var formData = $('#updateBenM2BankData').serialize();
+      var siteUrl = $('#siteUrl').val();
+
+      $.ajax({
+        url: siteUrl + "retailer/settlement/updateBenificaryAuth",
+        type: "POST",
+        data: formData,
+        dataType: "json",
+        success: function (obj) {
+
+          if (obj.error && obj.errors) {
+            $.each(obj.errors, function (key, value) {
+              $('#' + key + '_error').html(value);
+            });
+          } else if (obj.error) {
+            $('#updateBenAlert').removeClass('hide alert-success').addClass('show alert-danger');
+            $('#updateBenAlert').html(`<strong>Error: </strong>${obj.dataval}`);
+            setTimeout(function () {
+              $('#updateBenAlert').removeClass('show').addClass('hide');
+              $('#updateBenAlert').empty();
+            }, 3000);
+          } else {
+            $('#account_verify_form')[0].reset();
+            $('#updateBenAlert').removeClass('hide alert-danger').addClass('show alert-success');
+            $('#updateBenAlert').html(`<strong>Success: </strong>${obj.dataval}`);
+            setTimeout(function () {
+              $('#updateBenAlert').removeClass('show').addClass('hide');
+              $('#updateBenAlert').empty();
+              location.reload();
+            }, 3000);
+          }
+        },
+        error: function (xhr, status, error) {
+          console.log('AJAX Error: ' + error);
+        }
+      });
+    });
+  });
+  //------------- Money Transfer 2 --------
+  function updateBenModel1(id) {
+    var siteUrl = $("#siteUrl").val();
+    $.ajax({
+      url: siteUrl + "retailer/transfer/getBenData/" + id,
+      success: function (response) {
+        var data = JSON.parse($.trim(response));
+        if (data["status"] == 1) {
+          $("#recordID").val(id);
           $("#updateBenModel1").modal("show");
-          $('#' + key + '_error').html(value);
-        });
+          $("#updatebenBlock1").html(data["dataval"]);
+          return false;
+        } else {
+          $.each(response.errors, function (key, value) {
+            $("#updateBenModel1").modal("show");
+            $('#' + key + '_error').html(value);
+          });
+        }
       }
-    }
-  });
-}
+    });
+  }
 
-function updateBenModel2(id) {
-  var siteUrl = $("#siteUrl").val();
-  $.ajax({
-    url: siteUrl + "retailer/settlement/getBenData/" + id,
-    success: function (response) {
-      var data = JSON.parse($.trim(response));
-      if (data["status"] == 1) {
-        $("#recordID").val(id);
-        $("#updateBenModel2").modal("show");
-        $("#updatebenBlock2").html(data["dataval"]);
-        return false;
-      } else {
-        $.each(response.errors, function (key, value) {
+  function updateBenModel2(id) {
+    var siteUrl = $("#siteUrl").val();
+    $.ajax({
+      url: siteUrl + "retailer/settlement/getBenData/" + id,
+      success: function (response) {
+        var data = JSON.parse($.trim(response));
+        if (data["status"] == 1) {
+          $("#recordID").val(id);
           $("#updateBenModel2").modal("show");
-          $('#' + key + '_error').html(value);
-        });
+          $("#updatebenBlock2").html(data["dataval"]);
+          return false;
+        } else {
+          $.each(response.errors, function (key, value) {
+            $("#updateBenModel2").modal("show");
+            $('#' + key + '_error').html(value);
+          });
+        }
       }
-    }
-  });
-}
+    });
+  }
+});
 
 /**Activate AEPS 3  */
 $(document).ready(function () {
   $(".aeps3btn").click(function (e) {
     e.preventDefault();
-    var siteUrl = $("#siteUrl").val(); // Get the site URL
-    var formData = $("#aeps3_form").serialize(); // Serialize form data
-    $('#loader').show(); // Show loader
+    var siteUrl = $("#siteUrl").val();
+    var formData = $("#aeps3_form").serialize();
 
     $.ajax({
-      type: "post",
-      url: siteUrl + "retailer/iciciaeps/activeAuth", 
+      type: "POST",
+      url: siteUrl + "retailer/iciciaeps/activeAuth",
       data: formData,
       dataType: "json",
       success: function (response) {
-        $('#loader').hide(); // Hide loader on success
-        $('.error').html(''); // Clear any previous error messages
-        $('#benAlert').removeClass('show').addClass('hide').html(''); // Clear the alert box
+        $('#loader').hide();
+        $('.error').html('');
+        console.log(response);
+        $('#benAlert').removeClass('show').addClass('hide').html('');
 
         if (response.error && response.errors) {
-          // Loop through errors and display them on the form
+
           $.each(response.errors, function (key, value) {
             $('#' + key + '_error').html(value);
           });
         } else if (response.error) {
-          // Display a generic error if the response has an error but no specific error details
+
           $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
           if (response.apiresponse === "yes") {
-            // Show specific API error details
+
             $('#benAlert').html(`<b><strong>Error:</strong> (${response.dataval.statuscode} - ${response.dataval.statuscodemessage})</b>`);
           } else {
             $('#benAlert').html(`<b><strong>Error:</strong> ${response.dataval}</b>`);
           }
           setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide').empty(); // Hide alert after 5 seconds
+            $('#benAlert').removeClass('show').addClass('hide').empty();
           }, 5000);
         } else {
-          // If no error, populate modal and display success message
+
           $("#account_holder_name").val(response.account_holder_name);
           $("#bankModal").modal("show");
           $("#bankResponse").html(response.dataval);
           setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide').empty(); // Hide alert after 3 seconds
+            $('#benAlert').removeClass('show').addClass('hide').empty();
           }, 3000);
         }
       },
       error: function (xhr, status, error) {
-        $('#loader').hide(); // Hide loader on error
-        console.error("AJAX error: " + error); // Log the error
+        $('#loader').hide();
+        console.error("AJAX error: " + error);
         $('#benAlert').removeClass('hide').addClass('show').html("An error occurred. Please try again.");
       }
     });
   });
 
 });
-
 

@@ -129,38 +129,60 @@ class Iciciaeps extends CI_Controller {
 	// save member
 	public function activeAuth()
 	{
-		//check for foem validation
 		$post = $this->input->post();
 		$memberID = $post['memberID'];
-		$response =  [];
+		$response = [];
+
 		$this->load->library('form_validation');
 
-		$this->form_validation->set_rules('first_name', 'First Name',  'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-        $this->form_validation->set_rules('middle_name', 'Middle Name',  'trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-        $this->form_validation->set_rules('last_name', 'Last Name',  'trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-        $this->form_validation->set_rules('father_name', 'Father Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-        $this->form_validation->set_rules('mother_name', 'Mother Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		// Set form validation rules
+		$this->form_validation->set_rules('first_name', 'First Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('middle_name', 'Middle Name', 'trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('last_name', 'Last Name', 'trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('father_name', 'Father Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('mother_name', 'Mother Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
 		$this->form_validation->set_rules('person_dob', 'User Date Of Birth', 'required|trim|xss_clean');
-		$this->form_validation->set_rules('mobile', 'Mobile Number',  'required|trim|xss_clean|numeric|min_length[10]|max_length[10]');
-        $this->form_validation->set_rules('aadhar_no', 'Aadhar No',  'required|trim|xss_clean|numeric|min_length[12]|max_length[12]');
-        $this->form_validation->set_rules('pancard_no', 'Pancard No',  'required|xss_clean|regex_match[/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/]');
-        $this->form_validation->set_rules('shop_name', 'Shop', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-        $this->form_validation->set_rules('state_id', 'State', 'required|xss_clean');
-        $this->form_validation->set_rules('city_id', 'City', 'required|xss_clean');
-		$this->form_validation->set_rules('house_flat', 'House/Flat No', 'required|trim|xss_clean|alpha_numeric');
-        $this->form_validation->set_rules('pin_code', 'Pincode', 'required|trim|xss_clean|numeric|min_length[6]|max_length[6]');
-        $this->form_validation->set_rules('village', 'village', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-        $this->form_validation->set_rules('post', 'Post', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-        $this->form_validation->set_rules('police_station', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-        $this->form_validation->set_rules('block', 'Block', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-        $this->form_validation->set_rules('district', 'District', 'required|xss_clean');
-        $this->form_validation->set_rules('account_no', 'Bank Account', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-        $this->form_validation->set_rules('bank_ifsc', 'Bank Ifsc', 'required|trim|xss_clean|alpha_numeric');
+		$this->form_validation->set_rules('gender', 'Gender', 'required|trim|xss_clean');
+		$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email');
 
-		$this->form_validation->set_rules('aadhar_photo', 'Aadhar Front Image', 'callback__validate_image');
-		$this->form_validation->set_rules('aadhar_back_photo', 'Aadhar Back Image', 'callback__validate_image');
+		$this->form_validation->set_rules('aadhar_no', 'Aadhar No', 'required|trim|xss_clean|numeric|min_length[12]|max_length[12]');
+		$this->form_validation->set_rules('pancard_no', 'Pancard No', 'required|xss_clean|min_length[10]|max_length[10]|regex_match[/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/]');
+		$this->form_validation->set_rules('street_locality', 'Street/Locality', 'required|trim|xss_clean');
+		$this->form_validation->set_rules('adhar_back_address', 'Aadhar Card Back Address', 'required|trim|xss_clean');
+
+		$this->form_validation->set_rules('shop_business_name', 'Shop/Business Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('shop_business_address', 'Shop/Business Address', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('business_type', 'Business Type', 'required|xss_clean');
+		$this->form_validation->set_rules('selState', 'State', 'required|xss_clean');
+		$this->form_validation->set_rules('city_id', 'City', 'required|xss_clean');
+		$this->form_validation->set_rules('pin_code', 'Pincode', 'required|trim|xss_clean|numeric|min_length[6]|max_length[6]');
+		$this->form_validation->set_rules('village', 'Village', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('post_office', 'Post office', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('police_station', 'Police Station', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('block', 'Block', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('district', 'District', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('bank_name', 'Bank Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('bank_branch_name', 'Bank Branch Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+
+		$this->form_validation->set_rules('account_no', 'Bank Account', 'required|trim|xss_clean|regex_match[/^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/]');
+		$this->form_validation->set_rules('bank_ifsc', 'Bank Ifsc', 'required|trim|xss_clean|alpha_numeric');
+
+		$this->form_validation->set_rules('aadharfront_photo', 'Aadhar Front Photo', 'callback__validate_image');
+		$this->form_validation->set_rules('aadharback_photo', 'Aadhar Back Photo', 'callback__validate_image');
 		$this->form_validation->set_rules('pancard_photo', 'Pancard Image', 'callback__validate_image');
+		$this->form_validation->set_rules('bps_photo', 'Bank Passbook Statement Photo', 'callback__validate_image');
+		$this->form_validation->set_rules('user_photo', 'User Photo', 'callback__validate_image');
+		$this->form_validation->set_rules('shop_photo', 'Shop Photo', 'callback__validate_image');
+
+		$this->form_validation->set_rules('mobile', 'Mobile', 'required|trim|xss_clean|numeric|min_length[10]|max_length[10]|regex_match[/^[6789]\d{9}$/]', [
+			'required' => 'The %s field is required.',
+			'numeric' => 'The %s field must contain only numbers.',
+			'exact_length' => 'The %s field must be exactly 10 digits long.',
+			'regex_match' => 'The %s field must start with 6, 7, 8, or 9 and be followed by 9 digits.'
+		]);
+
 		$this->form_validation->set_message('regex_match', 'The %s field must contain only alphabetic characters and single spaces between names.');
+
 		if ($this->form_validation->run() === false) {
 			$response = [
 				'error' => true,
@@ -170,86 +192,105 @@ class Iciciaeps extends CI_Controller {
 					'last_name'         => form_error('last_name'),
 					'father_name'       => form_error('father_name'),
 					'mother_name'       => form_error('mother_name'),
+					'person_dob'        => form_error('person_dob'),
+					'gender'            => form_error('gender'),
+					'email'             => form_error('email'),
 					'mobile'            => form_error('mobile'),
 					'aadhar_no'         => form_error('aadhar_no'),
 					'pancard_no'        => form_error('pancard_no'),
-					'shop_name'         => form_error('shop_name'),
-					'state_id'          => form_error('state_id'),
+					'adhar_back_address'=> form_error('adhar_back_address'),
+					'street_locality'   => form_error('street_locality'),
+					'shop_business_name'=> form_error('shop_business_name'),
+					'shop_business_address'=> form_error('shop_business_address'),
+					'business_type'     => form_error('business_type'),
+					'selState'          => form_error('selState'),
 					'city_id'           => form_error('city_id'),
 					'pin_code'          => form_error('pin_code'),
 					'village'           => form_error('village'),
-					'post'              => form_error('post'),
+					'post_office'       => form_error('post_office'),
 					'police_station'    => form_error('police_station'),
 					'block'             => form_error('block'),
 					'district'          => form_error('district'),
 					'account_no'        => form_error('account_no'),
 					'bank_ifsc'         => form_error('bank_ifsc'),
-					'aadhar_photo'      => form_error('aadhar_photo'),
-					'aadhar_back_photo' => form_error('aadhar_back_photo'),
-					'pancard_photo'     => form_error('pancard_photo')
+					'bank_name'         => form_error('bank_name'),
+					'bank_branch_name'  => form_error('bank_branch_name'),
+					'aadharfront_photo' => form_error('aadharfront_photo'),
+					'aadharback_photo'  => form_error('aadharback_photo'),
+					'pancard_photo'     => form_error('pancard_photo'),
+					'bps_photo'         => form_error('bps_photo'),
+					'user_photo'        => form_error('user_photo'),
+					'shop_photo'        => form_error('shop_photo'),
 				],
 			];
 			echo json_encode($response);
 			return;
-		}else
-		{
-			$account_id = $this->User->get_domain_account();
-		 	$loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
-		 	$memberID = $loggedUser['id'];
-
-		 	$activeService = $this->User->account_active_service($loggedUser['id']);
-			if(!in_array(19, $activeService)){
-				$response = [
-                    'error' => true,
-                    'dataval' => 'Sorry ! You are not authorized to access this page.',
-                ];
-				echo json_encode($response);
-				return;
-			}
-
-			$user_instantpay_aeps_status = $this->User->get_member_instantpay_aeps_status($loggedUser['id']);
-
-			if($user_instantpay_aeps_status)
-			{
-				$response = [
-                    'error' => true,
-                    'dataval' => 'Sorry ! You are not authorized to access this page.',
-                ];
-				echo json_encode($response);
-				return;
-			}else{
-				$response = [
-                    'error' => false,
-                    'dataval' => 'Member has active InstantPay AEPS status.',
-                ];
-				echo json_encode($response);
-				return;
-			}
-
-			// Uploading AdharCard , Pencard
-
-			$aadhar_photo = $this->_upload_file('aadhar_photo');
-			$aadhar_back_photo = $this->_upload_file('aadhar_back_photo');
-			$pancard_photo = $this->_upload_file('pancard_photo');
-
-			$response = $this->IciciAeps_model->activeAEPSMember($post,$aadhar_photo,$aadhar_back_photo,$pancard_photo);
-			$status = $response['status'];
-			$err_msg= $response['msg'];
-			if($status == 1){
-				$otpReferenceID = $response['otpReferenceID'];
-				$response = [
-                    'error' => false,
-                    'dataval' => 'We have sent OTP on your registered mobile, please verfiy.',
-					'redirectUrl'=> 'retailer/iciciaeps/otpVerify/'.$otpReferenceID
-                ];
-			}else{
-				$response = [
-                    'error' => true,
-                    'dataval' => 'Sorry ! Activation failed due to'.$err_msg,
-					'redirectUrl'=> 'retailer/iciciaeps/activeAeps'
-                ];
-			}
 		}
+
+		// Proceed with the activation process
+		$account_id = $this->User->get_domain_account();
+		$loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
+		$memberID = $loggedUser['id'];
+
+		$activeService = $this->User->account_active_service($loggedUser['id']);
+		if (!in_array(19, $activeService)) {
+			$response = [
+				'error' => true,
+				'dataval' => 'Sorry! You are not authorized to access this page.'
+			];
+			echo json_encode($response);
+			return;
+		}
+
+		$user_instantpay_aeps_status = $this->User->get_member_instantpay_aeps_status($loggedUser['id']);
+		if ($user_instantpay_aeps_status) {
+			$response = [
+				'error' => true,
+				'dataval' => 'Sorry! You are not authorized to access this page.'
+			];
+			echo json_encode($response);
+			return;
+		}
+
+		// Handle file uploads for Aadhar and Pancard
+		$aadhar_photo = $this->_upload_file('aadharfront_photo');
+		$aadhar_back_photo = $this->_upload_file('aadharback_photo');
+		$pancard_photo = $this->_upload_file('pancard_photo');
+		$bps_photo = $this->_upload_file('bps_photo');
+		$user_photo = $this->_upload_file('user_photo');
+		$shop_photo = $this->_upload_file('shop_photo');
+
+		if (!$aadhar_photo || !$aadhar_back_photo || !$pancard_photo || !$user_photo) {
+			$response = [
+				'error' => true,
+				'dataval' => 'File upload failed, please try again.'
+			];
+			echo json_encode($response);
+			return;
+		}
+
+		// Call model method for active AEPS
+		$response = $this->IciciAeps_model->activeAEPSMember($post, $aadhar_photo, $aadhar_back_photo, $pancard_photo);
+		$status = $response['status'];
+		$err_msg = $response['msg'];
+
+		if ($status == 1) {
+			$otpReferenceID = $response['otpReferenceID'];
+			$response = [
+				'error' => false,
+				'dataval' => 'We have sent OTP to your registered mobile, please verify.',
+				'redirectUrl' => 'retailer/iciciaeps/otpVerify/' . $otpReferenceID
+			];
+		} else {
+			$response = [
+				'error' => true,
+				'dataval' => 'Sorry! Activation failed due to ' . $err_msg,
+				'redirectUrl' => 'retailer/iciciaeps/activeAeps'
+			];
+		}
+
+		echo json_encode($response);
+		return;
 	}
 
 	public function otpVerify($otpReferenceID = ''){
@@ -1531,55 +1572,54 @@ class Iciciaeps extends CI_Controller {
 		echo json_encode($response);
 	}
 
-	// Single function for validating multiple images
 	public function _validate_image($field_name)
 	{
-		// Check if file is uploaded
-		if (empty($_FILES[$field_name]['name'])) {
-			$this->form_validation->set_message($field_name, 'The %s is required.');
-			return FALSE;
+		// Load upload library
+		$this->load->library('upload');
+
+		// Upload configuration
+		$config['upload_path'] = './media/aeps_kyc_doc/';
+		$config['allowed_types'] = 'jpg|jpeg|png';
+		$config['max_size'] = 2048; // 2MB max size
+		$config['file_name'] = time() . rand(111111, 999999);
+
+		$this->upload->initialize($config);
+
+		// Check if file exists in $_FILES array
+		if (!isset($_FILES[$field_name]) || $_FILES[$field_name]['error'] == UPLOAD_ERR_NO_FILE) {
+			$this->form_validation->set_message('_validate_image', 'The {field} field is required.');
+			return false;
 		}
 
-		// Allowed file types (jpg, jpeg, png)
-		$allowed_types = ['image/jpeg', 'image/png'];
-		$file_type = $_FILES[$field_name]['type'];
-
-		// Validate file type
-		if (!in_array($file_type, $allowed_types)) {
-			$this->form_validation->set_message($field_name, 'The %s must be a JPG, JPEG, or PNG image.');
-			return FALSE;
+		// Validate and upload the file
+		if (!$this->upload->do_upload($field_name)) {
+			$this->form_validation->set_message('_validate_image', $this->upload->display_errors('', ''));
+			return false;
 		}
 
-		// Validate file size (Max 2MB)
-		$max_size = 2048; // 2MB in KB
-		$file_size = $_FILES[$field_name]['size'] / 1024; // File size in KB
+		// File successfully uploaded, save file info if needed
+		$upload_data = $this->upload->data();
+		// Optionally, store the uploaded file name in a property for later use
+		$this->uploaded_files[$field_name] = $upload_data['file_name'];
 
-		if ($file_size > $max_size) {
-			$this->form_validation->set_message($field_name, 'The %s size must not exceed 2MB.');
-			return FALSE;
-		}
-
-		return TRUE;
+		return true;
 	}
 
-	// Helper method to handle file upload
-	public function _upload_file($field_name)
-	{
+	public function _upload_file($field_name){
 		if (!isset($_FILES[$field_name]['name']) || $_FILES[$field_name]['name'] == '') {
 			return '';
 		}
 
 		$config['upload_path'] = './media/aeps_kyc_doc/';
 		$config['allowed_types'] = 'jpg|jpeg|png';
-		$config['max_size'] = 2048;
-		$fileName = time().rand(111111,999999);
-		$config['file_name'] = $fileName;
+		$config['max_size'] = 2048;  // 2MB max size
+		$config['file_name'] = time() . rand(111111, 999999);
 
 		$this->upload->initialize($config);
 
 		if ($this->upload->do_upload($field_name)) {
 			$fileData = $this->upload->data();
-			return true;
+			return $fileData['file_name']; // Return the file name
 		} else {
 			$uploadError = $this->upload->display_errors();
 			log_message('error', 'AEPS 3 Document File Upload Error: ' . $uploadError);

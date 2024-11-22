@@ -18,17 +18,19 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>First Name*</b></label>
-                                <input type="text" class="form-control" id="first_name" name="first_name"
-                                    placeholder="First Name" value="<?php echo set_value('first_name'); ?>">
+                                <input type="text" class="form-control only-alphabet-allowed first-char-capitalize"
+                                    id="first_name" name="first_name" placeholder="First Name"
+                                    value="<?php echo set_value('first_name'); ?>">
                                 <?php echo form_error('first_name', '<div class="error">', '</div>'); ?>
                                 <div class="error" id="first_name_error"></div>
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
-                                <label><b>Middle Name*</b></label>
-                                <input type="text" class="form-control" id="last_name" name="middle_name"
-                                    placeholder="Middle Name" value="<?php echo set_value('middle_name'); ?>">
+                                <label><b>Middle Name</b></label>
+                                <input type="text" class="form-control only-alphabet-allowed first-char-capitalize"
+                                    id="last_name" name="middle_name" placeholder="Middle Name"
+                                    value="<?php echo set_value('middle_name'); ?>">
                                 <div class="error" id="middle_name_error"></div>
 
                             </div>
@@ -36,9 +38,10 @@
 
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
-                                <label><b>Last Name*</b></label>
-                                <input type="text" class="form-control" id="last_name" name="last_name"
-                                    placeholder="Last Name" value="<?php echo set_value('last_name'); ?>">
+                                <label><b>Last Name</b></label>
+                                <input type="text" class="form-control only-alphabet-allowed first-char-capitalize"
+                                    id="last_name" name="last_name" placeholder="Last Name"
+                                    value="<?php echo set_value('last_name'); ?>">
                                 <?php echo form_error('last_name', '<div class="error">', '</div>'); ?>
                                 <div class="error" id="last_name_error"></div>
                             </div>
@@ -47,8 +50,9 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Father Name.*</b></label>
-                                <input type="text" class="form-control" name="father_name" id="father_name"
-                                    placeholder="Father Name." value="<?php echo set_value('father_name'); ?>">
+                                <input type="text" class="form-control only-alphabet-allowed first-char-capitalize"
+                                    name="father_name" id="father_name" placeholder="Father Name."
+                                    value="<?php echo set_value('father_name'); ?>">
                                 <div class="error" id="father_name_error"></div>
                             </div>
                         </div>
@@ -56,16 +60,18 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Mother Name.*</b></label>
-                                <input type="text" class="form-control" name="mother_name" id="mother_name"
-                                    placeholder="Mother Name." value="<?php echo set_value('mother_name'); ?>">
+                                <input type="text" class="form-control only-alphabet-allowed first-char-capitalize"
+                                    name="mother_name" id="mother_name" placeholder="Mother Name."
+                                    value="<?php echo set_value('mother_name'); ?>">
                                 <div class="error" id="mother_name_error"></div>
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>User Date Of Birth*</b></label>
-                                <input type="date" class="form-control" name="person_dob" id="person_dob"
-                                    placeholder="Person Date of birth" value="<?php echo set_value('person_dob'); ?>">
+                                <input type="date" class="form-control only-number-allowed" name="person_dob"
+                                    id="person_dob" placeholder="Person Date of birth"
+                                    value="<?php echo set_value('person_dob'); ?>">
                                 <div class="error" id="person_dob_error"></div>
 
                             </div>
@@ -86,7 +92,7 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Mobile No.*</b></label>
-                                <input type="text" class="form-control" id="mobile" name="mobile"
+                                <input type="text" class="form-control only-number-allowed" id="mobile" name="mobile"
                                     placeholder="Mobile No." value="<?php echo set_value('mobile'); ?>">
                                 <div class="error" id="mobile_error"></div>
                             </div>
@@ -102,8 +108,9 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Aadhar No.*</b></label>
-                                <input type="text" class="form-control" name="aadhar_no" id="aadhar_no"
-                                    placeholder="Aadhar No." value="<?php echo set_value('aadhar_no'); ?>">
+                                <input type="text" class="form-control only-number-allowed" name="aadhar_no"
+                                    id="aadhar_no" placeholder="Aadhar No."
+                                    value="<?php echo set_value('aadhar_no'); ?>">
                                 <div class="error" id="aadhar_no_error"></div>
                             </div>
                         </div>
@@ -111,8 +118,9 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Pancard No.*</b></label>
-                                <input type="text" class="form-control" name="pancard_no" id="pancard_no"
-                                    placeholder="Pancard No." value="<?php echo set_value('pancard_no'); ?>">
+                                <input type="text" class="form-control only-alphabet-number-allowed pancard_no"
+                                    name="pancard_no" id="pancard_no" placeholder="Pancard No."
+                                    value="<?php echo set_value('pancard_no'); ?>">
                                 <div class="error" id="pancard_no_error"></div>
                             </div>
                         </div>
@@ -125,7 +133,7 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Street/Locality*</b></label>
-                                <input type="text" class="form-control" name="street_locality"
+                                <input type="text" class="form-control first-char-capitalize" name="street_locality"
                                     placeholder="Street/Locality" value="<?php echo set_value('street_locality'); ?>" />
                                 <div class="error" id="street_locality_error"></div>
                             </div>
@@ -134,27 +142,29 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Village*</b></label>
-                                <input type="text" class="form-control" name="village" id="village"
-                                    placeholder="Village" value="<?php echo set_value('village'); ?>">
+                                <input type="text" class="form-control  alpha-single-space first-char-capitalize"
+                                    name="village" id="village" placeholder="Village"
+                                    value="<?php echo set_value('village'); ?>">
                                 <div class="error" id="village_error"></div>
                             </div>
                         </div>
 
-
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Post Office*</b></label>
-                                <input type="text" class="form-control" name="post_office" id="post_office"
-                                    placeholder="Post Office" value="<?php echo set_value('post_office'); ?>">
-                                <div class="error" id="post_error"></div>
+                                <input type="text" class="form-control alpha-single-space first-char-capitalize"
+                                    name="post_office" id="post_office" placeholder="Post office"
+                                    value="<?php echo set_value('police_station'); ?>">
+                                <div class="error" id="post_office_error"></div>
                             </div>
                         </div>
 
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Police Station*</b></label>
-                                <input type="text" class="form-control" name="police_station" id="police_station"
-                                    placeholder="Police Station" value="<?php echo set_value('police_station'); ?>">
+                                <input type="text" class="form-control alpha-single-space first-char-capitalize"
+                                    name="police_station" id="police_station" placeholder="Police Station"
+                                    value="<?php echo set_value('police_station'); ?>">
                                 <div class="error" id="police_station_error"></div>
                             </div>
                         </div>
@@ -162,7 +172,8 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Block*</b></label>
-                                <input type="text" class="form-control" name="block" id="block" placeholder="Block"
+                                <input type="text" class="form-control only-alphabet-allowed first-char-capitalize"
+                                    name="block" id="block" placeholder="Block"
                                     value="<?php echo set_value('block'); ?>">
                                 <div class="error" id="block_error"></div>
                             </div>
@@ -171,15 +182,16 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>District*</b></label>
-                                <input type="text" class="form-control" name="district" id="district"
-                                    placeholder="District" value="<?php echo set_value('district'); ?>">
+                                <input type="text" class="form-control alpha-single-space first-char-capitalize"
+                                    name="district" id="district" placeholder="District"
+                                    value="<?php echo set_value('district'); ?>">
                                 <div class="error" id="district_error"></div>
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>State*</b></label>
-                                <select class="form-control" name="state_id" id="selState">
+                                <select class="form-control" name="selState" id="selState">
                                     <option value="">Select State</option>
                                     <?php if ($stateList) { ?>
                                     <?php foreach ($stateList as $list) { ?>
@@ -187,7 +199,7 @@
                                     <?php } ?>
                                     <?php } ?>
                                 </select>
-                                <div class="error" id="state_error"></div>
+                                <div class="error" id="selState_error"></div>
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-12">
@@ -203,9 +215,19 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>PIN Code*</b></label>
-                                <input type="text" class="form-control" name="pin_code" id="pin_code"
-                                    placeholder="PIN Code" value="<?php echo set_value('pin_code'); ?>">
+                                <input type="text" class="form-control only-number-allowed" name="pin_code"
+                                    id="pin_code" placeholder="PIN Code" value="<?php echo set_value('pin_code'); ?>">
                                 <div class="error" id="pin_code_error"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12">
+                            <div class="form-group">
+                                <label><b>Adharcard Back Side Address*</b></label>
+                                <input type="text" class="form-control alpha-first-cap-num-sp-chars"
+                                    name="adhar_back_address" id="adhar_back_address"
+                                    placeholder="Adharcard Back Address"
+                                    value="<?php echo set_value('adhar_back_address'); ?>">
+                                <div class="error" id="adhar_back_address_error"></div>
                             </div>
                         </div>
                         <div class="col-sm-12">
@@ -217,8 +239,9 @@
                         <div class="col-md-3 col-sm-12">
                             <div class="form-group">
                                 <label><b>Bank Account Number*</b></label>
-                                <input type="text" class="form-control" id="account_no" name="account_no"
-                                    placeholder="Account no" value="<?php echo set_value('account_no'); ?>">
+                                <input type="text" class="form-control only-number-allowed" id="account_no"
+                                    name="account_no" placeholder="Account no"
+                                    value="<?php echo set_value('account_no'); ?>">
                                 <div class="error" id="account_no_error"></div>
                             </div>
                         </div>
@@ -226,16 +249,19 @@
                         <div class="col-md-3 col-sm-12">
                             <div class="form-group">
                                 <label><b>Bank IFSC*</b></label>
-                                <input type="text" class="form-control" id="bank_ifsc" name="bank_ifsc"
-                                    placeholder="Bank Ifsc" value="<?php echo set_value('bank_ifsc'); ?>">
+                                <input type="text"
+                                    class="form-control only-alphabet-number-allowed first-char-capitalize each-char-capitalize"
+                                    id="bank_ifsc" name="bank_ifsc" placeholder="Bank Ifsc"
+                                    value="<?php echo set_value('bank_ifsc'); ?>">
                                 <div class="error" id="bank_ifsc_error"></div>
                             </div>
                         </div>
                         <div class="col-md-3 col-sm-12">
                             <div class="form-group">
                                 <label><b>Bank Name*</b></label>
-                                <input type="text" class="form-control" id="bank_name" name="bank_name"
-                                    placeholder="Bank Name" value="<?php echo set_value('bank_name'); ?>">
+                                <input type="text" class="form-control alpha-single-space first-char-capitalize"
+                                    id="bank_name" name="bank_name" placeholder="Bank Name"
+                                    value="<?php echo set_value('bank_name'); ?>">
                                 <div class="error" id="bank_name_error"></div>
                             </div>
                         </div>
@@ -243,8 +269,9 @@
                         <div class="col-md-3 col-sm-12">
                             <div class="form-group">
                                 <label><b>Branch Name*</b></label>
-                                <input type="text" class="form-control" id="bank_branch_name" name="bank_branch_name"
-                                    placeholder="Bank Branch Name" value="<?php echo set_value('bank_branch_name'); ?>">
+                                <input type="text" class="form-control alpha-single-space first-char-capitalize"
+                                    id="bank_branch_name" name="bank_branch_name" placeholder="Bank Branch Name"
+                                    value="<?php echo set_value('bank_branch_name'); ?>">
                                 <div class="error" id="bank_branch_name_error"></div>
                             </div>
                         </div>
@@ -256,8 +283,8 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Shop/Business Name*</b></label>
-                                <input type="text" class="form-control" id="shop_business_name"
-                                    name="shop_business_name" placeholder="Shop/Business Name"
+                                <input type="text" class="form-control alpha-single-space first-char-capitalize"
+                                    id="shop_business_name" name="shop_business_name" placeholder="Shop/Business Name"
                                     value="<?php echo set_value('shop_business_name'); ?>">
                                 <div class="error" id="shop_business_name_error"></div>
                             </div>
@@ -265,8 +292,9 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Shop/Business Address*</b></label>
-                                <input type="text" class="form-control" id="shop_business_address"
-                                    name="shop_business_address" placeholder="Shop/Business Address"
+                                <input type="text" class="form-control alpha-single-space first-char-capitalize"
+                                    id="shop_business_address" name="shop_business_address"
+                                    placeholder="Shop/Business Address"
                                     value="<?php echo set_value('shop_business_address'); ?>">
                                 <div class="error" id="shop_business_address_error"></div>
                             </div>
@@ -296,47 +324,44 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Aadhar Front Photo*</b></label>
-                                <input type="file" name="aadhar_front_photo">
+                                <input type="file" name="aadharfront_photo" id="aadharfront_photo">
                                 <p>Note: Only jpg,png allowed, max size 2MB.</p>
-                                <div class="error" id="aadhar_front_photo"></div>
+                                <div class="error" id="aadharfront_photo_error"></div>
                             </div>
                         </div>
 
 
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
-                                <label><b>Aadhar Back Photo*</b></label>
-                                <input type="file" name="aadhar_back_photo">
+                                <label><b>Aadhar Back Image*</b></label>
+                                <input type="file" name="aadharback_photo" id="aadharback_photo">
                                 <p>Note: Only jpg,png allowed, max size 2MB.</p>
-                                <div class="error" id="aadhar_back_photo_error"></div>
+                                <div class="error" id="aadharback_photo_error"></div>
 
                             </div>
                         </div>
-
-
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
-                                <label><b>Pancard Photo*</b></label>
-                                <input type="file" name="pancard_photo">
+                                <label><b>Pancard Image*</b></label>
+                                <input type="file" name="pancard_photo" id="pancard_photo">
                                 <p>Note: Only jpg,png allowed, max size 2MB.</p>
                                 <div class="error" id="pancard_photo_error"></div>
-
                             </div>
                         </div>
 
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
-                                <label><b>Bank Passbook/Statement Photo (Optional)</b></label>
-                                <input type="file" name="bank_passbook_statement_photo">
+                                <label><b>Bank Passbook/Statement Image (Optional)</b></label>
+                                <input type="file" name="bps_photo" id="bps_photo">
                                 <p>Note: Only jpg,png allowed, max size 2MB.</p>
-                                <div class="error" id="bank_passbook_statement_photo_error"></div>
-
+                                <div class="error" id="bps_photo_error"></div>
                             </div>
                         </div>
+
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>User Photograph</b></label>
-                                <input type="file" name="user_photo">
+                                <input type="file" name="user_photo" id="user_photo">
                                 <p>Note: Only jpg,png allowed, max size 2MB. Upload your recent passport-size
                                     photograph.</p>
                                 <div class="error" id="user_photo_error"></div>
@@ -354,22 +379,23 @@
                         </div>
 
                         <div class="card-header py-3 text-right">
-                            <button type="submit" class="btn btn-success aeps3btn">Submit</button>
+                            <button class="btn btn-success aeps3btn">Submit</button>
                             <button onclick="window.history.back()" type="button"
                                 class="btn btn-secondary">Cancel</button>
                         </div>
-                        <div class="alert alert-warning mt-3 col-md-12 col-sm-12" role="alert">
-                            <h5 class="text-danger"><strong>Note:</strong></h5>
-                            <p class="mb-1 "><span class="text-danger">*</span> All fields marked with an asterisk are
-                                <b>mandatory.</b>
-                            </p>
-                            <p class="mb-1">Ensure uploaded documents are <span class="font-weight-bold">clear</span>
-                                and
-                                meet the size and format requirements.</p>
-                            <p class="mb-0">Verify all details before submission to avoid errors.</p>
-                        </div>
-                    </div>
+
             </form>
         </div>
+        <div class="alert alert-warning mt-3 col-md-12 col-sm-12" role="alert">
+            <h5 class="text-danger"><strong>Note:</strong></h5>
+            <ul class="mb-1">
+                <li><span class="text-danger">*</span> All fields marked with an asterisk are <b>mandatory.</b></li>
+                <li>Ensure uploaded documents are <span class="font-weight-bold">clear</span> and meet the size and
+                    format requirements.</li>
+                <li>Verify all details before submission to avoid errors.</li>
+            </ul>
+
+        </div>
     </div>
+</div>
 </div>
