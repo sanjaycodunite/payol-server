@@ -2995,45 +2995,51 @@ $(document).ready(function () {
     var siteUrl = $("#siteUrl").val();
     var formData = $("#aeps3_form").serialize();
 
+    // Show loader before AJAX call
+    $('#loader').show();
+
     $.ajax({
       type: "POST",
       url: siteUrl + "retailer/iciciaeps/activeAuth",
       data: formData,
       dataType: "json",
       success: function (response) {
+        // Hide loader once the response is received
         $('#loader').hide();
-        $('.error').html('');
+        $('.error').html('');  // Clear any previous error messages
+        $('#benAlert').removeClass('show').addClass('hide').html('');  // Hide any alerts
         console.log(response);
-        $('#benAlert').removeClass('show').addClass('hide').html('');
-
         if (response.error && response.errors) {
-
-          $.each(response.errors, function (key, value) {
-            $('#' + key + '_error').html(value);
+          // Handle validation errors
+          $.each(response.errors, function (key, messages) {
+            var errorMessages = messages.join('<br>');
+            console.log(errorMessages);  // Log the correct variable (errorMessages)
+            $('#' + key + '_error').html(errorMessages);  // Display error messages in the corresponding element
           });
         } else if (response.error) {
-
+          // Handle general error
           $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
-          if (response.apiresponse === "yes") {
+          var errorMessage = response.apiresponse === "yes" ?
+            `<b><strong>Error:</strong> (${response.dataval.statuscode} - ${response.dataval.statuscodemessage})</b>` :
+            `<b><strong>Error:</strong> ${response.dataval}</b>`;
+          $('#benAlert').html(errorMessage);
 
-            $('#benAlert').html(`<b><strong>Error:</strong> (${response.dataval.statuscode} - ${response.dataval.statuscodemessage})</b>`);
-          } else {
-            $('#benAlert').html(`<b><strong>Error:</strong> ${response.dataval}</b>`);
-          }
           setTimeout(function () {
             $('#benAlert').removeClass('show').addClass('hide').empty();
           }, 5000);
         } else {
-
+          // Handle success case
           $("#account_holder_name").val(response.account_holder_name);
           $("#bankModal").modal("show");
           $("#bankResponse").html(response.dataval);
+
           setTimeout(function () {
             $('#benAlert').removeClass('show').addClass('hide').empty();
           }, 3000);
         }
       },
       error: function (xhr, status, error) {
+        // Hide loader in case of an error
         $('#loader').hide();
         console.error("AJAX error: " + error);
         $('#benAlert').removeClass('hide').addClass('show').html("An error occurred. Please try again.");

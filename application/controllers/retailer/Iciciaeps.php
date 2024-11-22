@@ -131,168 +131,288 @@ class Iciciaeps extends CI_Controller {
 	{
 		$post = $this->input->post();
 		$memberID = $post['memberID'];
+
 		$response = [];
-
+		$uploadedFiles = [];
+		$validationErrors = []; // Initialize an array to store validation errors
 		$this->load->library('form_validation');
+		$files = [
+			'aadharfront_photo',
+			'aadharback_photo',
+			'pancard_photo',
+			'user_photo',
+			'bps_photo', // Optional
+			'shop_photo' // Optional
+		];
+		foreach ($files as $fileField) {
 
-		// Set form validation rules
-		$this->form_validation->set_rules('first_name', 'First Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-		$this->form_validation->set_rules('middle_name', 'Middle Name', 'trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-		$this->form_validation->set_rules('last_name', 'Last Name', 'trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-		$this->form_validation->set_rules('father_name', 'Father Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-		$this->form_validation->set_rules('mother_name', 'Mother Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-		$this->form_validation->set_rules('person_dob', 'User Date Of Birth', 'required|trim|xss_clean');
-		$this->form_validation->set_rules('gender', 'Gender', 'required|trim|xss_clean');
-		$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email');
+			// Check if a file was uploaded
+			if (!empty($_FILES[$fileField]['name'])) {
 
-		$this->form_validation->set_rules('aadhar_no', 'Aadhar No', 'required|trim|xss_clean|numeric|min_length[12]|max_length[12]');
-		$this->form_validation->set_rules('pancard_no', 'Pancard No', 'required|xss_clean|min_length[10]|max_length[10]|regex_match[/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/]');
-		$this->form_validation->set_rules('street_locality', 'Street/Locality', 'required|trim|xss_clean');
-		$this->form_validation->set_rules('adhar_back_address', 'Aadhar Card Back Address', 'required|trim|xss_clean');
+				// Check if the file is an image (validate mime type)
+				$fileType = mime_content_type($_FILES[$fileField]['tmp_name']);  // Detect file mime type
+				$allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
-		$this->form_validation->set_rules('shop_business_name', 'Shop/Business Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-		$this->form_validation->set_rules('shop_business_address', 'Shop/Business Address', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-		$this->form_validation->set_rules('business_type', 'Business Type', 'required|xss_clean');
-		$this->form_validation->set_rules('selState', 'State', 'required|xss_clean');
-		$this->form_validation->set_rules('city_id', 'City', 'required|xss_clean');
-		$this->form_validation->set_rules('pin_code', 'Pincode', 'required|trim|xss_clean|numeric|min_length[6]|max_length[6]');
-		$this->form_validation->set_rules('village', 'Village', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-		$this->form_validation->set_rules('post_office', 'Post office', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-		$this->form_validation->set_rules('police_station', 'Police Station', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-		$this->form_validation->set_rules('block', 'Block', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-		$this->form_validation->set_rules('district', 'District', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-		$this->form_validation->set_rules('bank_name', 'Bank Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-		$this->form_validation->set_rules('bank_branch_name', 'Bank Branch Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+				if (!in_array($fileType, $allowedTypes)) {
+					// Error: Not a valid image file
+					$validationErrors[$fileField][] = ucfirst(str_replace('_', ' ', $fileField)) . ' must be a valid image file (jpg, jpeg, png).';
+				}
 
-		$this->form_validation->set_rules('account_no', 'Bank Account', 'required|trim|xss_clean|regex_match[/^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/]');
-		$this->form_validation->set_rules('bank_ifsc', 'Bank Ifsc', 'required|trim|xss_clean|alpha_numeric');
+				// Check file size (max 2MB)
+				$maxSize = 2048; // Max size in KB
+				if ($_FILES[$fileField]['size'] > $maxSize * 1024) {
+					// Error: Exceeds max size
+					$validationErrors[$fileField][] = ucfirst(str_replace('_', ' ', $fileField)) . ' must not exceed ' . $maxSize . ' KB.';
+				}
 
-		$this->form_validation->set_rules('aadharfront_photo', 'Aadhar Front Photo', 'callback__validate_image');
-		$this->form_validation->set_rules('aadharback_photo', 'Aadhar Back Photo', 'callback__validate_image');
-		$this->form_validation->set_rules('pancard_photo', 'Pancard Image', 'callback__validate_image');
-		$this->form_validation->set_rules('bps_photo', 'Bank Passbook Statement Photo', 'callback__validate_image');
-		$this->form_validation->set_rules('user_photo', 'User Photo', 'callback__validate_image');
-		$this->form_validation->set_rules('shop_photo', 'Shop Photo', 'callback__validate_image');
+			} else {
+				// If the file is not provided, check if it's required
+				if ($fileField !== 'bps_photo' && $fileField !== 'shop_photo') {
+					// Required fields must not be empty
+					$validationErrors[$fileField][] = ucfirst(str_replace('_', ' ', $fileField)) . ' is required.';
+				}
+			}
+		}
 
-		$this->form_validation->set_rules('mobile', 'Mobile', 'required|trim|xss_clean|numeric|min_length[10]|max_length[10]|regex_match[/^[6789]\d{9}$/]', [
-			'required' => 'The %s field is required.',
-			'numeric' => 'The %s field must contain only numbers.',
-			'exact_length' => 'The %s field must be exactly 10 digits long.',
-			'regex_match' => 'The %s field must start with 6, 7, 8, or 9 and be followed by 9 digits.'
-		]);
-
-		$this->form_validation->set_message('regex_match', 'The %s field must contain only alphabetic characters and single spaces between names.');
-
-		if ($this->form_validation->run() === false) {
+		// If there are any validation errors, return the response
+		if (!empty($validationErrors)) {
 			$response = [
 				'error' => true,
-				'errors' => [
-					'first_name'        => form_error('first_name'),
-					'middle_name'       => form_error('middle_name'),
-					'last_name'         => form_error('last_name'),
-					'father_name'       => form_error('father_name'),
-					'mother_name'       => form_error('mother_name'),
-					'person_dob'        => form_error('person_dob'),
-					'gender'            => form_error('gender'),
-					'email'             => form_error('email'),
-					'mobile'            => form_error('mobile'),
-					'aadhar_no'         => form_error('aadhar_no'),
-					'pancard_no'        => form_error('pancard_no'),
-					'adhar_back_address'=> form_error('adhar_back_address'),
-					'street_locality'   => form_error('street_locality'),
-					'shop_business_name'=> form_error('shop_business_name'),
-					'shop_business_address'=> form_error('shop_business_address'),
-					'business_type'     => form_error('business_type'),
-					'selState'          => form_error('selState'),
-					'city_id'           => form_error('city_id'),
-					'pin_code'          => form_error('pin_code'),
-					'village'           => form_error('village'),
-					'post_office'       => form_error('post_office'),
-					'police_station'    => form_error('police_station'),
-					'block'             => form_error('block'),
-					'district'          => form_error('district'),
-					'account_no'        => form_error('account_no'),
-					'bank_ifsc'         => form_error('bank_ifsc'),
-					'bank_name'         => form_error('bank_name'),
-					'bank_branch_name'  => form_error('bank_branch_name'),
-					'aadharfront_photo' => form_error('aadharfront_photo'),
-					'aadharback_photo'  => form_error('aadharback_photo'),
-					'pancard_photo'     => form_error('pancard_photo'),
-					'bps_photo'         => form_error('bps_photo'),
-					'user_photo'        => form_error('user_photo'),
-					'shop_photo'        => form_error('shop_photo'),
-				],
+				'errors' => $validationErrors
 			];
 			echo json_encode($response);
 			return;
+		}else{
+				// Set validation rules for other fields
+				$this->form_validation->set_rules('first_name', 'First Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+				$this->form_validation->set_rules('middle_name', 'Middle Name', 'trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+				$this->form_validation->set_rules('last_name', 'Last Name', 'trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+				$this->form_validation->set_rules('father_name', 'Father Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+				$this->form_validation->set_rules('mother_name', 'Mother Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+				$this->form_validation->set_rules('person_dob', 'User Date Of Birth', 'required|trim|xss_clean');
+				$this->form_validation->set_rules('gender', 'Gender', 'required|trim|xss_clean');
+				$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email');
+				$this->form_validation->set_rules('aadhar_no', 'Aadhar No', 'required|trim|xss_clean|numeric|min_length[12]|max_length[12]');
+				$this->form_validation->set_rules('pancard_no', 'Pancard No', 'required|xss_clean|min_length[10]|max_length[10]|regex_match[/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/]');
+				$this->form_validation->set_rules('street_locality', 'Street/Locality', 'required|trim|xss_clean');
+				$this->form_validation->set_rules('adhar_back_address', 'Aadhar Card Back Address', 'required|trim|xss_clean');
+				$this->form_validation->set_rules('shop_business_name', 'Shop/Business Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+				$this->form_validation->set_rules('shop_business_address', 'Shop/Business Address', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+				$this->form_validation->set_rules('business_type', 'Business Type', 'required|xss_clean');
+				$this->form_validation->set_rules('selState', 'State', 'required|xss_clean');
+				$this->form_validation->set_rules('city_id', 'City', 'required|xss_clean');
+				$this->form_validation->set_rules('pin_code', 'Pincode', 'required|trim|xss_clean|numeric|min_length[6]|max_length[6]');
+				$this->form_validation->set_rules('village', 'Village', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+				$this->form_validation->set_rules('post_office', 'Post office', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+				$this->form_validation->set_rules('police_station', 'Police Station', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+				$this->form_validation->set_rules('block', 'Block', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+				$this->form_validation->set_rules('district', 'District', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+				$this->form_validation->set_rules('bank_name', 'Bank Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+				$this->form_validation->set_rules('bank_branch_name', 'Bank Branch Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+				$this->form_validation->set_rules('account_no', 'Bank Account', 'required|trim|xss_clean|regex_match[/^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/]');
+				$this->form_validation->set_rules('bank_ifsc', 'Bank Ifsc', 'required|trim|xss_clean|alpha_numeric');
+
+				$this->form_validation->set_rules('mobile', 'Mobile', 'required|trim|xss_clean|numeric|min_length[10]|max_length[10]|regex_match[/^[6789]\d{9}$/]');
+
+				if ($this->form_validation->run() === false) {
+					$response = [
+						'error' => true,
+						'errors' => [
+							'first_name' => form_error('first_name'),
+							'middle_name' => form_error('middle_name'),
+							'last_name' => form_error('last_name'),
+							'father_name' => form_error('father_name'),
+							'mother_name' => form_error('mother_name'),
+							'person_dob' => form_error('person_dob'),
+							'gender' => form_error('gender'),
+							'email' => form_error('email'),
+							'mobile' => form_error('mobile'),
+							'aadhar_no' => form_error('aadhar_no'),
+							'pancard_no' => form_error('pancard_no'),
+							'adhar_back_address' => form_error('adhar_back_address'),
+							'street_locality' => form_error('street_locality'),
+							'shop_business_name' => form_error('shop_business_name'),
+							'shop_business_address' => form_error('shop_business_address'),
+							'business_type' => form_error('business_type'),
+							'selState' => form_error('selState'),
+							'city_id' => form_error('city_id'),
+							'pin_code' => form_error('pin_code'),
+							'village' => form_error('village'),
+							'post_office' => form_error('post_office'),
+							'police_station' => form_error('police_station'),
+							'block' => form_error('block'),
+							'district' => form_error('district'),
+							'account_no' => form_error('account_no'),
+							'bank_ifsc' => form_error('bank_ifsc'),
+							'bank_name' => form_error('bank_name'),
+							'bank_branch_name' => form_error('bank_branch_name'),
+							'aadharfront_photo' => form_error('aadharfront_photo'),
+							'aadharback_photo' => form_error('aadharback_photo'),
+							'pancard_photo' => form_error('pancard_photo'),
+							'bps_photo' => form_error('bps_photo') ? form_error('bps_photo') : "",
+							'shop_photo' => form_error('shop_photo') ? form_error('shop_photo') : "",
+							'user_photo' => form_error('user_photo')
+						],
+					];
+					echo json_encode($response);
+					return;
+				}
+
+				// Define the file fields for uploading
+				$files = [
+					'aadharfront_photo',
+					'aadharback_photo',
+					'pancard_photo',
+					'user_photo',
+					'bps_photo', // Optional
+					'shop_photo' // Optional
+				];
+
+
+
+				// Set validation rules for image fields
+				foreach ($files as $fileField) {
+					// Check if the file is required (not empty) and apply validation rules
+					if (!empty($_FILES[$fileField]['name'])) {
+						// If the file is not empty, validate it
+						$this->form_validation->set_rules($fileField, ucfirst(str_replace('_', ' ', $fileField)), 'callback__validate_image');
+					} else {
+						// If the file is empty and optional (bps_photo, shop_photo), do not apply validation
+						if ($fileField !== 'bps_photo' && $fileField !== 'shop_photo') {
+							// Required fields must not be empty
+							$this->form_validation->set_rules($fileField, ucfirst(str_replace('_', ' ', $fileField)), 'required');
+						}
+					}
+				}
+
+				// Run form validation
+				if ($this->form_validation->run() === false) {
+					// Collect error messages for specific file fields
+					foreach ($files as $fileField) {
+						// If there is an error for this file field, capture the error message
+						if (form_error($fileField)) {
+							$validationErrors[$fileField] = form_error($fileField);
+						}
+					}
+
+					// If there are validation errors, respond with detailed error information
+					if (!empty($validationErrors)) {
+						$response = [
+							'error' => true,
+							'dataval' => 'File upload failed. Please check the following errors.',
+							'errors' => $validationErrors // Include individual errors for each file field
+						];
+						echo json_encode($response);
+						return;
+					}
+				}
+
+				// File upload logic (only runs if validation passes)
+				$uploadedFiles['aadharfront_photo'] = $this->_upload_file('aadharfront_photo');
+				$uploadedFiles['aadharback_photo'] = $this->_upload_file('aadharback_photo');
+				$uploadedFiles['pancard_photo'] = $this->_upload_file('pancard_photo');
+				$uploadedFiles['bps_photo'] = $this->_upload_file('bps_photo');
+				$uploadedFiles['user_photo'] = $this->_upload_file('user_photo');
+				$uploadedFiles['shop_photo'] = $this->_upload_file('shop_photo');
+
+				// Check for any upload errors and return if any
+				if (in_array(false, $uploadedFiles, true)) {
+					$response = [
+						'error' => true,
+						'dataval' => 'One or more file uploads failed, please try again.'
+					];
+					echo json_encode($response);
+					return;
+				}
+
+					// Proceed with the activation process
+					$account_id = $this->User->get_domain_account();
+					$loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
+					$memberID = $loggedUser['id'];
+
+					$activeService = $this->User->account_active_service($loggedUser['id']);
+					if (!in_array(19, $activeService)) {
+						$response = [
+							'error' => true,
+							'dataval' => 'Sorry! You are not authorized to access this page.'
+						];
+						echo json_encode($response);
+						return;
+					}
+
+					$user_instantpay_aeps_status = $this->User->get_member_instantpay_aeps_status($loggedUser['id']);
+					if ($user_instantpay_aeps_status) {
+						$response = [
+							'error' => true,
+							'dataval' => 'Sorry! You are not authorized to access this page.'
+						];
+						echo json_encode($response);
+						return;
+					}
+					$aadhar_photo = $this->_upload_file('aadharfront_photo');
+					$aadhar_back_photo = $this->_upload_file('aadharback_photo');
+					$pancard_photo = $this->_upload_file('pancard_photo');
+					$bps_photo = $this->_upload_file('bps_photo');
+					$user_photo = $this->_upload_file('user_photo');
+					$shop_photo = $this->_upload_file('shop_photo');
+
+					// Check if any file upload failed
+					$uploadErrors = [];
+
+					if (!$aadhar_photo) {
+						$uploadErrors[] = 'Aadhar front photo upload failed.';
+					}
+
+					if (!$aadhar_back_photo) {
+						$uploadErrors[] = 'Aadhar back photo upload failed.';
+					}
+
+					if (!$pancard_photo) {
+						$uploadErrors[] = 'Pancard photo upload failed.';
+					}
+
+					if (!$user_photo) {
+						$uploadErrors[] = 'User photo upload failed.';
+					}
+
+					if (!$shop_photo) {
+						$uploadErrors[] = 'Shop photo upload failed.';
+					}
+
+					// If any file upload failed, return an error response
+					if (!empty($uploadErrors)) {
+						$response = [
+							'error' => true,
+							'dataval' => implode(' ', $uploadErrors), // Concatenate all error messages
+						];
+						echo json_encode($response);
+						return;
+					}
+
+					// Call model method for active AEPS
+					$response = $this->IciciAeps_model->activeAEPSMember($post, $aadhar_photo, $aadhar_back_photo, $pancard_photo);
+					$status = $response['status'];
+					$err_msg = $response['msg'];
+
+					if ($status == 1) {
+						$otpReferenceID = $response['otpReferenceID'];
+						$response = [
+							'error' => false,
+							'dataval' => 'We have sent OTP to your registered mobile, please verify.',
+							'redirectUrl' => 'retailer/iciciaeps/otpVerify/' . $otpReferenceID
+						];
+					} else {
+						$response = [
+							'error' => true,
+							'dataval' => 'Sorry! Activation failed due to ' . $err_msg,
+							'redirectUrl' => 'retailer/iciciaeps/activeAeps'
+						];
+					}
+
+					echo json_encode($response);
+					return;
 		}
-
-		// Proceed with the activation process
-		$account_id = $this->User->get_domain_account();
-		$loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
-		$memberID = $loggedUser['id'];
-
-		$activeService = $this->User->account_active_service($loggedUser['id']);
-		if (!in_array(19, $activeService)) {
-			$response = [
-				'error' => true,
-				'dataval' => 'Sorry! You are not authorized to access this page.'
-			];
-			echo json_encode($response);
-			return;
-		}
-
-		$user_instantpay_aeps_status = $this->User->get_member_instantpay_aeps_status($loggedUser['id']);
-		if ($user_instantpay_aeps_status) {
-			$response = [
-				'error' => true,
-				'dataval' => 'Sorry! You are not authorized to access this page.'
-			];
-			echo json_encode($response);
-			return;
-		}
-
-		// Handle file uploads for Aadhar and Pancard
-		$aadhar_photo = $this->_upload_file('aadharfront_photo');
-		$aadhar_back_photo = $this->_upload_file('aadharback_photo');
-		$pancard_photo = $this->_upload_file('pancard_photo');
-		$bps_photo = $this->_upload_file('bps_photo');
-		$user_photo = $this->_upload_file('user_photo');
-		$shop_photo = $this->_upload_file('shop_photo');
-
-		if (!$aadhar_photo || !$aadhar_back_photo || !$pancard_photo || !$user_photo) {
-			$response = [
-				'error' => true,
-				'dataval' => 'File upload failed, please try again.'
-			];
-			echo json_encode($response);
-			return;
-		}
-
-		// Call model method for active AEPS
-		$response = $this->IciciAeps_model->activeAEPSMember($post, $aadhar_photo, $aadhar_back_photo, $pancard_photo);
-		$status = $response['status'];
-		$err_msg = $response['msg'];
-
-		if ($status == 1) {
-			$otpReferenceID = $response['otpReferenceID'];
-			$response = [
-				'error' => false,
-				'dataval' => 'We have sent OTP to your registered mobile, please verify.',
-				'redirectUrl' => 'retailer/iciciaeps/otpVerify/' . $otpReferenceID
-			];
-		} else {
-			$response = [
-				'error' => true,
-				'dataval' => 'Sorry! Activation failed due to ' . $err_msg,
-				'redirectUrl' => 'retailer/iciciaeps/activeAeps'
-			];
-		}
-
-		echo json_encode($response);
-		return;
 	}
-
 	public function otpVerify($otpReferenceID = ''){
 
 		$account_id = $this->User->get_domain_account();
@@ -1571,60 +1691,53 @@ class Iciciaeps extends CI_Controller {
 
 		echo json_encode($response);
 	}
-
-	public function _validate_image($field_name)
+	public function __validate_image($str)
 	{
-		// Load upload library
-		$this->load->library('upload');
 
-		// Upload configuration
-		$config['upload_path'] = './media/aeps_kyc_doc/';
-		$config['allowed_types'] = 'jpg|jpeg|png';
-		$config['max_size'] = 2048; // 2MB max size
-		$config['file_name'] = time() . rand(111111, 999999);
+		// Check if a file is uploaded for this field
+		if (isset($_FILES[$str]) && $_FILES[$str]['name']) {
+			// Get the file's MIME type using fileinfo extension
+			$fileType = mime_content_type($_FILES[$str]['tmp_name']);
 
-		$this->upload->initialize($config);
+			// Allowed MIME types for image files (can be customized)
+			$allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
-		// Check if file exists in $_FILES array
-		if (!isset($_FILES[$field_name]) || $_FILES[$field_name]['error'] == UPLOAD_ERR_NO_FILE) {
-			$this->form_validation->set_message('_validate_image', 'The {field} field is required.');
-			return false;
+			// Validate if the uploaded file is an image
+			if (!in_array($fileType, $allowedTypes)) {
+				$this->form_validation->set_message('__validate_image', 'The {field} must be a valid image file (jpg, jpeg, png).');
+				return false;
+			}
+
+			// Validate the file size (if necessary)
+			$maxSize = 2048; // Max size in KB
+			if ($_FILES[$str]['size'] > $maxSize * 1024) {
+				$this->form_validation->set_message('__validate_image', 'The {field} must not exceed ' . $maxSize . ' KB.');
+				return false;
+			}
+
+			// If validation passes, return true
+			return true;
 		}
 
-		// Validate and upload the file
-		if (!$this->upload->do_upload($field_name)) {
-			$this->form_validation->set_message('_validate_image', $this->upload->display_errors('', ''));
-			return false;
-		}
-
-		// File successfully uploaded, save file info if needed
-		$upload_data = $this->upload->data();
-		// Optionally, store the uploaded file name in a property for later use
-		$this->uploaded_files[$field_name] = $upload_data['file_name'];
-
+		// If no file is uploaded for this field, return true (this allows for optional fields)
 		return true;
 	}
 
-	public function _upload_file($field_name){
-		if (!isset($_FILES[$field_name]['name']) || $_FILES[$field_name]['name'] == '') {
-			return '';
-		}
-
+	// Helper function to handle file uploads
+	public function  _upload_file($fieldName)
+	{
 		$config['upload_path'] = './media/aeps_kyc_doc/';
 		$config['allowed_types'] = 'jpg|jpeg|png';
 		$config['max_size'] = 2048;  // 2MB max size
 		$config['file_name'] = time() . rand(111111, 999999);
 
-		$this->upload->initialize($config);
+		$this->load->library('upload', $config);
 
-		if ($this->upload->do_upload($field_name)) {
-			$fileData = $this->upload->data();
-			return $fileData['file_name']; // Return the file name
-		} else {
-			$uploadError = $this->upload->display_errors();
+		if (!$this->upload->do_upload($fieldName)) {
 			log_message('error', 'AEPS 3 Document File Upload Error: ' . $uploadError);
 			return false;
 		}
+		// Return the file name if upload is successful
+		return $this->upload->data('file_name');
 	}
-
 }
