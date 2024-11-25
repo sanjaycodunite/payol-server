@@ -2989,13 +2989,112 @@ $(document).ready(function () {
 });
 
 /**Activate AEPS 3  */
+// $(document).ready(function () {
+//   $(".aeps3btn").click(function (e) {
+//     e.preventDefault();
+
+//     var siteUrl = $("#siteUrl").val();
+//     var formData = new FormData($("#aeps3_form")[0]); // Collect form data, including files
+
+//     // Show loader before sending AJAX request
+//     $('#loader').show();
+
+//     $.ajax({
+//       type: "POST",
+//       url: siteUrl + "retailer/iciciaeps/activeAuth",
+//       data: formData,
+//       dataType: "json",
+//       processData: false,
+//       cache: false,
+//       contentType: false,
+//       success: function (response) {
+
+//         $('#loader').hide();
+//         $('.error').html('');
+//         $('#benAlert').removeClass('show').addClass('hide').html('');
+
+//         if (response.error && response.errors) {
+//           $.each(response.errors, function (key, messages) {
+//             if (Array.isArray(messages)) {
+//               // Display array of error messages
+//               var errorMessages = messages.join('<br>');
+//               $('#' + key + '_error').html(errorMessages);
+//             } else if (messages) {
+//               // Display single error message
+//               $('#' + key + '_error').html(messages);
+//             }
+//           });
+//         }
+
+//         // Handle image-specific validation errors
+//         if (response.error && response.errors.imageErrors) {
+//           console.log(response.errors.imageErrors);
+
+//           $.each(response.imageErrors, function (key, messages) {
+//             if (Array.isArray(messages) && messages.length > 0) {
+//               // Join array of error messages into a single string with line breaks
+//               var errorMessages = messages.join('<br>');
+//               $('#' + key + '_error').html(errorMessages);
+//             } else if (typeof messages === "string") {
+//               // If a single string message is provided
+//               $('#' + key + '_error').html(messages);
+//             } else {
+//               // Handle unexpected error message format
+//               console.error(`Unexpected error format for ${key}:`, messages);
+//             }
+//           });
+//         }
+
+//         // Handle general errors
+//         if (response.error && !response.errors && !response.imageErrors) {
+//           $('#benAlert')
+//             .removeClass('hide alert-success')
+//             .addClass('show alert-danger')
+//             .html(`<b><strong>Error:</strong> ${response.dataval}</b>`);
+
+//           setTimeout(function () {
+//             $('#benAlert').removeClass('show').addClass('hide').empty();
+//           }, 5000);
+//         }
+
+//         // Handle success
+//         if (!response.error) {
+//           if (response.redirectUrl) {
+//             // Redirect if a URL is provided
+//             window.location.href = response.redirectUrl;
+//           } else {
+//             // Display success data
+//             $("#account_holder_name").val(response.account_holder_name);
+//             $("#bankModal").modal("show");
+//             $("#bankResponse").html(response.dataval);
+
+//             setTimeout(function () {
+//               $('#benAlert').removeClass('show').addClass('hide').empty();
+//             }, 3000);
+//           }
+//         }
+//       },
+//       error: function (xhr, status, error) {
+//         // Handle AJAX errors
+//         $('#loader').hide();
+//         console.error("AJAX error: " + error);
+//         $('#benAlert')
+//           .removeClass('hide')
+//           .addClass('show')
+//           .html("An error occurred. Please try again.");
+//       }
+//     });
+//   });
+// });
+
 $(document).ready(function () {
   $(".aeps3btn").click(function (e) {
     e.preventDefault();
-    var siteUrl = $("#siteUrl").val();
-    var formData = $("#aeps3_form").serialize();
 
-    // Show loader before AJAX call
+    var siteUrl = $("#siteUrl").val();
+    var formData = new FormData($("#aeps3_form")[0]); // Collect form data, including files
+
+    // Show loader before sending AJAX request
     $('#loader').show();
 
     $.ajax({
@@ -3003,49 +3102,76 @@ $(document).ready(function () {
       url: siteUrl + "retailer/iciciaeps/activeAuth",
       data: formData,
       dataType: "json",
+      processData: false,
+      cache: false,
+      contentType: false,
       success: function (response) {
-        // Hide loader once the response is received
+        // Hide loader
         $('#loader').hide();
-        $('.error').html('');  // Clear any previous error messages
-        $('#benAlert').removeClass('show').addClass('hide').html('');  // Hide any alerts
-        console.log(response);
-        if (response.error && response.errors) {
-          // Handle validation errors
-          $.each(response.errors, function (key, messages) {
-            var errorMessages = messages.join('<br>');
-            console.log(errorMessages);  // Log the correct variable (errorMessages)
-            $('#' + key + '_error').html(errorMessages);  // Display error messages in the corresponding element
-          });
-        } else if (response.error) {
-          // Handle general error
-          $('#benAlert').removeClass('hide alert-success').addClass('show alert-danger');
-          var errorMessage = response.apiresponse === "yes" ?
-            `<b><strong>Error:</strong> (${response.dataval.statuscode} - ${response.dataval.statuscodemessage})</b>` :
-            `<b><strong>Error:</strong> ${response.dataval}</b>`;
-          $('#benAlert').html(errorMessage);
 
-          setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide').empty();
-          }, 5000);
+        // Reset error messages
+        $('.error').html('');
+        $('#benAlert').removeClass('show alert-danger alert-success').addClass('hide').html('');
+
+        if (response.error) {
+          // Display validation errors
+          if (response.errors) {
+            $.each(response.errors, function (key, messages) {
+              if (Array.isArray(messages)) {
+                $('#' + key + '_error').html(messages.join('<br>'));
+              } else if (messages) {
+                $('#' + key + '_error').html(messages);
+              }
+            });
+          }
+
+          // Display image-specific validation errors
+          if (response.error && response.imageErrors) {
+            $.each(response.imageErrors, function (key, messages) {
+              if (Array.isArray(messages) && messages.length > 0) {
+                $('#' + key + '_error').html(messages.join('<br>'));
+              } else if (typeof messages === "string") {
+                $('#' + key + '_error').html(messages);
+              }
+            });
+          }
+
+          // Handle generic error
+          if (!response.errors && !response.imageErrors) {
+            $('#benAlert')
+              .removeClass('hide alert-success')
+              .addClass('show alert-danger')
+              .html(`<b><strong>Error:</strong> ${response.dataval}</b>`);
+            setTimeout(function () {
+              $('#benAlert').removeClass('show').addClass('hide').empty();
+            }, 5000);
+          }
         } else {
           // Handle success case
-          $("#account_holder_name").val(response.account_holder_name);
-          $("#bankModal").modal("show");
-          $("#bankResponse").html(response.dataval);
+          if (response.redirectUrl) {
+            window.location.href = response.redirectUrl;
+          } else {
+            $("#account_holder_name").val(response.account_holder_name);
+            $("#bankModal").modal("show");
+            $("#bankResponse").html(response.dataval);
 
-          setTimeout(function () {
-            $('#benAlert').removeClass('show').addClass('hide').empty();
-          }, 3000);
+            setTimeout(function () {
+              $('#benAlert').removeClass('show').addClass('hide').empty();
+            }, 3000);
+          }
         }
       },
       error: function (xhr, status, error) {
-        // Hide loader in case of an error
+        // Hide loader and show error
         $('#loader').hide();
         console.error("AJAX error: " + error);
-        $('#benAlert').removeClass('hide').addClass('show').html("An error occurred. Please try again.");
+        $('#benAlert')
+          .removeClass('hide alert-success')
+          .addClass('show alert-danger')
+          .html("An error occurred. Please try again.");
       }
     });
   });
-
 });
+
 

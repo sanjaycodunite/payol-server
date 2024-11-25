@@ -84,7 +84,6 @@
                                 <div class="error" id="gender_error"></div>
                             </div>
                         </div>
-
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Mobile No.*</b></label> <input type="text"
@@ -287,7 +286,6 @@
                                 <div class="error" id="business_type_error"></div>
                             </div>
                         </div>
-
                         <div class="col-sm-12">
                             <h5>Document Upload</h5>
                             <hr>
