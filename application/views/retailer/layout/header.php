@@ -26,6 +26,7 @@
         rel="stylesheet">
 
     <link href="{site_url}skin/admin/css/devloper-custom.css" rel="stylesheet">
+    <link href="{site_url}skin/admin/full-loader/please-wait-fullpage-loader.css" rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="{site_url}skin/admin/css/sb-admin-2.css" rel="stylesheet">
 
@@ -33,7 +34,7 @@
     <link href="{site_url}skin/admin/css/theme2.css" rel="stylesheet">
 
     <?php
-   if($get_theme['theme_id'] == 1){ 
+   if($get_theme['theme_id'] == 1){
   ?>
 
     <link href="{site_url}skin/admin/css/dark-black.css" rel="stylesheet">

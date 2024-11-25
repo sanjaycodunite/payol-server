@@ -1,15 +1,19 @@
-.wait-loader1 {
+#wait-loader {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 9999;
-    /* Ensure it appears on top of other elements */
-    background-color: rgba(255, 255, 255, 0.7);
-    /* Optional semi-transparent background */
+    z-index: 9999; /* Ensure it appears on top of other elements */
+    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent background */
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100vw;
-    height: 100vh;
+    width: 100%; /* Cover full viewport width */
+    height: 100%; /* Cover full viewport height */
+    pointer-events: none; /* Prevent interaction with elements beneath */
+}
+
+.aeps3FormDiv
+{
+    position:relative;
 }

@@ -2989,114 +2989,12 @@ $(document).ready(function () {
 });
 
 /**Activate AEPS 3  */
-// $(document).ready(function () {
-//   $(".aeps3btn").click(function (e) {
-//     e.preventDefault();
-
-//     var siteUrl = $("#siteUrl").val();
-//     var formData = new FormData($("#aeps3_form")[0]); // Collect form data, including files
-
-//     // Show loader before sending AJAX request
-//     $('#loader').show();
-
-//     $.ajax({
-//       type: "POST",
-//       url: siteUrl + "retailer/iciciaeps/activeAuth",
-//       data: formData,
-//       dataType: "json",
-//       processData: false,
-//       cache: false,
-//       contentType: false,
-//       success: function (response) {
-
-//         $('#loader').hide();
-//         $('.error').html('');
-//         $('#benAlert').removeClass('show').addClass('hide').html('');
-
-//         if (response.error && response.errors) {
-//           $.each(response.errors, function (key, messages) {
-//             if (Array.isArray(messages)) {
-//               // Display array of error messages
-//               var errorMessages = messages.join('<br>');
-//               $('#' + key + '_error').html(errorMessages);
-//             } else if (messages) {
-//               // Display single error message
-//               $('#' + key + '_error').html(messages);
-//             }
-//           });
-//         }
-
-//         // Handle image-specific validation errors
-//         if (response.error && response.errors.imageErrors) {
-//           console.log(response.errors.imageErrors);
-
-//           $.each(response.imageErrors, function (key, messages) {
-//             if (Array.isArray(messages) && messages.length > 0) {
-//               // Join array of error messages into a single string with line breaks
-//               var errorMessages = messages.join('<br>');
-//               $('#' + key + '_error').html(errorMessages);
-//             } else if (typeof messages === "string") {
-//               // If a single string message is provided
-//               $('#' + key + '_error').html(messages);
-//             } else {
-//               // Handle unexpected error message format
-//               console.error(`Unexpected error format for ${key}:`, messages);
-//             }
-//           });
-//         }
-
-//         // Handle general errors
-//         if (response.error && !response.errors && !response.imageErrors) {
-//           $('#benAlert')
-//             .removeClass('hide alert-success')
-//             .addClass('show alert-danger')
-//             .html(`<b><strong>Error:</strong> ${response.dataval}</b>`);
-
-//           setTimeout(function () {
-//             $('#benAlert').removeClass('show').addClass('hide').empty();
-//           }, 5000);
-//         }
-
-//         // Handle success
-//         if (!response.error) {
-//           if (response.redirectUrl) {
-//             // Redirect if a URL is provided
-//             window.location.href = response.redirectUrl;
-//           } else {
-//             // Display success data
-//             $("#account_holder_name").val(response.account_holder_name);
-//             $("#bankModal").modal("show");
-//             $("#bankResponse").html(response.dataval);
-
-//             setTimeout(function () {
-//               $('#benAlert').removeClass('show').addClass('hide').empty();
-//             }, 3000);
-//           }
-//         }
-//       },
-//       error: function (xhr, status, error) {
-//         // Handle AJAX errors
-//         $('#loader').hide();
-//         console.error("AJAX error: " + error);
-//         $('#benAlert')
-//           .removeClass('hide')
-//           .addClass('show')
-//           .html("An error occurred. Please try again.");
-//       }
-//     });
-//   });
-// });
-
 $(document).ready(function () {
   $(".aeps3btn").click(function (e) {
     e.preventDefault();
-
     var siteUrl = $("#siteUrl").val();
     var formData = new FormData($("#aeps3_form")[0]); // Collect form data, including files
-
-    // Show loader before sending AJAX request
-    $('#loader').show();
-
+    toggleWaitLoader(true);
     $.ajax({
       type: "POST",
       url: siteUrl + "retailer/iciciaeps/activeAuth",
@@ -3107,11 +3005,10 @@ $(document).ready(function () {
       contentType: false,
       success: function (response) {
         // Hide loader
-        $('#loader').hide();
-
+        toggleWaitLoader(false);
         // Reset error messages
         $('.error').html('');
-        $('#benAlert').removeClass('show alert-danger alert-success').addClass('hide').html('');
+        $('#aeps3Alert').removeClass('show alert-danger alert-success').addClass('hide').html('');
 
         if (response.error) {
           // Display validation errors
@@ -3125,6 +3022,17 @@ $(document).ready(function () {
             });
           }
 
+          if (response.error && response.auth_errors) {
+            $('#aeps3Alert').focus();
+            $('#aeps3Alert')
+              .removeClass('hide alert-success')
+              .addClass('show alert-danger')
+              .html(`<b><strong>Error:</strong> ${response.auth_errors}</b>`);
+            setTimeout(function () {
+              $('#aeps3Alert').removeClass('show').addClass('hide').empty();
+            }, 5000);
+          }
+
           // Display image-specific validation errors
           if (response.error && response.imageErrors) {
             $.each(response.imageErrors, function (key, messages) {
@@ -3135,37 +3043,34 @@ $(document).ready(function () {
               }
             });
           }
-
-          // Handle generic error
-          if (!response.errors && !response.imageErrors) {
-            $('#benAlert')
+        } else {
+          if (response.after_api_error) {
+            $('#aeps3Alert').focus();
+            $('#aeps3Alert')
               .removeClass('hide alert-success')
               .addClass('show alert-danger')
               .html(`<b><strong>Error:</strong> ${response.dataval}</b>`);
             setTimeout(function () {
-              $('#benAlert').removeClass('show').addClass('hide').empty();
+              $('#aeps3Alert').removeClass('show').addClass('hide').empty();
             }, 5000);
-          }
-        } else {
-          // Handle success case
-          if (response.redirectUrl) {
-            window.location.href = response.redirectUrl;
-          } else {
-            $("#account_holder_name").val(response.account_holder_name);
-            $("#bankModal").modal("show");
-            $("#bankResponse").html(response.dataval);
 
+          } else {
+            $('#aeps3Alert').focus();
+            $('#aeps3Alert')
+              .addClass('hide alert-success')
+              .removeClass('show alert-danger')
+              .html(`<b><strong>Success:</strong> ${response.dataval}</b>`);
             setTimeout(function () {
-              $('#benAlert').removeClass('show').addClass('hide').empty();
-            }, 3000);
+              $('#aeps3Alert').removeClass('show').addClass('hide').empty();
+              window.location.href = response.redirectUrl;
+            }, 5000);
           }
         }
       },
       error: function (xhr, status, error) {
-        // Hide loader and show error
-        $('#loader').hide();
+        toggleWaitLoader(false);
         console.error("AJAX error: " + error);
-        $('#benAlert')
+        $('#aeps3Alert')
           .removeClass('hide alert-success')
           .addClass('show alert-danger')
           .html("An error occurred. Please try again.");

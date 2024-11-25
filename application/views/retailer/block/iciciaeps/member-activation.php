@@ -2,14 +2,26 @@
 <div class="card shadow">
     <div class="card-header py-3">
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-12">
                 <h4><b>Activate ICICI AEPS</b></h4>
+            </div>
+            <div class="row">
+                <div id="wait-loader" style="display:none;">
+                    <img src="{site_url}skin/admin/images/loading-wait.gif" alt="Loading...">
+                </div>
             </div>
             <form id="aeps3_form" enctype="multipart/form-data" name="aeps3_form">
                 <div class="card-body">
                     <input type="hidden" value="<?php echo $site_url; ?>" id="siteUrl"> <input type="hidden"
                         value="<?php echo $memberID; ?>" name="memberID">
-                    <div class="row">
+                    <div class="row" id="aeps3FormDiv">
+                        <div class="alert alert-danger alert-dismissible fade text-center col-sm-12 col-md-12 col-xsm-12"
+                            role="alert" id="aeps3Alert" tabindex="0">
+                            <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                         <div class="col-md-12 col-sm-12">
                             <h5>Personal Detail</h5>
                             <hr>
@@ -46,18 +58,16 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Father Name.*</b></label> <input type="text"
-                                    class="form-control only-alphabet-allowed first-char-capitalize" name="father_name"
-                                    id="father_name" placeholder="Father Name."
-                                    value="<?php echo set_value('father_name'); ?>">
+                                    class="form-control first-char-capitalize" name="father_name" id="father_name"
+                                    placeholder="Father Name." value="<?php echo set_value('father_name'); ?>">
                                 <div class="error" id="father_name_error"></div>
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Mother Name.*</b></label> <input type="text"
-                                    class="form-control only-alphabet-allowed first-char-capitalize" name="mother_name"
-                                    id="mother_name" placeholder="Mother Name."
-                                    value="<?php echo set_value('mother_name'); ?>">
+                                    class="form-control first-char-capitalize" name="mother_name" id="mother_name"
+                                    placeholder="Mother Name." value="<?php echo set_value('mother_name'); ?>">
                                 <div class="error" id="mother_name_error"></div>
                             </div>
                         </div>
@@ -94,7 +104,7 @@
                         </div>
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
-                                <label><b>Email Address*</b></label> <input type="text" class="form-control" id="email"
+                                <label><b>Email Address*</b></label> <input type="email" class="form-control" id="email"
                                     name="email" placeholder="Email" value="<?php echo set_value('email'); ?>">
                                 <div class="error" id="email_error"></div>
                             </div>
@@ -102,7 +112,7 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Aadhar No.*</b></label> <input type="text"
-                                    class="form-control only-number-allowed" name="aadhar_no" id="aadhar_no"
+                                    class="form-control only-number-allowed" name="aadhar" id="aadhar"
                                     placeholder="Aadhar No." value="<?php echo set_value('aadhar_no'); ?>">
                                 <div class="error" id="aadhar_no_error"></div>
                             </div>
@@ -110,9 +120,8 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Pancard No.*</b></label> <input type="text"
-                                    class="form-control only-alphabet-number-allowed pancard_no" name="pancard_no"
-                                    id="pancard_no" placeholder="Pancard No."
-                                    value="<?php echo set_value('pancard_no'); ?>">
+                                    class="form-control only-alphabet-number-allowed" name="pancard_no" id="pancard_no"
+                                    placeholder="Pancard No." value="<?php echo set_value('pancard_no'); ?>">
                                 <div class="error" id="pancard_no_error"></div>
                             </div>
                         </div>
@@ -158,8 +167,8 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Block*</b></label> <input type="text"
-                                    class="form-control only-alphabet-allowed first-char-capitalize" name="block"
-                                    id="block" placeholder="Block" value="<?php echo set_value('block'); ?>">
+                                    class="form-control first-char-capitalize" name="block" id="block"
+                                    placeholder="Block" value="<?php echo set_value('block'); ?>">
                                 <div class="error" id="block_error"></div>
                             </div>
                         </div>
@@ -199,16 +208,15 @@
                                 <label><b>PIN Code*</b></label> <input type="text"
                                     class="form-control only-number-allowed" name="pin_code" id="pin_code"
                                     placeholder="PIN Code" value="<?php echo set_value('pin_code'); ?>">
-                                <div class="error" id="pin_code_error"></div>
+                                <div class="error" id="pin_code_error" max_length="6" min_length="6"></div>
                             </div>
                         </div>
                         <div class="col-md-12 col-sm-12">
                             <div class="form-group">
                                 <label><b>Adharcard Back Side Address*</b></label> <input type="text"
-                                    class="form-control alpha-first-cap-num-sp-chars" name="adhar_back_address"
-                                    id="adhar_back_address" placeholder="Adharcard Back Address"
-                                    value="<?php echo set_value('adhar_back_address'); ?>">
-                                <div class="error" id="adhar_back_address_error"></div>
+                                    class="form-control alpha-first-cap-num-sp-chars" name="address" id="address"
+                                    placeholder="Adharcard Back Address" value="<?php echo set_value('address'); ?>">
+                                <div class="error" id="address_error"></div>
                             </div>
                         </div>
                         <div class="col-sm-12">
@@ -266,7 +274,7 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Shop/Business Address*</b></label> <input type="text"
-                                    class="form-control alpha-first-cap-num-sp-chars" id="shop_business_address"
+                                    class="form-control alpha-first-cap-num-sp-chars" id=" shop_business_address"
                                     name="shop_business_address" placeholder="Shop/Business Address"
                                     value="<?php echo set_value('shop_business_address'); ?>">
                                 <div class="error" id="shop_business_address_error"></div>
@@ -280,7 +288,8 @@
                                     <option value="Retailer" <?php echo set_select('business_type', 'Retailer'); ?>>
                                         Retailer</option>
                                     <option value="Distributor"
-                                        <?php echo set_select('business_type', 'Distributor'); ?>>Distributor</option>
+                                        <?php echo set_select('business_type', 'Distributor'); ?>>
+                                        Distributor</option>
                                     <option value="Other" <?php echo set_select('business_type', 'Other'); ?>>Other
                                     </option>
                                 </select>

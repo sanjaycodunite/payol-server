@@ -134,8 +134,18 @@ class Iciciaeps extends CI_Controller {
 
 		$response = [];
 		$validationErrors = [];
-		$this->load->library('form_validation');
 
+		// $activeService = $this->User->account_active_service($loggedUser['id']);
+		// if(!in_array(19, $activeService)){
+		// 	$response = [
+		// 		'error' => true,
+		// 		'auth_errors' => 'Sorry ! You are not authorized to access this page.'.$activeService
+		// 	];
+		// 	echo json_encode($response);
+		// 	return;;
+		// }
+
+		$this->load->library('form_validation');
 		// Set validation rules for fields
 		$this->form_validation->set_rules('first_name', 'First Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
 		$this->form_validation->set_rules('middle_name', 'Middle Name', 'trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
@@ -148,9 +158,9 @@ class Iciciaeps extends CI_Controller {
 		$this->form_validation->set_rules('aadhar_no', 'Aadhar No', 'required|trim|xss_clean|numeric|min_length[12]|max_length[12]');
 		$this->form_validation->set_rules('pancard_no', 'Pancard No', 'required|xss_clean|min_length[10]|max_length[10]|regex_match[/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/]');
 		$this->form_validation->set_rules('street_locality', 'Street/Locality', 'required|trim|xss_clean');
-		$this->form_validation->set_rules('adhar_back_address', 'Aadhar Card Back Address', 'required|trim|xss_clean');
+		$this->form_validation->set_rules('address', 'Aadhar Card Back Address', 'required|trim|xss_clean');
 		$this->form_validation->set_rules('shop_business_name', 'Shop/Business Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-		$this->form_validation->set_rules('shop_business_address', 'Shop/Business Address', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('shop_business_address', 'Shop/Business Address', 'required|trim|xss_clean');
 		$this->form_validation->set_rules('business_type', 'Business Type', 'required|xss_clean');
 		$this->form_validation->set_rules('selState', 'State', 'required|xss_clean');
 		$this->form_validation->set_rules('city_id', 'City', 'required|xss_clean');
@@ -169,12 +179,12 @@ class Iciciaeps extends CI_Controller {
 
 		// File validation rules
 		$files = [
-			'aadharfront_photo' => true, // Required
-			'aadharback_photo' => true, // Required
-			'pancard_photo' => true, // Required
-			'user_photo' => true, // Required
-			'bps_photo' => false, // Optional
-			'shop_photo' => false  // Optional
+			'aadharfront_photo' => true,
+			'aadharback_photo' => true,
+			'pancard_photo' => true,
+			'user_photo' => true,
+			'bps_photo' => false,
+			'shop_photo' => false
 		];
 
 		$allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
@@ -210,40 +220,43 @@ class Iciciaeps extends CI_Controller {
 			];
 			echo json_encode($response);
 			return;
-		}
+		}else{
+			// File upload logic
+			$uploadedFiles = [];
+			foreach (array_keys($files) as $fileField) {
+				$uploadedFiles[$fileField] = $this->_upload_file($fileField);
+				if (!$uploadedFiles[$fileField] && $files[$fileField]) {
+					// If a required file fails to upload
+					$response = [
+						'error' => true,
+						'dataval' => ucfirst(str_replace('_', ' ', $fileField)) . " upload failed."
+					];
+					echo json_encode($response);
+					return;
+				}
+			}
 
-		// File upload logic
-		$uploadedFiles = [];
-		foreach (array_keys($files) as $fileField) {
-			$uploadedFiles[$fileField] = $this->_upload_file($fileField);
-			if (!$uploadedFiles[$fileField] && $files[$fileField]) {
-				// If a required file fails to upload
+			// Proceed with activation process
+			$response = $this->IciciAeps_model->activeAEPSMember($post, ...array_values($uploadedFiles));
+			if ($response['status'] == 1) {
 				$response = [
-					'error' => true,
-					'dataval' => ucfirst(str_replace('_', ' ', $fileField)) . " upload failed."
+					'after_api_error' => false,
+					'dataval' => 'We have sent OTP to your registered mobile, please verify.',
+					'redirectUrl' => 'retailer/iciciaeps/otpVerify/' . $response['otpReferenceID']
+				];
+				echo json_encode($response);
+				return;
+			} else {
+				$response = [
+					'after_api_error' => true,
+					'dataval' => 'Activation failed: ' . $response['msg'],
+					'redirectUrl' => 'retailer/iciciaeps/activeAeps'
 				];
 				echo json_encode($response);
 				return;
 			}
-		}
 
-		// Proceed with activation process
-		$response = $this->IciciAeps_model->activeAEPSMember($post, ...array_values($uploadedFiles));
-		if ($response['status'] == 1) {
-			$response = [
-				'error' => false,
-				'dataval' => 'We have sent OTP to your registered mobile, please verify.',
-				'redirectUrl' => 'retailer/iciciaeps/otpVerify/' . $response['otpReferenceID']
-			];
-		} else {
-			$response = [
-				'error' => true,
-				'dataval' => 'Activation failed: ' . $response['msg'],
-				'redirectUrl' => 'retailer/iciciaeps/activeAeps'
-			];
 		}
-
-		echo json_encode($response);
 	}
 
 
@@ -297,8 +310,6 @@ class Iciciaeps extends CI_Controller {
             'content_block' => 'iciciaeps/otp-verify'
         );
         $this->parser->parse('retailer/layout/column-1' , $data);
-
-
 	}
 
 	// save member
