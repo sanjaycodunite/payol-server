@@ -130,9 +130,10 @@
                         </div>
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
-                                <label><b>Village*</b></label> <input type="text"
+                                <label><b>Village/Place*</b></label> <input type="text"
                                     class="form-control alpha-single-space first-char-capitalize" name="village"
-                                    id="village" placeholder="Village" value="<?php echo set_value('village'); ?>">
+                                    id="village" placeholder="Village/Place"
+                                    value="<?php echo set_value('village'); ?>">
                                 <div class="error" id="village_error"></div>
                             </div>
                         </div>
