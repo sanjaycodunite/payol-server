@@ -177,18 +177,18 @@ class Iciciaeps extends CI_Controller {
 
 		$this->form_validation->set_rules('mobile', 'Mobile', 'required|trim|xss_clean|numeric|min_length[10]|max_length[10]|regex_match[/^[6789]\d{9}$/]');
 
-		// File validation rules
 		$files = [
 			'aadharfront_photo' => true,
-			'aadharback_photo' => true,
-			'pancard_photo' => true,
-			'user_photo' => true,
-			'bps_photo' => false,
-			'shop_photo' => false
+			'aadharback_photo'  => true,
+			'pancard_photo'     => true,
+			'user_photo'        => true,
+			'bps_photo'         => false,
+			'shop_photo'        => false,
 		];
 
 		$allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 		$maxSizeKB = 2048; // 2 MB
+		$validationErrors = []; // Initialize validation errors array
 
 		foreach ($files as $fileField => $isRequired) {
 			if (!empty($_FILES[$fileField]['name'])) {
@@ -198,12 +198,14 @@ class Iciciaeps extends CI_Controller {
 
 				// Validate file type
 				if (!in_array($fileType, $allowedTypes)) {
-					$validationErrors[$fileField][] = ucfirst(str_replace('_', ' ', $fileField)) . " must be a valid image file (jpg, jpeg, png).";
+					$validationErrors[$fileField][] = ucfirst(str_replace('_', ' ', $fileField)) .
+						" must be a valid image file (jpg, jpeg, png).";
 				}
 
 				// Validate file size
 				if ($fileSize > $maxSizeKB * 1024) {
-					$validationErrors[$fileField][] = ucfirst(str_replace('_', ' ', $fileField)) . " must not exceed {$maxSizeKB} KB.";
+					$validationErrors[$fileField][] = ucfirst(str_replace('_', ' ', $fileField)) .
+						" must not exceed {$maxSizeKB} KB.";
 				}
 			} elseif ($isRequired) {
 				// If file is required but not uploaded
@@ -218,19 +220,25 @@ class Iciciaeps extends CI_Controller {
 				'errors' => $this->form_validation->error_array(),
 				'imageErrors' => $validationErrors
 			];
+			log_message('debug', ' activeAuth Incici Api Response Data - ' . json_encode($response));
+			log_message('debug', ' activeAuth Post Response Data - ' . json_encode($post));
+
 			echo json_encode($response);
 			return;
 		}else{
-			// File upload logic
+
 			$uploadedFiles = [];
-			foreach (array_keys($files) as $fileField) {
+			foreach ($files as $fileField => $isRequired) {
 				$uploadedFiles[$fileField] = $this->_upload_file($fileField);
-				if (!$uploadedFiles[$fileField] && $files[$fileField]) {
-					// If a required file fails to upload
+
+				// Check if a required file fails to upload
+				if ($isRequired && !$uploadedFiles[$fileField]) {
 					$response = [
-						'error' => true,
-						'dataval' => ucfirst(str_replace('_', ' ', $fileField)) . " upload failed."
+						'error'   => true,
+						'dataval' => ucfirst(str_replace('_', ' ', $fileField)) . " upload failed.",
 					];
+
+					log_message('debug', 'activeAuth Post Image Docs Response Data - ' . json_encode($response));
 					echo json_encode($response);
 					return;
 				}
@@ -240,22 +248,25 @@ class Iciciaeps extends CI_Controller {
 			$response = $this->IciciAeps_model->activeAEPSMember($post, ...array_values($uploadedFiles));
 			if ($response['status'] == 1) {
 				$response = [
-					'after_api_error' => false,
+					'error'   => false,
+					'is_api_error' => false,
 					'dataval' => 'We have sent OTP to your registered mobile, please verify.',
 					'redirectUrl' => 'retailer/iciciaeps/otpVerify/' . $response['otpReferenceID']
 				];
+				log_message('debug', ' activeAuth API Success Response Data - ' . json_encode($response));
 				echo json_encode($response);
 				return;
 			} else {
 				$response = [
-					'after_api_error' => true,
+					'error'   => true,
+					'is_api_error' => true,
 					'dataval' => 'Activation failed: ' . $response['msg'],
 					'redirectUrl' => 'retailer/iciciaeps/activeAeps'
 				];
+				log_message('debug', ' activeAuth API Response Data - ' . json_encode($response));
 				echo json_encode($response);
 				return;
 			}
-
 		}
 	}
 
@@ -1536,53 +1547,26 @@ class Iciciaeps extends CI_Controller {
 
 		echo json_encode($response);
 	}
-	public function __validate_image($str)
-	{
-
-		// Check if a file is uploaded for this field
-		if (isset($_FILES[$str]) && $_FILES[$str]['name']) {
-			// Get the file's MIME type using fileinfo extension
-			$fileType = mime_content_type($_FILES[$str]['tmp_name']);
-
-			// Allowed MIME types for image files (can be customized)
-			$allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-
-			// Validate if the uploaded file is an image
-			if (!in_array($fileType, $allowedTypes)) {
-				$this->form_validation->set_message('__validate_image', 'The {field} must be a valid image file (jpg, jpeg, png).');
-				return false;
-			}
-
-			// Validate the file size (if necessary)
-			$maxSize = 2048; // Max size in KB
-			if ($_FILES[$str]['size'] > $maxSize * 1024) {
-				$this->form_validation->set_message('__validate_image', 'The {field} must not exceed ' . $maxSize . ' KB.');
-				return false;
-			}
-
-			// If validation passes, return true
-			return true;
-		}
-
-		// If no file is uploaded for this field, return true (this allows for optional fields)
-		return true;
-	}
-
 	// Helper function to handle file uploads
-	public function  _upload_file($fieldName)
+	public function _upload_file($fieldName)
 	{
-		$config['upload_path'] = './media/aeps_kyc_doc/';
-		$config['allowed_types'] = 'jpg|jpeg|png';
-		$config['max_size'] = 2048;  // 2MB max size
-		$config['file_name'] = time() . rand(111111, 999999);
+		$uploadPath = 'media/aeps_kyc_doc/';
+		$config = [
+			'upload_path'   => $uploadPath,
+			'allowed_types' => 'jpg|jpeg|png|JPEG',
+			'max_size'      => 2048,
+			'file_name'     => time() . rand(111111, 999999),
+		];
 
 		$this->load->library('upload', $config);
 
 		if (!$this->upload->do_upload($fieldName)) {
-			log_message('error', 'AEPS 3 Document File Upload Error: ' . $uploadError);
+			$uploadError = $this->upload->display_errors();
+			log_message('error', 'File Upload Error for ' . $fieldName . ': ' . $uploadError);
 			return false;
 		}
-		// Return the file name if upload is successful
-		return $this->upload->data('file_name');
+		$uploadedFileName = $this->upload->data('file_name');
+		return $uploadPath . $uploadedFileName;
 	}
+
 }

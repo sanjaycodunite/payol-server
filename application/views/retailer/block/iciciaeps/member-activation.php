@@ -112,7 +112,7 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                                 <label><b>Aadhar No.*</b></label> <input type="text"
-                                    class="form-control only-number-allowed" name="aadhar" id="aadhar"
+                                    class="form-control only-number-allowed" name="aadhar_no" id="aadhar_no"
                                     placeholder="Aadhar No." value="<?php echo set_value('aadhar_no'); ?>">
                                 <div class="error" id="aadhar_no_error"></div>
                             </div>

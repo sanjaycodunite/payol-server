@@ -31,9 +31,9 @@ class IciciAeps_model extends CI_Model {
         $lat = isset($googleResponse['lat']) ? $googleResponse['lat'] : '';
         $lng = isset($googleResponse['lng']) ? $googleResponse['lng'] : '';
 
-        $data = array(
-            'account_id'         => $account_id ?? null,
-            'member_id'          => $memberID ?? null,
+        $wallet_data = array(
+            'account_id'          => $account_id ?? null,
+            'member_id'           => $memberID ?? null,
             'first_name'          => $post['first_name'] ?? null,
             'middle_name'         => $post['middle_name'] ?? null,
             'last_name'           => $post['last_name'] ?? null,
@@ -42,20 +42,21 @@ class IciciAeps_model extends CI_Model {
             'person_dob'          => $post['person_dob'] ?? null,
             'gender'              => $post['gender'] ?? null,
             'email'               => $post['email'] ?? null,
-            'aadhar'              => $post['aadhar'] ?? null,
+            'aadhar'              => $post['aadhar_no'] ?? null,
             'status'              => $post['status'] ?? 0,
             'is_otp_verify'       => 0,
             'api_response'        => 0,
             'otpReferenceID'      => $post['otpReferenceID'] ?? null,
             'hash'                => $post['hash'] ?? null,
             'aadhar_data'         => $post['aadhar'] ?? null,
-            'pancard'             => $post['pancard'] ?? null,
+            'adhar_back_address'  => $post['address'] ?? null,
+            'pancard'             => $post['pancard_no'] ?? null,
             'street_locality'     => $post['street_locality'] ?? null,
             'address'             => $post['address'] ?? null,
             'shop_name'           => $post['shop_business_name'] ?? null,
             'shop_business_address'=> $post['shop_business_address'] ?? null,
             'business_type'       => $post['business_type'] ?? null,
-            'state_id'            => $post['state_id'] ?? null,
+            'state_id'            => $post['selState'] ?? null,
             'city_id'             => $post['city_id'] ?? null,
             'pin_code'            => $post['pin_code'] ?? null,
             'village'             => $post['village'] ?? null,
@@ -76,20 +77,44 @@ class IciciAeps_model extends CI_Model {
             'user_photo'          => $user_photo ?? null,
             'bps_photo'           => $bps_photo ?? null,
             'shop_photo'          => $shop_photo ?? null,
-            'created_at'          => date('Y-m-d H:i:s'),
+            'created'             => date('Y-m-d H:i:s'),
             'created_by'          => $loggedUser['id'],
         );
 
+        $conditions = [
+            'account_id' => $account_id,
+            'member_id'  => $memberID,
+            'mobile'     => $post['mobile'],
+        ];
 
-        $this->db->insert('instantpay_ekyc',$wallet_data);
-        $recordID = $this->db->insert_id();
+        $this->db->where($conditions);
+        $query = $this->db->get('instantpay_ekyc');
+
+        if ($query->num_rows() > 0) {
+            // Update if the record exists
+            $this->db->where($conditions);
+            if ($this->db->update('instantpay_ekyc', $wallet_data)) {
+                $recordID = $this->db->get_where('instantpay_ekyc', $conditions)->row()->id;
+                log_message('debug', 'tbl_instantpay_ekyc Data updating inside the table ID - ' . json_encode($recordID));
+            } else {
+                log_message('error', 'tbl_instantpay_ekyc Data Update failed: ' . $this->db->last_query());
+            }
+        } else {
+            // Insert if the record does not exist
+            if ($this->db->insert('instantpay_ekyc', $wallet_data)) {
+                $recordID = $this->db->insert_id();
+                log_message('debug', 'tbl_instantpay_ekyc Data inserting inside the table ID - ' . json_encode($recordID));
+            } else {
+                log_message('error', 'Insert failed: ' . $this->db->last_query());
+            }
+        }
 
         $memberData = $this->db->get_where('users',array('id'=>$memberID))->row_array();
         $member_code = $memberData['user_code'];
         $member_pin = $memberData['decoded_transaction_password'];
         $member_email = $memberData['email'];
         // get state name
-        $get_state_name = $this->db->get_where('aeps_state',array('id'=>$post['state_id']))->row_array();
+        $get_state_name = $this->db->get_where('aeps_state',array('id'=>$post['selState']))->row_array();
         $state_name = isset($get_state_name['state']) ? $get_state_name['state'] : '';
 
         // get city name
@@ -169,7 +194,7 @@ class IciciAeps_model extends CI_Model {
             'created_by' => 1
         );
         $this->db->insert('instantpay_api_response',$apiData);
-
+        log_message('debug', ' instantpay_api_response Data insertinging inside the table ID - ' . json_encode($apiData));
         if(isset($responseData['statuscode']) && $responseData['statuscode'] == 'TXN' && $responseData['status'] == 'Transaction Successful')
         {
             $otpReferenceID =  $responseData['data']['otpReferenceID'];
@@ -177,7 +202,10 @@ class IciciAeps_model extends CI_Model {
             $this->db->where('id',$recordID);
             $this->db->update('instantpay_ekyc',array('is_otp_verify'=>0,'otpReferenceID'=>$otpReferenceID,'hash'=>$hash));
             return array('status'=>1,'msg'=>$responseData['status'],'otpReferenceID'=>$otpReferenceID);
+           log_message('debug', ' instantpay_ekyc table data update when api success  - ' . json_encode($apiData));
+
         }else{
+            log_message('debug', ' instantpay_ekyc table data when api failed  - ' . json_encode(array('status'=>0,'msg'=>$responseData['status'])));
             return array('status'=>0,'msg'=>$responseData['status']);
         }
     }

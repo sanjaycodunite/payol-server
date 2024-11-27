@@ -3044,7 +3044,7 @@ $(document).ready(function () {
             });
           }
         } else {
-          if (response.after_api_error) {
+          if (response.is_api_error) {
             $('#aeps3Alert').focus();
             $('#aeps3Alert')
               .removeClass('hide alert-success')
