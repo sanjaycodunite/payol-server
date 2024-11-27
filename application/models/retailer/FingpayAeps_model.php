@@ -3,15 +3,6 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-/*
- * Model used for setup default message and resize image
- *
- * This one used for defined some methods accross all site.
- * this one used for show system message, errors.
- * this one used for image resizing
- * @author trilok
- */
-
 require_once BASEPATH . '/core/Model.php';
 
 class FingpayAeps_model extends CI_Model
@@ -99,13 +90,12 @@ class FingpayAeps_model extends CI_Model
             return false;
         }
     }
-
-    public function activeAEPSMember($post, $aadhar_photo, $pancard_photo, $memberID)
+    public function activeAEPSMember($post, $aadhar_photo, $aadhar_back_photo, $pancard_photo, $user_photo, $bps_photo = null, $shop_photo = null)
     {
         $account_id = $this->User->get_domain_account();
         $accountData = $this->User->get_account_data($account_id);
 
-        $memberData = $this->db->get_where('users', ['id' => $memberID])->row_array();
+        $memberData = $this->db->get_where('users', ['id' => $post['memberID']])->row_array();
         $member_code = $memberData['user_code'];
         $member_pin = 123456;
         $member_email = $memberData['email'];
@@ -115,37 +105,95 @@ class FingpayAeps_model extends CI_Model
         $lat = isset($googleResponse['lat']) ? $googleResponse['lat'] : '';
         $lng = isset($googleResponse['lng']) ? $googleResponse['lng'] : '';
 
-        $wallet_data = [
-            'account_id'    => $account_id,
-            'member_id'     => $memberID,
-            'first_name'    => $post['first_name'],
-            'last_name'     => $post['last_name'],
-            'mobile'        => $post['mobile'],
-            'shop_name'     => $post['shop_name'],
-            'state_id'      => $post['state_id'],
-            'city_id'       => $post['city_id'],
-            'address'       => $post['address'],
-            'pin_code'      => $post['pin_code'],
-            'aadhar_no'     => $post['aadhar_no'],
-            'pancard_no'    => $post['pancard_no'],
-            'aadhar_photo'  => $aadhar_photo,
-            'pancard_photo' => $pancard_photo,
-            'member_code'   => $member_code,
-            'member_pin'    => $member_pin,
-            'member_email'  => $member_email,
-            'is_api_member' => 0,
-            'status'        => 0,
-            'lat'           => $lat,
-            'lng'           => $lng,
-            'created'       => date('Y-m-d H:i:s'),
-            'created_by'    => $memberID,
+        $wallet_data = array(
+            'account_id'          => $account_id ?? null,
+            'member_id'           => $post['memberID'] ?? null,
+            'first_name'          => $post['first_name'] ?? null,
+            'middle_name'         => $post['middle_name'] ?? null,
+            'last_name'           => $post['last_name'] ?? null,
+            'father_name'         => $post['father_name'] ?? null,
+            'mother_name'         => $post['mother_name'] ?? null,
+            'person_dob'          => $post['person_dob'] ?? null,
+            'gender'              => $post['gender'] ?? null,
+            'email'               => $post['email'] ?? null,
+            'aadhar_no'           => $post['aadhar_no'] ?? null,
+            'status'              => $post['status'] ?? 0,
+            'is_otp_verify'       => 0,
+            'api_response'        => 0,
+            'otpReferenceID'      => $post['otpReferenceID'] ?? null,
+            'hash'                => $post['hash'] ?? null,
+            'aadhar_data'         => $post['aadhar'] ?? null,
+            'adhar_back_address'  => $post['address'] ?? null,
+            'pancard_no'             => $post['pancard_no'] ?? null,
+            'street_locality'     => $post['street_locality'] ?? null,
+            'address'             => $post['address'] ?? null,
+            'shop_name'           => $post['shop_business_name'] ?? null,
+            'shop_business_address'=> $post['shop_business_address'] ?? null,
+            'business_type'       => $post['business_type'] ?? null,
+            'state_id'            => $post['selState'] ?? null,
+            'city_id'             => $post['city_id'] ?? null,
+            'pin_code'            => $post['pin_code'] ?? null,
+            'village'             => $post['village'] ?? null,
+            'post'                => $post['post_office'] ?? null,
+            'police_station'      => $post['police_station'] ?? null,
+            'block'               => $post['block'] ?? null,
+            'district'            => $post['district'] ?? null,
+            'bank_name'           => $post['bank_name'] ?? null,
+            'bank_branch_name'    => $post['bank_branch_name'] ?? null,
+            'account_no'          => $post['account_no'] ?? null,
+            'bank_ifsc'           => $post['bank_ifsc'] ?? null,
+            'latitudes'           => $lat ?? null,
+            'longitudes'          => $lng ?? null,
+            'mobile'              => $post['mobile'] ?? null,
+            'aadhar_photo'        => $aadhar_photo ?? null,
+            'aadhar_back_photo'   => $aadhar_back_photo ?? null,
+            'pancard_photo'       => $pancard_photo ?? null,
+            'user_photo'          => $user_photo ?? null,
+            'bps_photo'           => $bps_photo ?? null,
+            'shop_photo'          => $shop_photo ?? null,
+            'member_code'         => $member_code,
+            'member_pin'          => $member_pin,
+            'member_email'        => $member_email,
+            'is_api_member'       => 0,
+            'status'              => 0,
+            'lat'                 => $lat,
+            'lng'                 => $lng,
+            'created'             => date('Y-m-d H:i:s'),
+            'created_by'          => $post['memberID'],
+        );
+
+        $conditions = [
+            'account_id' => $account_id,
+            'member_id'  => $memberID,
+            'mobile'     => $post['mobile'],
         ];
+        $this->db->where($conditions);
+        $query = $this->db->get('fingpay_aeps_member_kyc');
+
+        if ($query->num_rows() > 0) {
+            // Update if the record exists
+            $this->db->where($conditions);
+            if ($this->db->update('fingpay_aeps_member_kyc', $wallet_data)) {
+                $recordID = $this->db->get_where('fingpay_aeps_member_kyc', $conditions)->row()->id;
+                log_message('debug', 'tbl_fingpay_aeps_member_kyc Data updating inside the table ID - ' . json_encode($recordID));
+            } else {
+                log_message('error', 'tbl_fingpay_aeps_member_kyc Data Update failed: ' . $this->db->last_query());
+            }
+        } else {
+            // Insert if the record does not exist
+            if ($this->db->insert('fingpay_aeps_member_kyc', $wallet_data)) {
+                $recordID = $this->db->insert_id();
+                log_message('debug', 'tbl_fingpay_aeps_member_kyc Data inserting inside the table ID - ' . json_encode($recordID));
+            } else {
+                log_message('error', 'Insert failed: ' . $this->db->last_query());
+            }
+        }
 
         $this->db->insert('fingpay_aeps_member_kyc', $wallet_data);
         $recordID = $this->db->insert_id();
 
         // get state name
-        $get_state_name = $this->db->get_where('aeps_state', ['id' => $post['state_id']])->row_array();
+        $get_state_name = $this->db->get_where('aeps_state', ['id' => $post['selState']])->row_array();
         $state_name = isset($get_state_name['state']) ? $get_state_name['state'] : '';
 
         // get city name
@@ -1918,6 +1966,3 @@ class FingpayAeps_model extends CI_Model
         }
     }
 }
-
-/* end of file: az.php */
-/* Location: ./application/models/az.php */

@@ -2988,7 +2988,7 @@ $(document).ready(function () {
   }
 });
 
-/**Activate AEPS 3  */
+/**Activate ICICI AEPS  */
 $(document).ready(function () {
   $(".aeps3btn").click(function (e) {
     e.preventDefault();
@@ -3079,4 +3079,95 @@ $(document).ready(function () {
   });
 });
 
+/**Activate Activate AEPS 3*/
+$(document).ready(function () {
+  $(".fingpayAeps3btn").click(function (e) {
+    e.preventDefault();
+    var siteUrl = $("#siteUrl").val();
+    var formData = new FormData($("#fingpayAeps_aeps3_form")[0]);
+    toggleWaitLoader(true);
+    $.ajax({
+      type: "POST",
+      url: siteUrl + "retailer/fingpayAeps/activeAuth",
+      data: formData,
+      dataType: "json",
+      processData: false,
+      cache: false,
+      contentType: false,
+      success: function (response) {
+        // Hide loader
+        toggleWaitLoader(false);
+        // Reset error messages
+        $('.error').html('');
+        $('#aeps3Alert').removeClass('show alert-danger alert-success').addClass('hide').html('');
+
+        if (response.error) {
+          // Display validation errors
+          if (response.errors) {
+            $.each(response.errors, function (key, messages) {
+              if (Array.isArray(messages)) {
+                $('#' + key + '_error').html(messages.join('<br>'));
+              } else if (messages) {
+                $('#' + key + '_error').html(messages);
+              }
+            });
+          }
+
+          if (response.error && response.auth_errors) {
+            $('#aeps3Alert').focus();
+            $('#aeps3Alert')
+              .removeClass('hide alert-success')
+              .addClass('show alert-danger')
+              .html(`<b><strong>Error:</strong> ${response.auth_errors}</b>`);
+            setTimeout(function () {
+              $('#aeps3Alert').removeClass('show').addClass('hide').empty();
+            }, 5000);
+          }
+
+          // Display image-specific validation errors
+          if (response.error && response.imageErrors) {
+            $.each(response.imageErrors, function (key, messages) {
+              if (Array.isArray(messages) && messages.length > 0) {
+                $('#' + key + '_error').html(messages.join('<br>'));
+              } else if (typeof messages === "string") {
+                $('#' + key + '_error').html(messages);
+              }
+            });
+          }
+        } else {
+          if (response.is_api_error) {
+            $('#aeps3Alert').focus();
+            $('#aeps3Alert')
+              .removeClass('hide alert-success')
+              .addClass('show alert-danger')
+              .html(`<b><strong>Error:</strong> ${response.dataval}</b>`);
+            setTimeout(function () {
+              $('#aeps3Alert').removeClass('show').addClass('hide').empty();
+            }, 5000);
+
+          } else {
+            $('#aeps3Alert').focus();
+            $('#aeps3Alert')
+              .addClass('hide alert-success')
+              .removeClass('show alert-danger')
+              .html(`<b><strong>Success:</strong> ${response.dataval}</b>`);
+            setTimeout(function () {
+              $('#aeps3Alert').removeClass('show').addClass('hide').empty();
+              $("#fingpayAeps_aeps3_form")[0].reset();
+              window.location.href = response.redirectUrl;
+            }, 5000);
+          }
+        }
+      },
+      error: function (xhr, status, error) {
+        toggleWaitLoader(false);
+        console.error("AJAX error: " + error);
+        $('#aeps3Alert')
+          .removeClass('hide alert-success')
+          .addClass('show alert-danger')
+          .html("An error occurred. Please try again.");
+      }
+    });
+  });
+});
 

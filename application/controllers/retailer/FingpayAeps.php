@@ -112,92 +112,116 @@ class FingpayAeps extends CI_Controller
 
     // save member
     public function activeAuth()
-    {
-        //check for foem validation
-        $post = $this->input->post();
-        $memberID = $post['memberID'];
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules('first_name', 'First Name', 'required|xss_clean');
-        $this->form_validation->set_rules('last_name', 'Last Name', 'required|xss_clean');
-        $this->form_validation->set_rules('mobile', 'Mobile Number', 'required|xss_clean|numeric|max_length[12]');
-        $this->form_validation->set_rules('shop_name', 'Shop Name', 'required|xss_clean');
-        $this->form_validation->set_rules('state_id', 'State', 'required|xss_clean');
-        $this->form_validation->set_rules('city_id', 'City', 'required|xss_clean');
-        $this->form_validation->set_rules('address', 'Address', 'required|xss_clean');
-        $this->form_validation->set_rules('pin_code', 'PIN Code', 'required|xss_clean');
-        $this->form_validation->set_rules('aadhar_no', 'Aadhar No', 'required|xss_clean');
-        $this->form_validation->set_rules('pancard_no', 'Pancard No', 'required|xss_clean');
-        if (!isset($_FILES['aadhar_photo']['name']) || $_FILES['aadhar_photo']['name'] == '') {
-            $this->form_validation->set_rules('aadhar_photo', 'Aadhar Image', 'required|xss_clean');
+	{
+		$post = $this->input->post();
+		$response = [];
+		$validationErrors = [];
+        $uploadedFiles = [];
+        $account_id = $this->User->get_domain_account();
+        $loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
+        $memberID = $loggedUser['id'];
+
+        $activeService = $this->User->account_active_service($memberID);
+        if (!in_array(25, $activeService)) {
+            $response = [
+                'error' => true,
+                'auth_errors' => 'Sorry ! You are not authorized to access this page.'
+            ];
+            echo json_encode($response);
+            return;
         }
-        if (!isset($_FILES['pancard_photo']['name']) || $_FILES['pancard_photo']['name'] == '') {
-            $this->form_validation->set_rules('pancard_photo', 'Pancard Image', 'required|xss_clean');
+
+        $user_aeps_status = $this->User->get_member_fingpay_aeps_status($memberID);
+        if ($user_aeps_status) {
+            $response = [
+                'error' => true,
+                'auth_errors' => 'Sorry ! Fingpay AEPS already activated for this member.'
+            ];
+            echo json_encode($response);
+            return;
         }
-        if ($this->form_validation->run() == false) {
-            $this->activeAeps();
-        } else {
-            $account_id = $this->User->get_domain_account();
-            $loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
-            $memberID = $loggedUser['id'];
 
-            $activeService = $this->User->account_active_service($loggedUser['id']);
-            if (!in_array(25, $activeService)) {
-                $this->Az->redirect('retailer/dashboard', 'system_message_error', lang('AUTHORIZE_ERROR'));
-            }
+		$this->load->library('form_validation');
+		// Set validation rules for fields
+		$this->form_validation->set_rules('first_name', 'First Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('middle_name', 'Middle Name', 'trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('last_name', 'Last Name', 'trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('father_name', 'Father Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('mother_name', 'Mother Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('person_dob', 'User Date Of Birth', 'required|trim|xss_clean');
+		$this->form_validation->set_rules('gender', 'Gender', 'required|trim|xss_clean');
+		$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email');
+		$this->form_validation->set_rules('aadhar_no', 'Aadhar No', 'required|trim|xss_clean|numeric|min_length[12]|max_length[12]');
+		$this->form_validation->set_rules('pancard_no', 'Pancard No', 'required|xss_clean|min_length[10]|max_length[10]|regex_match[/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/]');
+		$this->form_validation->set_rules('street_locality', 'Street/Locality', 'required|trim|xss_clean');
+		$this->form_validation->set_rules('address', 'Aadhar Card Back Address', 'required|trim|xss_clean');
+		$this->form_validation->set_rules('shop_business_name', 'Shop/Business Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('shop_business_address', 'Shop/Business Address', 'required|trim|xss_clean');
+		$this->form_validation->set_rules('business_type', 'Business Type', 'required|xss_clean');
+		$this->form_validation->set_rules('selState', 'State', 'required|xss_clean');
+		$this->form_validation->set_rules('city_id', 'City', 'required|xss_clean');
+		$this->form_validation->set_rules('pin_code', 'Pincode', 'required|trim|xss_clean|numeric|min_length[6]|max_length[6]');
+		$this->form_validation->set_rules('village', 'Village', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('post_office', 'Post office', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('police_station', 'Police Station', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('block', 'Block', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('district', 'District', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('bank_name', 'Bank Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('bank_branch_name', 'Bank Branch Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('account_no', 'Bank Account', 'required|trim|xss_clean|regex_match[/^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/]');
+		$this->form_validation->set_rules('bank_ifsc', 'Bank Ifsc', 'required|trim|xss_clean|alpha_numeric');
 
-            $user_aeps_status = $this->User->get_member_fingpay_aeps_status($loggedUser['id']);
+		$this->form_validation->set_rules('mobile', 'Mobile', 'required|trim|xss_clean|numeric|min_length[10]|max_length[10]|regex_match[/^[6789]\d{9}$/]');
 
-            if ($user_aeps_status) {
-                $this->Az->redirect('retailer/dashboard', 'system_message_error', lang('AEPS_MEMBER_ERROR'));
-            }
+		$files = [
+			'aadharfront_photo' => true,
+			'aadharback_photo'  => true,
+			'pancard_photo'     => true,
+			'user_photo'        => true,
+			'bps_photo'         => false,
+			'shop_photo'        => false,
+		];
 
-            // upload front document
-            $aadhar_photo = '';
-            if (isset($_FILES['aadhar_photo']['name']) && $_FILES['aadhar_photo']['name']) {
-                $config['upload_path'] = './media/aeps_kyc_doc/';
-                $config['allowed_types'] = 'jpg|png|jpeg';
-                $config['max_size'] = 2048;
-                $fileName = time() . rand(111111, 999999);
-                $config['file_name'] = $fileName;
-                $this->load->library('upload', $config);
-                $this->upload->do_upload('aadhar_photo');
-                $uploadError = $this->upload->display_errors();
-                if ($uploadError) {
-                    $this->Az->redirect(
-                        'retailer/fingpayAeps/activeAeps',
-                        'system_message_error',
-                        '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $uploadError . '</div>'
-                    );
-                } else {
-                    $fileData = $this->upload->data();
-                    //get uploaded file path
-                    $aadhar_photo = substr($config['upload_path'] . $fileData['file_name'], 2);
-                }
-            }
+		$allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+		$maxSizeKB = 2048; // 2 MB
+		$validationErrors = []; // Initialize validation errors array
 
-            // upload back document
-            $pancard_photo = '';
-            if (isset($_FILES['pancard_photo']['name']) && $_FILES['pancard_photo']['name']) {
-                $config02['upload_path'] = './media/aeps_kyc_doc/';
-                $config02['allowed_types'] = 'jpg|png|jpeg';
-                $config02['max_size'] = 2048;
-                $fileName = time() . rand(111111, 999999);
-                $config02['file_name'] = $fileName;
-                $this->load->library('upload', $config02);
-                $this->upload->do_upload('pancard_photo');
-                $uploadError = $this->upload->display_errors();
-                if ($uploadError) {
-                    $this->Az->redirect(
-                        'retailer/fingpayAeps/activeAeps',
-                        'system_message_error',
-                        '<div class="alert alert-danger alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $uploadError . '</div>'
-                    );
-                } else {
-                    $fileData = $this->upload->data();
-                    //get uploaded file path
-                    $pancard_photo = substr($config02['upload_path'] . $fileData['file_name'], 2);
-                }
-            }
+		foreach ($files as $fileField => $isRequired) {
+			if (!empty($_FILES[$fileField]['name'])) {
+				$fileTmpName = $_FILES[$fileField]['tmp_name'];
+				$fileSize = $_FILES[$fileField]['size'];
+				$fileType = mime_content_type($fileTmpName);
+
+				// Validate file type
+				if (!in_array($fileType, $allowedTypes)) {
+					$validationErrors[$fileField][] = ucfirst(str_replace('_', ' ', $fileField)) .
+						" must be a valid image file (jpg, jpeg, png).";
+				}
+
+				// Validate file size
+				if ($fileSize > $maxSizeKB * 1024) {
+					$validationErrors[$fileField][] = ucfirst(str_replace('_', ' ', $fileField)) .
+						" must not exceed {$maxSizeKB} KB.";
+				}
+			} elseif ($isRequired) {
+				// If file is required but not uploaded
+				$validationErrors[$fileField][] = ucfirst(str_replace('_', ' ', $fileField)) . " is required.";
+			}
+		}
+
+		// Run form validation
+		if ($this->form_validation->run() === false || !empty($validationErrors)) {
+			$response = [
+				'error' => true,
+				'errors' => $this->form_validation->error_array(),
+				'imageErrors' => $validationErrors
+			];
+			log_message('debug', ' Fingpay activeAuth Incici Api Response Data - ' . json_encode($response));
+			log_message('debug', ' Fingpay activeAuth Post Response Data - ' . json_encode($post));
+
+			echo json_encode($response);
+			return;
+		} else {
 
             $statusCheckResponse = $this->FingpayAeps_model->checkAepsStatusLive($memberID);
             if ($statusCheckResponse == true) {
@@ -218,15 +242,58 @@ class FingpayAeps extends CI_Controller
                 $this->db->where('member_id', $memberID);
                 $this->db->update('fingpay_aeps_member_kyc', ['status' => 1]);
                 $this->Az->redirect('retailer/dashboard', 'system_message_error', lang('AEPS_ACTIVE_SUCCESS'));
+
+                $response = [
+					'error'   => false,
+					'is_api_error' => false,
+					'dataval' => 'Congratulations ! Member AEPS service is activated now.',
+					'redirectUrl' => 'retailer/iciciaeps/otpVerify/' . $response['otpReferenceID']
+				];
+				log_message('debug', ' activeAuth API Success Response Data - ' . json_encode($response));
+				echo json_encode($response);
+				return;
+
             } else {
-                $response = $this->FingpayAeps_model->activeAEPSMember($post, $aadhar_photo, $pancard_photo, $memberID);
+
+                foreach ($files as $fileField => $isRequired) {
+                    $uploadedFiles[$fileField] = $this->_upload_file($fileField);
+
+                    // Check if a required file fails to upload
+                    if ($isRequired && !$uploadedFiles[$fileField]) {
+                        $response = [
+                            'error'   => true,
+                            'dataval' => ucfirst(str_replace('_', ' ', $fileField)) . " upload failed.",
+                        ];
+
+                        log_message('debug', 'activeAuth Post Image Docs Response Data - ' . json_encode($response));
+                        echo json_encode($response);
+                        return;
+                    }
+                }
+                $response = $this->FingpayAeps_model->activeAEPSMember($post, ...array_values($uploadedFiles));
                 $status = $response['status'];
 
                 if ($status == 1) {
                     $encodeFPTxnId = $response['encodeFPTxnId'];
+                    $response = [
+                        'error'   => false,
+                        'is_api_error' => false,
+                        'dataval' => 'Congratulations ! Member AEPS service is activated now.',
+                        'redirectUrl' => 'retailer/iciciaeps/otpVerify/' . $response['otpReferenceID']
+                    ];
+                    log_message('debug', ' activeAuth API Success Response Data - ' . json_encode($response));
+                    echo json_encode($response);
+
                     $this->Az->redirect('retailer/fingpayAeps/otpVerify/' . $encodeFPTxnId, 'system_message_error', lang('AEPS_OTP_SUCCESS'));
                 } else {
-                    $this->Az->redirect('retailer/fingpayAeps/activeAeps', 'system_message_error', sprintf(lang('AEPS_ACTIVE_FAILED'), $response['msg']));
+                    $response = [
+                        'error'   => true,
+                        'is_api_error' => true,
+                        'dataval' => 'Sorry ! Activation failed due to '.$response['msg'],
+                        'redirectUrl' => 'retailer/fingpayAeps/activeAeps'
+                    ];
+                    log_message('debug', ' activeAuth API Success Response Data - ' . json_encode($response));
+                    echo json_encode($response);
                 }
             }
         }
@@ -2002,4 +2069,25 @@ class FingpayAeps extends CI_Controller
 
         echo json_encode(['status' => 1, 'str' => $str, 'current_time' => $current_time]);
     }
+    // Helper function to handle file uploads
+	public function _upload_file($fieldName)
+	{
+		$uploadPath = 'media/aeps_kyc_doc/';
+		$config = [
+			'upload_path'   => $uploadPath,
+			'allowed_types' => 'jpg|jpeg|png|JPEG',
+			'max_size'      => 2048,
+			'file_name'     => time() . rand(111111, 999999),
+		];
+
+		$this->load->library('upload', $config);
+
+		if (!$this->upload->do_upload($fieldName)) {
+			$uploadError = $this->upload->display_errors();
+			log_message('error', 'File Upload Error for ' . $fieldName . ': ' . $uploadError);
+			return false;
+		}
+		$uploadedFileName = $this->upload->data('file_name');
+		return $uploadPath . $uploadedFileName;
+	}
 }
