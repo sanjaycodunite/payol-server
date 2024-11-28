@@ -265,7 +265,7 @@ class FingpayAeps extends CI_Controller
                             'dataval' => ucfirst(str_replace('_', ' ', $fileField)) . " upload failed.",
                         ];
 
-                        log_message('debug', 'activeAuth Post Image Docs Response Data - ' . json_encode($response));
+                        log_message('debug', 'Fingpay activeAuth Post Image Docs Response Data - ' . json_encode($response));
                         echo json_encode($response);
                         return;
                     }
@@ -281,7 +281,7 @@ class FingpayAeps extends CI_Controller
                         'dataval' => 'Congratulations ! Member AEPS service is activated now.',
                         'redirectUrl' => 'retailer/iciciaeps/otpVerify/' . $response['otpReferenceID']
                     ];
-                    log_message('debug', ' activeAuth API Success Response Data - ' . json_encode($response));
+                    log_message('debug', 'Fingpay activeAuth API Success Response Data - ' . json_encode($response));
                     echo json_encode($response);
 
                     $this->Az->redirect('retailer/fingpayAeps/otpVerify/' . $encodeFPTxnId, 'system_message_error', lang('AEPS_OTP_SUCCESS'));
@@ -292,7 +292,7 @@ class FingpayAeps extends CI_Controller
                         'dataval' => 'Sorry ! Activation failed due to '.$response['msg'],
                         'redirectUrl' => 'retailer/fingpayAeps/activeAeps'
                     ];
-                    log_message('debug', ' activeAuth API Success Response Data - ' . json_encode($response));
+                    log_message('debug', 'Fingpay activeAuth API Success Response Data - ' . json_encode($response));
                     echo json_encode($response);
                 }
             }

@@ -85,7 +85,7 @@ class Iciciaeps extends CI_Controller {
 
 		$user_instantpay_aeps_status = $this->User->get_member_instantpay_aeps_status($loggedUser['id']);
 
-		if($user_instantpay_aeps_status == 0)
+		if($user_instantpay_aeps_status==0)
 		{
 			$this->Az->redirect('retailer/dashboard', 'system_message_error',lang('AEPS_MEMBER_ERROR'));
 		}
