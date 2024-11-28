@@ -119,12 +119,13 @@ class FingpayAeps_model extends CI_Model
             'aadhar_no'           => $post['aadhar_no'] ?? null,
             'status'              => $post['status'] ?? 0,
             'is_otp_verify'       => 0,
+            'api_post_data'       => 0,
             'api_response'        => 0,
             'otpReferenceID'      => $post['otpReferenceID'] ?? null,
             'hash'                => $post['hash'] ?? null,
             'aadhar_data'         => $post['aadhar'] ?? null,
             'adhar_back_address'  => $post['address'] ?? null,
-            'pancard_no'             => $post['pancard_no'] ?? null,
+            'pancard_no'          => $post['pancard_no'] ?? null,
             'street_locality'     => $post['street_locality'] ?? null,
             'address'             => $post['address'] ?? null,
             'shop_name'           => $post['shop_business_name'] ?? null,
@@ -142,8 +143,8 @@ class FingpayAeps_model extends CI_Model
             'bank_branch_name'    => $post['bank_branch_name'] ?? null,
             'account_no'          => $post['account_no'] ?? null,
             'bank_ifsc'           => $post['bank_ifsc'] ?? null,
-            'latitudes'           => $lat ?? null,
-            'longitudes'          => $lng ?? null,
+            'lat'                 => $lat ?? null,
+            'lng'                 => $lng ?? null,
             'mobile'              => $post['mobile'] ?? null,
             'aadhar_photo'        => $aadhar_photo ?? null,
             'aadhar_back_photo'   => $aadhar_back_photo ?? null,
@@ -167,6 +168,7 @@ class FingpayAeps_model extends CI_Model
             'member_id'  => $memberID,
             'mobile'     => $post['mobile'],
         ];
+        $recordID =  "";
         $this->db->where($conditions);
         $query = $this->db->get('fingpay_aeps_member_kyc');
 
@@ -174,23 +176,21 @@ class FingpayAeps_model extends CI_Model
             // Update if the record exists
             $this->db->where($conditions);
             if ($this->db->update('fingpay_aeps_member_kyc', $wallet_data)) {
-                $recordID = $this->db->get_where('fingpay_aeps_member_kyc', $conditions)->row()->id;
-                log_message('debug', 'tbl_fingpay_aeps_member_kyc Data updating inside the table ID - ' . json_encode($recordID));
+                $this->db->where($conditions);
+                $recordID = $this->db->get('fingpay_aeps_member_kyc')->row()->id;
+                log_message('debug', 'tbl_fingpay_aeps_member_kyc data updating inside the table ID - ' . json_encode($recordID));
             } else {
-                log_message('error', 'tbl_fingpay_aeps_member_kyc Data Update failed: ' . $this->db->last_query());
+                log_message('error', 'tbl_fingpay_aeps_member_kyc data Update failed: ' . $this->db->last_query());
             }
         } else {
             // Insert if the record does not exist
             if ($this->db->insert('fingpay_aeps_member_kyc', $wallet_data)) {
-                $recordID = $this->db->insert_id();
+                $recordID = $this->db->insert_id(); // Fetch the newly inserted record ID
                 log_message('debug', 'tbl_fingpay_aeps_member_kyc Data inserting inside the table ID - ' . json_encode($recordID));
             } else {
-                log_message('error', 'Insert failed: ' . $this->db->last_query());
+                log_message('error', 'tbl_fingpay_aeps_member_kyc data Insertion failed: ' . $this->db->last_query());
             }
         }
-
-        $this->db->insert('fingpay_aeps_member_kyc', $wallet_data);
-        $recordID = $this->db->insert_id();
 
         // get state name
         $get_state_name = $this->db->get_where('aeps_state', ['id' => $post['selState']])->row_array();
@@ -207,8 +207,6 @@ class FingpayAeps_model extends CI_Model
         $accountData['fingpay_aeps_username'] = 'payold';
         $accountData['fingpay_aeps_password'] = '1234d';
         $accountData['aeps_supermerchant_id'] = '1244';
-        $lat = '22.44543';
-        $lng = '77.434';
 
         $masked_photo = file_get_contents(base_url($aadhar_photo));
         $masked_pancard_photo = file_get_contents(base_url($pancard_photo));
@@ -224,8 +222,7 @@ class FingpayAeps_model extends CI_Model
                 [
                     "merchantLoginId" => $member_code,
                     "merchantLoginPin" => md5($member_pin),
-                    "merchantName" => $post['first_name'] . ' ' . $post['last_name'],
-
+                    "merchantName" => $post['first_name'] . ' '. $post['last_name'].' '. $post['last_name'],
                     "merchantPhoneNumber" => $post['mobile'],
                     "companyLegalName" => $post['shop_name'],
                     "companyMarketingName" => $post['shop_name'],
@@ -240,7 +237,7 @@ class FingpayAeps_model extends CI_Model
                     "ekycDocuments" => base64_encode($masked_photo),
                     "merchantAddress" => [
                         "merchantAddress" => $post['address'],
-                        "merchantState" => $post['state_id'],
+                        "merchantState" => $post['selState'],
                     ],
 
                     "certificateOfIncorporationImage" => "False",
