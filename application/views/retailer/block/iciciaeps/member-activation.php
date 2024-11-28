@@ -12,8 +12,8 @@
             </div>
             <form id="aeps3_form" enctype="multipart/form-data" name="aeps3_form">
                 <div class="card-body">
-                    <input type="hidden" value="<?php echo $site_url; ?>" id="siteUrl"> <input type="hidden"
-                        value="<?php echo $memberID; ?>" name="memberID">
+                    <input type="hidden" value="<?php echo $site_url; ?>" id="siteUrl">
+                    <input type="hidden" value="<?php echo $memberID; ?>" name="memberID">
                     <div class="row" id="aeps3FormDiv">
                         <div class="alert alert-danger alert-dismissible fade text-center col-sm-12 col-md-12 col-xsm-12"
                             role="alert" id="aeps3Alert" tabindex="0">
