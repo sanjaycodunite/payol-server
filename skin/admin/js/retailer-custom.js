@@ -2238,16 +2238,17 @@ $(document).ready(function () {
   $("#accountVerifyBtn").click(function () {
     var siteUrl = $("#siteUrl").val();
     var str = $("#account_verify_form").serialize();
-    $('#loader').show();
+    toggleWaitLoader(true);
     $.ajax({
       type: "POST",
       url: siteUrl + "retailer/bank/verifyAuth",
       data: str,
       dataType: "json",
       success: function (obj) {
-        $('#loader').hide();
+        toggleWaitLoader(false);
         $('.error').html('');
         $('#benAlert').removeClass('show').addClass('hide').html('');
+
         if (obj.error && obj.errors) {
           $.each(obj.errors, function (key, value) {
             $('#' + key + '_error').html(value);
@@ -2287,7 +2288,7 @@ $(document).ready(function () {
     var siteUrl = $('#siteUrl').val();
     const $button = $(this);
     const $spinner = $button.find('.spinner-border');
-
+    toggleWaitLoader(true);
     if (dbTableName === "user_benificary") {
       actionUrl = siteUrl + "retailer/transfer/beneficiaryAuth";
     } else {
@@ -2304,7 +2305,7 @@ $(document).ready(function () {
       data: formData,
       dataType: "json",
       success: function (response) {
-
+        toggleWaitLoader(false);
 
         if (response.error) {
           $spinner.hide();
@@ -2697,7 +2698,7 @@ $(document).ready(function () {
       e.preventDefault();
       var formData = $('#account_verify_form').serialize();
       var siteUrl = $('#siteUrl').val();
-
+      toggleWaitLoader(true);
       $.ajax({
         url: siteUrl + "retailer/transfer/beneficiaryAuth",
         type: "POST",
@@ -2707,6 +2708,7 @@ $(document).ready(function () {
           // Clear previous errors and success messages
           $('.error').html('');
           $('#benAlert').removeClass('show').addClass('hide').html('');
+          toggleWaitLoader(false);
           if (response.error && response.errors) {
             // Display validation errors
             $.each(response.errors, function (key, value) {
@@ -2823,7 +2825,7 @@ $(document).ready(function () {
       e.preventDefault();
       var formData = $('#account_verify_form').serialize();
       var siteUrl = $('#siteUrl').val();
-
+      toggleWaitLoader(true);
       $.ajax({
         url: siteUrl + "retailer/settlement/beneficiaryAuth",
         type: "POST",
@@ -2833,6 +2835,7 @@ $(document).ready(function () {
           // Clear previous errors and success messages
           $('.error').html('');
           $('#benAlert').removeClass('show').addClass('hide').html('');
+          toggleWaitLoader(false);
           if (response.error && response.errors) {
             // Display validation errors
             $.each(response.errors, function (key, value) {
@@ -3099,7 +3102,7 @@ $(document).ready(function () {
         toggleWaitLoader(false);
         // Reset error messages
         $('.error').html('');
-        $('#aeps3Alert').removeClass('show alert-danger alert-success').addClass('hide').html('');
+        $('#fingpayaeps3Alert').removeClass('show alert-danger alert-success').addClass('hide').html('');
 
         if (response.error) {
           // Display validation errors
@@ -3112,18 +3115,6 @@ $(document).ready(function () {
               }
             });
           }
-
-          if (response.error && response.auth_errors) {
-            $('#aeps3Alert').focus();
-            $('#aeps3Alert')
-              .removeClass('hide alert-success')
-              .addClass('show alert-danger')
-              .html(`<b><strong>Error:</strong> ${response.auth_errors}</b>`);
-            setTimeout(function () {
-              $('#aeps3Alert').removeClass('show').addClass('hide').empty();
-            }, 5000);
-          }
-
           // Display image-specific validation errors
           if (response.error && response.imageErrors) {
             $.each(response.imageErrors, function (key, messages) {
@@ -3134,29 +3125,27 @@ $(document).ready(function () {
               }
             });
           }
-        } else {
-          if (response.is_api_error) {
-            $('#aeps3Alert').focus();
-            $('#aeps3Alert')
+          if (response.is_api_error && response.error) {
+            $('#fingpayaeps3Alert').focus();
+            $('#fingpayaeps3Alert')
               .removeClass('hide alert-success')
               .addClass('show alert-danger')
               .html(`<b><strong>Error:</strong> ${response.dataval}</b>`);
             setTimeout(function () {
-              $('#aeps3Alert').removeClass('show').addClass('hide').empty();
-            }, 5000);
-
-          } else {
-            $('#aeps3Alert').focus();
-            $('#aeps3Alert')
-              .addClass('hide alert-success')
-              .removeClass('show alert-danger')
-              .html(`<b><strong>Success:</strong> ${response.dataval}</b>`);
-            setTimeout(function () {
-              $('#aeps3Alert').removeClass('show').addClass('hide').empty();
-              $("#fingpayAeps_aeps3_form")[0].reset();
-              window.location.href = response.redirectUrl;
+              $('#fingpayaeps3Alert').removeClass('show').addClass('hide').empty();
             }, 5000);
           }
+        } else {
+          $('#fingpayaeps3Alert').focus();
+          $('#fingpayaeps3Alert')
+            .addClass('hide alert-success')
+            .removeClass('show alert-danger')
+            .html(`<b><strong>Success:</strong> ${response.dataval}</b>`);
+          setTimeout(function () {
+            $('#fingpayaeps3Alert').removeClass('show').addClass('hide').empty();
+            $("#fingpayAeps_aeps3_form")[0].reset();
+            window.location.href = response.redirectUrl;
+          }, 5000);
         }
       },
       error: function (xhr, status, error) {
@@ -3165,9 +3154,23 @@ $(document).ready(function () {
         $('#aeps3Alert')
           .removeClass('hide alert-success')
           .addClass('show alert-danger')
-          .html("An error occurred. Please try again.");
+          .html(`An error occurred. Please try again. ${error}`);
       }
     });
   });
+
+  $('#bank_name').on('change', function () {
+    const selectedOption = $(this).find(':selected');
+    const globalIfsc = selectedOption.data('global-ifsc');
+    $('#bank_ifsc').val(globalIfsc);
+    $('#ifsc').val(globalIfsc);
+  });
+
+  $('#bankID').on('change', function () {
+    const selectedOption = $(this).find(':selected');
+    const globalIfsc = selectedOption.data('global-ifsc');
+    $('#ifsc').val(globalIfsc);
+  });
+
 });
 

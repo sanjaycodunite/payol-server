@@ -225,10 +225,18 @@
                         </div>
                         <div class="col-md-3 col-sm-12">
                             <div class="form-group">
-                                <label><b>Bank Account Number*</b></label> <input type="text"
-                                    class="form-control only-number-allowed" id="account_no" name="account_no"
-                                    placeholder="Account no" value="<?php echo set_value('account_no'); ?>">
-                                <div class="error" id="account_no_error"></div>
+                                <label><b>Bank Name*</b></label>
+                                <select name="bank_name" id="bank_name" class="form-control bank">
+                                    <option value="">Select Bank</option>
+                                    <?php foreach ($bankList as $bank): ?>
+                                    <option value="<?= html_escape($bank['bank_id']) ?>"
+                                        <?= set_select('bank_name', html_escape($bank['bank_id'])); ?>
+                                        data-global-ifsc="<?= html_escape($bank['ifsc_global']) ?>">
+                                        <?= html_escape($bank['name']) ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="error" id="bank_name_error"></div>
                             </div>
                         </div>
                         <div class="col-md-3 col-sm-12">
@@ -242,20 +250,19 @@
                         </div>
                         <div class="col-md-3 col-sm-12">
                             <div class="form-group">
-                                <label><b>Bank Name*</b></label> <input type="text"
-                                    class="form-control alpha-single-space first-char-capitalize" id="bank_name"
-                                    name="bank_name" placeholder="Bank Name"
-                                    value="<?php echo set_value('bank_name'); ?>">
-                                <div class="error" id="bank_name_error"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-12">
-                            <div class="form-group">
                                 <label><b>Branch Name*</b></label> <input type="text"
                                     class="form-control alpha-first-cap-num-sp-chars" id="bank_branch_name"
                                     name="bank_branch_name" placeholder="Bank Branch Name"
                                     value="<?php echo set_value('bank_branch_name'); ?>">
                                 <div class="error" id="bank_branch_name_error"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <label><b>Bank Account Number*</b></label> <input type="text"
+                                    class="form-control only-number-allowed" id="account_no" name="account_no"
+                                    placeholder="Account no" value="<?php echo set_value('account_no'); ?>">
+                                <div class="error" id="account_no_error"></div>
                             </div>
                         </div>
                         <div class="col-sm-12">

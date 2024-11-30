@@ -251,7 +251,7 @@ class Iciciaeps extends CI_Controller {
 					'error'   => false,
 					'is_api_error' => false,
 					'dataval' => 'We have sent OTP to your registered mobile, please verify.',
-					'redirectUrl' => 'retailer/iciciaeps/otpVerify/' . $response['otpReferenceID']
+					'redirectUrl' =>  base_url().'retailer/iciciaeps/otpVerify/' . $response['otpReferenceID']
 				];
 				log_message('debug', ' activeAuth API Success Response Data - ' . json_encode($response));
 				echo json_encode($response);
@@ -261,7 +261,7 @@ class Iciciaeps extends CI_Controller {
 					'error'   => true,
 					'is_api_error' => true,
 					'dataval' => 'Activation failed: ' . $response['msg'],
-					'redirectUrl' => 'retailer/iciciaeps/activeAeps'
+					'redirectUrl' =>  base_url().'retailer/iciciaeps/activeAeps'
 				];
 				log_message('debug', ' activeAuth API Response Data - ' . json_encode($response));
 				echo json_encode($response);

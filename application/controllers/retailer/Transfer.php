@@ -183,10 +183,9 @@ class Transfer extends CI_Controller
                 'is_delete' => 0
             ])
             ->result_array();
-        // echo $this->db->last_query();
-        // die;
-        // get bank list
-        $bankList = $this->db->get('tbl_instantpay_aeps_bank_list')->result_array();
+
+        //$bankList = $this->db->get('tbl_instantpay_aeps_bank_list')->result_array();
+        $bankList = $this->db->get('tbl_bank_global_ifsc_codes')->result_array();
 
         $siteUrl = site_url();
         $data = [

@@ -13,9 +13,10 @@
             </div>
             <div class="container">
                 <br />
-                <div id="loader" style="display:none;">
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Verifying account details, please wait...
+                <div class="row">
+                    <div id="wait-loader" style="display:none;">
+                        <img src="{site_url}skin/admin/images/loading-wait.gif" alt="Loading...">
+                    </div>
                 </div>
 
                 <div class="alert alert-success alert-dismissible fade hide" role="alert" id="benAlert">
@@ -30,30 +31,32 @@
                 <input type="hidden" id="dbTableName" name="dbTableName" value="user_benificary">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label><b>Account Holder Name*</b></label>
-                                <input type="text" class="form-control" name="account_holder_name"
-                                    id="account_holder_name" placeholder="Holder Name" value="">
-                                <div class="error" id="account_holder_name_error"></div>
-                            </div>
-                        </div>
 
-                        <div class="col-sm-2">
+                        <div class="col-sm-12 col-md-4">
                             <div class="form-group">
-                                <label><b>Bank*</b></label>
-                                <select class="form-control" name="bankID" id="bankID">
+                                <label><b>Bank Name*</b></label>
+                                <select name="bankID" id="bankID" class="form-control bank">
                                     <option value="">Select Bank</option>
-                                    <?php foreach ($bankList as $list) { ?>
-                                    <option value="<?php echo $list['id']; ?>"><?php echo $list['bank_name']; ?>
+                                    <?php foreach ($bankList as $bank): ?>
+                                    <option value="<?= html_escape($bank['bank_id']) ?>"
+                                        <?= set_select('bank_name', html_escape($bank['bank_id'])); ?>
+                                        data-global-ifsc="<?= html_escape($bank['ifsc_global']) ?>">
+                                        <?= html_escape($bank['name']) ?>
                                     </option>
-                                    <?php } ?>
+                                    <?php endforeach; ?>
                                 </select>
                                 <div class="error" id="bankID_error"></div>
                             </div>
                         </div>
-
-                        <div class="col-sm-3">
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-group">
+                                <label><b>Global/IFSC Code*</b></label>
+                                <input type="text" class="form-control" name="ifsc" id="ifsc" placeholder="IFSC Code"
+                                    value="">
+                                <div class="error" id="ifsc_error"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
                             <div class="form-group">
                                 <label><b>Account No.*</b></label>
                                 <input type="text" class="form-control" name="ben_account_number"
@@ -62,16 +65,16 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-2">
+                        <div class="col-sm-12 col-md-8">
                             <div class="form-group">
-                                <label><b>IFSC Code*</b></label>
-                                <input type="text" class="form-control" name="ifsc" id="ifsc" placeholder="IFSC Code"
-                                    value="">
-                                <div class="error" id="ifsc_error"></div>
+                                <label><b>Account Holder Name*</b></label>
+                                <input type="text" class="form-control" name="account_holder_name"
+                                    id="account_holder_name" placeholder="Holder Name" value="">
+                                <div class="error" id="account_holder_name_error"></div>
                             </div>
                         </div>
 
-                        <div class="col-sm-2">
+                        <div class="col-sm-12 col-md-4">
                             <div class="form-group">
                                 <label><b>Mobile No*</b></label>
                                 <input type="text" class="form-control" name="mobile_no" id="mobile_no"
@@ -126,7 +129,7 @@
                                 <th>Mobile No</th>
                                 <th>Account No.</th>
                                 <th>Bank</th>
-                                <th>IFSC</th>
+                                <th>Global/IFSC Code</th>
                                 <th>Added On</th>
                                 <th>Fund</th>
                                 <th>Action</th>
@@ -143,7 +146,8 @@
                                 <td class="align-middle"><?php echo $list['account_no']; ?></td>
                                 <td class="align-middle"><?php echo $list['bank_name']; ?></td>
                                 <td class="align-middle"><?php echo $list['ifsc']; ?></td>
-                                <td class="align-middle"> <?php echo date('d-m-Y <b>h:i A</b>', strtotime($list['created'])); ?></td>
+                                <td class="align-middle">
+                                    <?php echo date('d-m-Y <b>h:i A</b>', strtotime($list['created'])); ?></td>
                                 <td class="align-middle">
                                     <a
                                         href="<?php echo site_url('retailer/transfer/fundTransfer/' . $list['ben_id']); ?>">

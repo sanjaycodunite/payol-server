@@ -271,7 +271,7 @@ class Settlement extends CI_Controller
         ->get()
         ->result_array();
 
-        $bankList = $this->db->get('tbl_instantpay_aeps_bank_list')->result_array();
+        $bankList = $this->db->get('tbl_bank_global_ifsc_codes')->result_array();
 
         $siteUrl = site_url();
         $data = [

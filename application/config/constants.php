@@ -278,7 +278,9 @@ define('MORNINGPAY_PAN_TRANSCATION_STATUS', 'https://digipaydashboarduat.religar
 define('MORNINGPAY_PAN_STATUS', 'https://digipaydashboarduat.religaredigital.in/PancardStatus');
 define('IS_SOCIETY', 1);
 
-define('FINGPAY_AEPS_ONBOARD_API_URL', 'https://fingpayap.tapits.in/fpaepsweb/api/onboarding/merchant/creation/php/m1');
+//define('FINGPAY_AEPS_ONBOARD_API_URL', 'https://fingpayap.tapits.in/fpaepsweb/api/onboarding/merchant/creation/php/m1');
+define('FINGPAY_AEPS_ONBOARD_API_URL', 'https://fingpayap.tapits.in/fpaepsweb/api/onboarding/merchant/php/creation/v2');
+
 define('FINGPAY_AEPS_OTP_API_URL', 'https://fpekyc.tapits.in/fpekyc/api/ekyc/merchant/php/sendotp');
 
 define('FINGPAY_AEPS_OTP_VERIFY_API_URL', 'https://fpekyc.tapits.in/fpekyc/api/ekyc/merchant/php/validateotp');

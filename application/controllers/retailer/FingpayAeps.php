@@ -43,17 +43,18 @@ class FingpayAeps extends CI_Controller
         $bankList = $this->db->get('aeps_bank_list')->result_array();
 
         $data = [
-            'meta_title' => lang('SITE_NAME'),
-            'meta_keywords' => lang('SITE_NAME'),
+            'meta_title'       => lang('SITE_NAME'),
+            'meta_keywords'    => lang('SITE_NAME'),
             'meta_description' => lang('SITE_NAME'),
-            'site_url' => $siteUrl,
-            'loggedUser' => $loggedUser,
-            'bankList' => $bankList,
-            'system_message' => $this->Az->getSystemMessageError(),
-            'system_info' => $this->Az->getsystemMessageInfo(),
-            'system_warning' => $this->Az->getSystemMessageWarning(),
-            'content_block' => 'fingpayaeps/list',
+            'site_url'         => $siteUrl,
+            'loggedUser'       => $loggedUser,
+            'bankList'         => $bankList,
+            'system_message'   => $this->Az->getSystemMessageError(),
+            'system_info'      => $this->Az->getSystemMessageInfo(),
+            'system_warning'   => $this->Az->getSystemMessageWarning(),
+            'content_block'    => 'fingpayaeps/list',
         ];
+
         $this->parser->parse('retailer/layout/column-1', $data);
     }
 
@@ -84,6 +85,7 @@ class FingpayAeps extends CI_Controller
         }
 
         $memberData = $this->db->get_where('users', ['id' => $memberID, 'fingpay_aeps_status' => 0])->row_array();
+        $bankList = $this->db->get('tbl_bank_global_ifsc_codes')->result_array();
 
         // get state list
         $stateList = $this->db
@@ -102,6 +104,7 @@ class FingpayAeps extends CI_Controller
             'memberID' => $memberID,
             'memberData' => $memberData,
             'stateList' => $stateList,
+            'bankList'  => $bankList,
             'system_message' => $this->Az->getSystemMessageError(),
             'system_info' => $this->Az->getsystemMessageInfo(),
             'system_warning' => $this->Az->getSystemMessageWarning(),
@@ -149,7 +152,7 @@ class FingpayAeps extends CI_Controller
 		$this->form_validation->set_rules('father_name', 'Father Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
 		$this->form_validation->set_rules('mother_name', 'Mother Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
 		$this->form_validation->set_rules('person_dob', 'User Date Of Birth', 'required|trim|xss_clean');
-		$this->form_validation->set_rules('gender', 'Gender', 'required|trim|xss_clean');
+		$this->form_validation->set_rules('gender', 'Gender', 'required|xss_clean');
 		$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email');
 		$this->form_validation->set_rules('aadhar_no', 'Aadhar No', 'required|trim|xss_clean|numeric|min_length[12]|max_length[12]');
 		$this->form_validation->set_rules('pancard_no', 'Pancard No', 'required|xss_clean|min_length[10]|max_length[10]|regex_match[/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/]');
@@ -157,7 +160,7 @@ class FingpayAeps extends CI_Controller
 		$this->form_validation->set_rules('address', 'Aadhar Card Back Address', 'required|trim|xss_clean');
 		$this->form_validation->set_rules('shop_business_name', 'Shop/Business Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
 		$this->form_validation->set_rules('shop_business_address', 'Shop/Business Address', 'required|trim|xss_clean');
-		$this->form_validation->set_rules('business_type', 'Business Type', 'required|xss_clean');
+        $this->form_validation->set_rules('business_type', 'Business Type', 'required|trim|xss_clean');
 		$this->form_validation->set_rules('selState', 'State', 'required|xss_clean');
 		$this->form_validation->set_rules('city_id', 'City', 'required|xss_clean');
 		$this->form_validation->set_rules('pin_code', 'Pincode', 'required|trim|xss_clean|numeric|min_length[6]|max_length[6]');
@@ -166,9 +169,9 @@ class FingpayAeps extends CI_Controller
 		$this->form_validation->set_rules('police_station', 'Police Station', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
 		$this->form_validation->set_rules('block', 'Block', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
 		$this->form_validation->set_rules('district', 'District', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-		$this->form_validation->set_rules('bank_name', 'Bank Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
+		$this->form_validation->set_rules('bank_name', 'Bank Name', 'required|trim|xss_clean');
 		$this->form_validation->set_rules('bank_branch_name', 'Bank Branch Name', 'required|trim|xss_clean|regex_match[/^[a-zA-Z]+( [a-zA-Z]+)*$/]');
-		$this->form_validation->set_rules('account_no', 'Bank Account', 'required|trim|xss_clean|regex_match[/^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/]');
+		$this->form_validation->set_rules('account_no', 'Bank Account', 'required|trim|xss_clean|numeric');
 		$this->form_validation->set_rules('bank_ifsc', 'Bank Ifsc', 'required|trim|xss_clean|alpha_numeric');
 
 		$this->form_validation->set_rules('mobile', 'Mobile', 'required|trim|xss_clean|numeric|min_length[10]|max_length[10]|regex_match[/^[6789]\d{9}$/]');
@@ -289,7 +292,7 @@ class FingpayAeps extends CI_Controller
                     $response = [
                         'error'   => true,
                         'is_api_error' => true,
-                        'dataval' => 'Sorry ! Activation failed due to '.$response['msg'],
+                        'dataval' => 'Sorry ! Activation failed due to <b>'.$response['msg'].'</b>',
                         'redirectUrl' => 'retailer/fingpayAeps/activeAeps'
                     ];
                     log_message('debug', 'Fingpay activeAuth API Success Response Data - ' . json_encode($response));

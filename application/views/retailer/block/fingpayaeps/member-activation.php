@@ -8,13 +8,13 @@
             <div id="wait-loader" style="display:none;">
                 <img src="{site_url}skin/admin/images/loading-wait.gif" alt="Loading...">
             </div>
-            <form id="aeps3_form" enctype="multipart/form-data" name="aeps3_form">
+            <form id="fingpayAeps_aeps3_form" enctype="multipart/form-data" name="aeps3_form">
                 <div class="card-body">
                     <input type="hidden" value="<?php echo $site_url; ?>" id="siteUrl"> <input type="hidden"
                         value="<?php echo $memberID; ?>" name="memberID">
                     <div class="row" id="aeps3FormDiv">
                         <div class="alert alert-danger alert-dismissible fade text-center col-sm-12 col-md-12 col-xsm-12"
-                            role="alert" id="aeps3Alert" tabindex="0">
+                            role="alert" id="fingpayaeps3Alert" tabindex="0">
                         </div>
                         <div class="col-md-12 col-sm-12">
                             <h5>Personal Detail</h5>
@@ -217,12 +217,21 @@
                             <h5>Bank Details</h5>
                             <hr>
                         </div>
+
                         <div class="col-md-3 col-sm-12">
                             <div class="form-group">
-                                <label><b>Bank Account Number*</b></label> <input type="text"
-                                    class="form-control only-number-allowed" id="account_no" name="account_no"
-                                    placeholder="Account no" value="<?php echo set_value('account_no'); ?>">
-                                <div class="error" id="account_no_error"></div>
+                                <label><b>Bank Name*</b></label>
+                                <select name="bank_name" id="bank_name" class="form-control bank">
+                                    <option value="">Select Bank</option>
+                                    <?php foreach ($bankList as $bank): ?>
+                                    <option value="<?= html_escape($bank['bank_id']) ?>"
+                                        <?= set_select('bank_name', html_escape($bank['bank_id'])); ?>
+                                        data-global-ifsc="<?= html_escape($bank['ifsc_global']) ?>">
+                                        <?= html_escape($bank['name']) ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="error" id="bank_name_error"></div>
                             </div>
                         </div>
                         <div class="col-md-3 col-sm-12">
@@ -236,20 +245,19 @@
                         </div>
                         <div class="col-md-3 col-sm-12">
                             <div class="form-group">
-                                <label><b>Bank Name*</b></label> <input type="text"
-                                    class="form-control alpha-single-space first-char-capitalize" id="bank_name"
-                                    name="bank_name" placeholder="Bank Name"
-                                    value="<?php echo set_value('bank_name'); ?>">
-                                <div class="error" id="bank_name_error"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-12">
-                            <div class="form-group">
                                 <label><b>Branch Name*</b></label> <input type="text"
                                     class="form-control alpha-first-cap-num-sp-chars" id="bank_branch_name"
                                     name="bank_branch_name" placeholder="Bank Branch Name"
                                     value="<?php echo set_value('bank_branch_name'); ?>">
                                 <div class="error" id="bank_branch_name_error"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <label><b>Bank Account Number*</b></label> <input type="text"
+                                    class="form-control only-number-allowed" id="account_no" name="account_no"
+                                    placeholder="Account no" value="<?php echo set_value('account_no'); ?>">
+                                <div class="error" id="account_no_error"></div>
                             </div>
                         </div>
                         <div class="col-sm-12">
@@ -282,8 +290,7 @@
                                     <option value="Retailer" <?php echo set_select('business_type', 'Retailer'); ?>>
                                         Retailer</option>
                                     <option value="Distributor"
-                                        <?php echo set_select('business_type', 'Distributor'); ?>>
-                                        Distributor</option>
+                                        <?php echo set_select('business_type', 'Distributor'); ?>>Distributor</option>
                                     <option value="Other" <?php echo set_select('business_type', 'Other'); ?>>Other
                                     </option>
                                 </select>
@@ -336,7 +343,7 @@
                             </div>
                         </div>
                         <div class="card-header py-3 text-right">
-                            <button class="btn btn-success aeps3btn">Submit</button> <button
+                            <button class="btn btn-success fingpayAeps3btn">Submit</button> <button
                                 onclick="window.history.back()" type="button" class="btn btn-secondary">Cancel</button>
                         </div>
                     </div>

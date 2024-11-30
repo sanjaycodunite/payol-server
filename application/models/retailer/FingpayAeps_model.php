@@ -119,7 +119,7 @@ class FingpayAeps_model extends CI_Model
             'aadhar_no'           => $post['aadhar_no'] ?? null,
             'status'              => $post['status'] ?? 0,
             'is_otp_verify'       => 0,
-            'api_post_data'       => 0,
+            'form_post_data'       =>"",
             'api_response'        => 0,
             'otpReferenceID'      => $post['otpReferenceID'] ?? null,
             'hash'                => $post['hash'] ?? null,
@@ -135,7 +135,7 @@ class FingpayAeps_model extends CI_Model
             'city_id'             => $post['city_id'] ?? null,
             'pin_code'            => $post['pin_code'] ?? null,
             'village'             => $post['village'] ?? null,
-            'post'                => $post['post_office'] ?? null,
+            'post_office'          => $post['post_office'] ?? null,
             'police_station'      => $post['police_station'] ?? null,
             'block'               => $post['block'] ?? null,
             'district'            => $post['district'] ?? null,
@@ -165,7 +165,7 @@ class FingpayAeps_model extends CI_Model
 
         $conditions = [
             'account_id' => $account_id,
-            'member_id'  => $memberID,
+            'member_id'  => $post['memberID'],
             'mobile'     => $post['mobile'],
         ];
         $recordID =  "";
@@ -222,7 +222,7 @@ class FingpayAeps_model extends CI_Model
                 [
                     "merchantLoginId" => $member_code,
                     "merchantLoginPin" => md5($member_pin),
-                    "merchantName" => $post['first_name'] . ' '. $post['last_name'].' '. $post['last_name'],
+                    "merchantName" => $post['first_name'] . ' '. $post['middle_name'].' '. $post['last_name'],
                     "merchantPhoneNumber" => $post['mobile'],
                     "companyLegalName" => $post['shop_name'],
                     "companyMarketingName" => $post['shop_name'],
@@ -337,10 +337,10 @@ class FingpayAeps_model extends CI_Model
         /* output = "{\"status\":true,\"message\":\"successful\",\"data\":{\"merchantStatus\":true,\"remarks\":\"Successfully recorded\",\"superMerchantId\":1244,\"merchantLoginId\":\"MPCNR703985\",\"errorCodes\":null},\"statusCode\":10000}"*/
 
         $responseData = json_decode($output, true);
-
+        log_message('debug', 'Fingpay Onboard api responseData - ' . json_encode($responseData));
         $apiData = [
             'account_id' => $account_id,
-            'user_id' => $memberID,
+            'user_id' =>  $post['memberID'],
             'api_url' => $api_url,
             'api_response' => $output,
             'post_data' => json_encode($postdata),
@@ -472,7 +472,7 @@ class FingpayAeps_model extends CI_Model
                 return ['status' => 0, 'msg' => $otpResponseData['message'] . '  Reason -' . $otpResponseData['data']['remarks']];
             }
         } else {
-            return ['status' => 0, 'msg' => $otpResponseData['message'] . '  Reason -' . $otpResponseData['data']['remarks']];
+            return ['status' => $responseData['status'], 'msg' => $responseData['message']];
         }
     }
 
