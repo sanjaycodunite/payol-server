@@ -2328,6 +2328,7 @@ $(document).ready(function () {
       error: function (xhr, status, error) {
         $spinner.hide();
         $button.prop('disabled', false);
+        toggleWaitLoader(false);
         $('.btnDisabled').prop('disabled', false);
         console.log('AJAX Error: ' + error);
         $('.benAddonMsg').html(`<strong>Error: </strong>Failed to add beneficiary. Please try again.`);
@@ -3046,8 +3047,7 @@ $(document).ready(function () {
               }
             });
           }
-        } else {
-          if (response.is_api_error) {
+          if (response.is_api_error && response.error) {
             $('#aeps3Alert').focus();
             $('#aeps3Alert')
               .removeClass('hide alert-success')
@@ -3056,18 +3056,17 @@ $(document).ready(function () {
             setTimeout(function () {
               $('#aeps3Alert').removeClass('show').addClass('hide').empty();
             }, 5000);
-
-          } else {
-            $('#aeps3Alert').focus();
-            $('#aeps3Alert')
-              .addClass('hide alert-success')
-              .removeClass('show alert-danger')
-              .html(`<b><strong>Success:</strong> ${response.dataval}</b>`);
-            setTimeout(function () {
-              $('#aeps3Alert').removeClass('show').addClass('hide').empty();
-              window.location.href = response.redirectUrl;
-            }, 5000);
           }
+        } else {
+          $('#aeps3Alert').focus();
+          $('#aeps3Alert')
+            .addClass('hide alert-success')
+            .removeClass('show alert-danger')
+            .html(`<b><strong>Success:</strong> ${response.dataval}</b>`);
+          setTimeout(function () {
+            $('#aeps3Alert').removeClass('show').addClass('hide').empty();
+            window.location.href = response.redirectUrl;
+          }, 5000);
         }
       },
       error: function (xhr, status, error) {

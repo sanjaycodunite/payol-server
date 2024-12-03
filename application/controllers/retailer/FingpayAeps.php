@@ -174,7 +174,15 @@ class FingpayAeps extends CI_Controller
 		$this->form_validation->set_rules('account_no', 'Bank Account', 'required|trim|xss_clean|numeric');
 		$this->form_validation->set_rules('bank_ifsc', 'Bank Ifsc', 'required|trim|xss_clean|alpha_numeric');
 
-		$this->form_validation->set_rules('mobile', 'Mobile', 'required|trim|xss_clean|numeric|min_length[10]|max_length[10]|regex_match[/^[6789]\d{9}$/]');
+		$this->form_validation->set_rules('mobile', 'Mobile',
+            'required|trim|numeric|exact_length[10]|regex_match[/^[6789]\d{9}$/]',
+            [
+                'required' => 'The %s field is required.',
+                'numeric' => 'The %s field must contain only numbers.',
+                'exact_length' => 'The %s field must be exactly 10 digits long.',
+                'regex_match' => 'The %s field must start with 6, 7, 8, or 9 and be followed by 9 digits.'
+            ]
+        );
 
 		$files = [
 			'aadharfront_photo' => true,
