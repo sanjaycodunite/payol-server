@@ -511,7 +511,12 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed menu_notification_li" href="#" data-toggle="collapse" data-target="#collapse9"
                 aria-expanded="true" aria-controls="collapse9">
+<<<<<<< Updated upstream
                 <i class="fas fa-hands-helping" style="color: #f3baba !important;" style="color: #f3baba !important;"></i>
+=======
+                <i class="fas fa-hands-helping" style="color: #f3baba !important;"
+                    style="color: #f3baba !important;"></i>
+>>>>>>> Stashed changes
                 <span>Support Ticket</span>
                 <span class="menu_notification"><?php echo $this->User->getTotalUnreadTicket(); ?></span>
             </a>
@@ -895,8 +900,16 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#enquiry" aria-expanded="true"
                 aria-controls="enquiry">
+<<<<<<< Updated upstream
                 <i class="fas fa-tty" style="color: #f3baba !important;"></i>
                 <span>Enquiry</span>
+=======
+                <<<<<<< HEAD <i class="fas fa-tty" style="color: #f3baba !important;"></i>
+                    =======
+                    <i class="fa fa-file"></i>
+                    >>>>>>> 47c197e (contact us form enquiry complete)
+                    <span>Enquiry</span>
+>>>>>>> Stashed changes
             </a>
             <div id="enquiry" class="collapse" aria-labelledby="enquiry" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
@@ -932,7 +945,7 @@ $activeGateway = $this->User->account_active_gateway();
                     <h4><?php echo $accountData['title']; ?></h4>
 
                     <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav col-md-4 col-sm-12">
                         <li class="nav-item dropdown" style="padding-top: 10px; padding-right: 25px;">
                             <h6><span class="nav_icons"><img src="{site_url}skin/admin/img/wallet_icon.png"
                                         class="img-fluid"></span>
@@ -973,13 +986,27 @@ $activeGateway = $this->User->account_active_gateway();
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="{site_url}admin/setting/profile">
+<<<<<<< Updated upstream
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400" style="color: #f3baba !important;"></i>
+=======
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"
+                                        style="color: #f3baba !important;"></i>
+>>>>>>> Stashed changes
                                     Profile
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+<<<<<<< Updated upstream
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" style="color: #f3baba !important;"></i>
                                     Logout
+=======
+                                    <<<<<<< HEAD <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"
+                                        style="color: #f3baba !important;"></i>
+                                        =======
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        >>>>>>> 47c197e (contact us form enquiry complete)
+                                        Logout
+>>>>>>> Stashed changes
                                 </a>
                             </div>
                         </li>
