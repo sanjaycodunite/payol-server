@@ -683,6 +683,7 @@ $activeGateway = $this->User->account_active_gateway();
                     <a class="collapse-item" href="{site_url}admin/master/ipsetting">Manage IP</a>
 
                     <a class="collapse-item" href="{site_url}admin/master/upiApiSwitch">Payin Api Swtich</a>
+                    <a class="collapse-item" href="{site_url}admin/master/payoutApiSwitch">Payout Api Swtich</a>
 
                     <?php if ($accountData['is_payout_otp'] == 1) { ?>
                     <a class="collapse-item" href="{site_url}admin/master/payoutOtpSetting">Payout Amount Setting</a>

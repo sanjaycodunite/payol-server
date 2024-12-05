@@ -143,7 +143,8 @@
                                 <td class="align-middle"><?php echo $list['account_no']; ?></td>
                                 <td class="align-middle"><?php echo $list['bank_name']; ?></td>
                                 <td class="align-middle"><?php echo $list['ifsc']; ?></td>
-                                <td class="align-middle"> <?php echo date('d-m-Y <b>h:i A</b>', strtotime($list['created'])); ?></td>
+                                <td class="align-middle">
+                                    <?php echo date('d-m-Y <b>h:i A</b>', strtotime($list['created'])); ?></td>
                                 <td class="align-middle">
                                     <a
                                         href="<?php echo site_url('retailer/transfer/fundTransfer/' . $list['ben_id']); ?>">
@@ -237,7 +238,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div id="updatebenBlock1"></div>
+                    <div id="updatebenUpiBlock1"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>

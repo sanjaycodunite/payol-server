@@ -25,9 +25,9 @@
   <!-- Custom styles for this template-->
   <link href="{site_url}skin/admin/css/sb-admin-2.css" rel="stylesheet">
    <link href="{site_url}skin/admin/css/theme2.css" rel="stylesheet">
-  
+
   <?php
-   if($get_theme['theme_id'] == 1){ 
+   if($get_theme['theme_id'] == 1){
   ?>
 
   <link href="{site_url}skin/admin/css/dark-black.css" rel="stylesheet">
@@ -35,7 +35,7 @@
   <?php } elseif($get_theme['theme_id'] == 2){ ?>
 
   <link href="{site_url}skin/admin/css/dark-blue.css" rel="stylesheet">
-  
+
   <?php } elseif($get_theme['theme_id'] == 3){ ?>
 
   <link href="{site_url}skin/admin/css/dark-red.css" rel="stylesheet">
@@ -65,11 +65,11 @@
 
  <?php
   if($accountData['panel_theme_id'] == 1){
- ?> 
+ ?>
  <link href="{site_url}skin/admin/css/new-theme.css" rel="stylesheet">
 
  <?php } ?>
- 
+
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>

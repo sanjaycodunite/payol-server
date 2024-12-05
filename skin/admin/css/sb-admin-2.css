@@ -51,9 +51,20 @@
 html {
   font-family: sans-serif;
   line-height: 1.15;
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-text-size-adjust: 100%; /* Prevents font size adjustment on some devices */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* Removes tap highlight on touch devices */
+
+  transform: scale(0.9); /* Scales the entire document to 90% */
+  transform-origin: top left; /* Ensures scaling starts from the top-left corner */
+  width: 111.11%; /* Compensates for scaling to maintain full width */
+  height: 100%; /* Ensures the height of html matches the viewport height */
+  overflow-y: auto; /* Shows vertical scroll only when content exceeds viewport height */
+  overflow-x: hidden; /* Prevents horizontal scrolling */
 }
+
+
+
+
 
 article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block;
@@ -68,7 +79,10 @@ body {
   color: black;
   text-align: left;
   background-color: #fff;
+  height: 100%; /* Ensures body stretches to viewport height when content is small */
+  margin: 0; /* Removes default margin to prevent unintended scrollbars */
 }
+
 
 [tabindex="-1"]:focus {
   outline: 0 !important;
@@ -11277,7 +11291,7 @@ body.sidebar-toggled footer.sticky-footer {
     .panel-default > .panel-heading + .panel-collapse > .panel-body {
         border-top-color: #EEEEEE;
     }
-  
+
   .panel.panel-default.level-1 {
     width: 90%;
     margin: auto;
@@ -11314,7 +11328,7 @@ body.sidebar-toggled footer.sticky-footer {
 }
     .management-hierarchy .person > p.name a {
     color: #fff;
-    
+
 }
       .management-hierarchy .person > p.name b {
         color: rgba(59, 170, 157, 0.5); }
@@ -11327,16 +11341,16 @@ body.sidebar-toggled footer.sticky-footer {
         left: 50%;
         top: 0;
         transform: translateY(-100%); }
-    
+
 .sub-menu-block {
     margin-left: 18px;
-}   
+}
 
 
 .box.box-inverse.box-primary {
     color: #ffffff !important;
     background-color: #3b22c0;
-} 
+}
 .box.box-inverse.box-info{background-color:#50a7ff !important;}
 
 
@@ -11578,7 +11592,7 @@ i.fa.fa-comments {
     border-radius: 5px;
     width: 70px;
     height: 70px;
-}    
+}
 
 .recharge_services_items ul li a:hover {
     text-decoration: none; color:#224abe;
@@ -11821,7 +11835,7 @@ button.login_btn.btn.btn-success {
     margin-top: 10% !important;
 }
 .dash_card { padding: 20px;margin: 20px 0px}
-.card_row_col .service_col:nth-child(1) .card_body_dash, 
+.card_row_col .service_col:nth-child(1) .card_body_dash,
 .card_row_col .service_col:nth-child(2) .card_body_dash,
 .card_row_col .service_col:nth-child(3) .card_body_dash,
 .card_row_col .service_col:nth-child(4) .card_body_dash,
@@ -12313,7 +12327,7 @@ nav.navbar.navbar-expand.topbar li.nav-item.dropdown a .nav_notification_num {
 .float-end {
     float: right;
 }
-.card_notification_list {border-radius: 10px; 
+.card_notification_list {border-radius: 10px;
     border-bottom: 1px solid #eee;
    padding: 10px 14px;    margin-top: 10px;
 }
@@ -12364,8 +12378,8 @@ nav.navbar.navbar-expand.topbar li.nav-item.dropdown a .nav_notification_num {
     text-decoration: none;}
 
 .master_card_body {display: grid;grid-template-columns: repeat(7, 5fr);
-gap: 25px 10px;text-align: center;}    
-img.dash_icon {width: 85px;}    
+gap: 25px 10px;text-align: center;}
+img.dash_icon {width: 85px;}
 .master_list_col a h4 {font-size: 13px;margin-bottom: 0px;margin-top: 5px;font-weight: 700;}
 .master_list_col a:hover {color: red;}
 .master_list_col a:hover .mlc_icon img {box-shadow: 0 15px 17px -16px rgba(0,0,0,0.5);}
@@ -12448,10 +12462,10 @@ a.transaction_forget {text-decoration: underline;color: #be0000;}
 .card_notes_heading {text-align: center;background: linear-gradient(86deg, #ff1616, #000);
     color: #fff;border-radius: 20px;
     padding: 5px; box-shadow: inset 0 0 8px rgba(0,0,0,0.5);}
-.card_notes_heading h4 {margin: 0px;font-size: 16px;}    
+.card_notes_heading h4 {margin: 0px;font-size: 16px;}
 .card_recharge_notes {background: #fff6f6;}
 .card_notes_contents {border: 1px solid #c81212;margin: 20px;border-radius: 10px;}
-.card_notes_contents ol.notes_list {margin: 0px;padding: 10px 25px;}  
+.card_notes_contents ol.notes_list {margin: 0px;padding: 10px 25px;}
 .card_notes_contents ol.notes_list li {line-height: 25px;font-size: 12px;font-weight: 700;}
 
 .successful_colm {

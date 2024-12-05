@@ -4,21 +4,23 @@
     <div class="card-header py-3">
         <div class="row">
             <div class="col-sm-6">
-                <h4><b>Contact Us Enquiry List</b></h4>
+                <h4><b>Web Enquiry List</b></h4>
             </div>
+
         </div>
-        <?php echo form_close(); ?>
     </div>
     <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped" id="example" width="100%" cellspacing="0">
+        <div class="table-responsive position-relative">
+            <table class="table table-bordered table-striped" id="example" cellspacing="0">
+                <input type="hidden" enquiryType="webContactForm" class="webFormData">
+                <input type="hidden" value="<?php echo $site_url; ?>" id="siteUrl">
+                <input type="hidden" value="tbl_get_in_touch_contacts" id="enquiryTableName">
                 <thead class="thead-dark">
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Message</th>
-                        <th>Create On</th>
-                        <th>From</th>
+                        <th>Enquiry Person</th>
+                        <th>Message <div class="enquiryResponseText text-center"></div>
+                        </th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -27,35 +29,41 @@
                       $i = 1;
                       foreach ($contactFormList as $value) {
                     ?>
-                    <tr>
-                        <td><?php echo $i; ?></td>
-                        <td>
-                            <b>Name:</b> <?php echo $value['name']; ?><br>
-                            <b>Email:</b> <?php echo $value['email']; ?><br>
-                            <b>Contact:</b> <?php echo $value['phone']; ?><br>
-                            <b>Date:</b> <?php echo $value['created_at']; ?>
+                    <tr class="table-row">
+                        <td class="table-index">
+                            <?php echo $i; ?>
                         </td>
-                        <td><?php echo nl2br($value['message']); ?></td>
-                        <td><?php echo $value['created_at']; ?></td>
-                        <td><?php echo $value['from']; ?></td>
-                        <td class="text-center">
-                            <a title="Delete" class="btn btn-danger btn-sm" title="Delete"
-                                href="{site_url}employe/employe/deleteEmploye/<?= $value['id'] ?>"
-                                onclick="return confirm('Are you sure you want to delete?')">
+                        <td class="table-details">
+                            <div class="details-container">
+                                <p><b class="label">Name:</b> <span
+                                        class="value"><?php echo htmlspecialchars($value['name']); ?></span></p>
+                                <p><b class="label">Email:</b> <span
+                                        class="value"><?php echo htmlspecialchars($value['email']); ?></span></p>
+                                <p><b class="label">Contact:</b> <span
+                                        class="value"><?php echo htmlspecialchars($value['phone']); ?></span></p>
+                                <p><b class="label">Date:</b> <span
+                                        class="value"><?php echo date('d-m-Y <b> h:i A</b>', strtotime($value['created_at'])); ?></span>
+                                </p>
+                            </div>
+                        </td>
+                        <td class="table-message">
+                            <?php echo nl2br(htmlspecialchars(isset($value['message']) && $value['message'] ? $value['message'] : 'N/A')); ?>
+                        </td>
+
+                        <td class="table-action text-center">
+                            <button title="delete" class="btn btn-danger btn-sm" data-id="<?= $value['id'] ?>"
+                                onclick="confirmEquirynDelete(this)">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
-                            </a>
+                            </button>
                         </td>
                     </tr>
-                    <?php $i++; }
-                    ?>
+                    <?php $i++; } ?>
                 </tbody>
                 <tfoot class="thead-dark">
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
+                        <th>Enquiry Person</th>
                         <th>Message</th>
-                        <th>Create On</th>
-                        <th>From</th>
                         <th>Action</th>
                     </tr>
                 </tfoot>

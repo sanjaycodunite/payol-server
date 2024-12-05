@@ -12288,7 +12288,7 @@ class Report extends CI_Controller
             '<div class="alert alert-success alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Transaction refunded successfully.</div>'
         );
     }
-    
+
     public function refundOpenMoneyPayoutAjax($recharge_id = 0)
     {
         $account_id = $this->User->get_domain_account();
@@ -12317,21 +12317,21 @@ class Report extends CI_Controller
             {
                 // check recharge status
                 $get_recharge_data = $this->db->get_where('open_money_payout', ['id' => $recharge_id, 'account_id' => $account_id])->row_array();
-        
+
                 $transaction_id = isset($get_recharge_data['transaction_id']) ? $get_recharge_data['transaction_id'] : 0;
-        
+
                 $amount = isset($get_recharge_data['transfer_amount']) ? $get_recharge_data['transfer_amount'] : 0;
                 $final_amount = isset($get_recharge_data['total_wallet_charge']) ? $get_recharge_data['total_wallet_charge'] : 0;
                 $loggedAccountID = isset($get_recharge_data['user_id']) ? $get_recharge_data['user_id'] : 0;
-        
+
                 $this->db->where('account_id', $account_id);
                 $this->db->where('user_id', $loggedAccountID);
                 $this->db->where('transaction_id', $transaction_id);
                 $this->db->update('open_money_payout', ['status' => 4, 'force_status' => 1, 'updated' => date('Y-m-d H:i:s')]);
-        
+
                 $before_balance = $this->User->getMemberWalletBalanceSP($loggedAccountID);
                 $after_wallet_balance = $before_balance + $final_amount;
-        
+
                 $wallet_data = [
                     'account_id' => $account_id,
                     'member_id' => $loggedAccountID,
@@ -12344,33 +12344,33 @@ class Report extends CI_Controller
                     'created' => date('Y-m-d H:i:s'),
                     'description' => 'Payout Transfer #' . $transaction_id . ' Amount Refund Manually.',
                 ];
-        
+
                 $this->db->insert('member_wallet', $wallet_data);
-        
+
                 //send call back to api user
-        
+
                 $get_role_id = $this->db
                     ->select('role_id,open_payout_call_back_url,user_code')
                     ->get_where('users', ['id' => $loggedAccountID, 'account_id' => $account_id])
                     ->row_array();
                 $user_role_id = isset($get_role_id['role_id']) ? $get_role_id['role_id'] : 0;
                 $api_member_code = isset($get_role_id['user_code']) ? $get_role_id['user_code'] : 0;
-        
+
                 if ($user_role_id == 6) {
                     $user_call_back_url = isset($get_role_id['open_money_payout']) ? $get_role_id['open_money_payout'] : '';
                     // save system log
                     $log_msg = '[' . date('d-m-Y H:i:s') . ' - Open Payout Call Back send to API Member - ' . $api_member_code . ' - Call Back URL - ' . $user_call_back_url . '.]' . PHP_EOL;
                     $this->User->generateCallbackLog($log_msg);
-        
+
                     /*$api_post_data = array();
         				        		$api_post_data['status'] = 'FAILED';
         				        		$api_post_data['txnid'] = $transaction_id;
         				        		$api_post_data['optxid'] = '';
         				        		$api_post_data['amount'] = $amount;
         				        		$api_post_data['rrn'] = '';*/
-        
+
                     $user_callback_data_url = $user_call_back_url . '?status=FAILED&txnid=' . $transaction_id . '&optxid=&amount=' . $amount . '&rrn=';
-        
+
                     $ch = curl_init();
                     curl_setopt($ch, CURLOPT_URL, $user_callback_data_url);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -12382,7 +12382,7 @@ class Report extends CI_Controller
                     //curl_setopt($ch, CURLOPT_POSTFIELDS, $api_post_data);
                     $output = curl_exec($ch);
                     curl_close($ch);
-        
+
                     // save system log
                     $log_msg = '[' . date('d-m-Y H:i:s') . ' - Open Payout Call Back Send Successfully.]' . PHP_EOL;
                     $this->User->generateCallbackLog($log_msg);
@@ -12494,7 +12494,7 @@ class Report extends CI_Controller
             '<div class="alert alert-success alert-dismissable">  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Transaction successfully Credited.</div>'
         );
     }
-    
+
     public function successOpenMoneyPayoutAjax()
     {
         $account_id = $this->User->get_domain_account();
@@ -12518,7 +12518,7 @@ class Report extends CI_Controller
                     'status' => 0,
                     'msg' => 'Sorry ! You are not authorized to access this page.'
                 );
-                
+
             }
             else
             {
@@ -12535,23 +12535,23 @@ class Report extends CI_Controller
                 }
                 else
                 {
-        
+
                     // check recharge status
                     $get_recharge_data = $this->db->get_where('open_money_payout', ['id' => $recharge_id, 'account_id' => $account_id])->row_array();
-            
+
                     $transaction_id = isset($get_recharge_data['transaction_id']) ? $get_recharge_data['transaction_id'] : 0;
                     $amount = isset($get_recharge_data['transfer_amount']) ? $get_recharge_data['transfer_amount'] : 0;
                     $loggedAccountID = isset($get_recharge_data['user_id']) ? $get_recharge_data['user_id'] : 0;
                     $surcharge_amount = isset($get_recharge_data['transfer_charge_amount']) ? $get_recharge_data['transfer_charge_amount'] : 0;
                     $txnType = isset($get_recharge_data['txnType']) ? $get_recharge_data['txnType'] : '';
-            
+
                     $this->db->where('account_id', $account_id);
                     $this->db->where('user_id', $loggedAccountID);
                     $this->db->where('transaction_id', $transaction_id);
                     $this->db->update('open_money_payout', ['optxid' => $optxid, 'rrn' => $bank_rrn, 'status' => 3, 'force_status' => 1, 'updated' => date('Y-m-d H:i:s')]);
-            
+
                     $this->User->distribute_payout_commision($recharge_id, $transaction_id, $amount, $loggedAccountID, $surcharge_amount, 'MD', 'ADMIN', $txnType);
-            
+
                     $get_role_id = $this->db
                         ->select('role_id,open_payout_call_back_url,user_code')
                         ->get_where('users', ['id' => $loggedAccountID, 'account_id' => $account_id])
@@ -12563,16 +12563,16 @@ class Report extends CI_Controller
                         // save system log
                         $log_msg = '[' . date('d-m-Y H:i:s') . ' - Open Payout Call Back send to API Member - ' . $api_member_code . ' - Call Back URL - ' . $user_call_back_url . '.]' . PHP_EOL;
                         $this->User->generateCallbackLog($log_msg);
-            
+
                         /*$api_post_data = array();
             			        		$api_post_data['status'] = 'SUCCESS';
             			        		$api_post_data['txnid'] = $transaction_id;
             			        		$api_post_data['optxid'] = $optxid;
             			        		$api_post_data['amount'] = $amount;
             			        		$api_post_data['rrn'] = $bank_rrn;*/
-            
+
                         $user_callback_data_url = $user_call_back_url . '?status=SUCCESS&txnid=' . $transaction_id . '&optxid=' . $optxid . '&amount=' . $amount . '&rrn=' . $bank_rrn;
-            
+
                         $ch = curl_init();
                         curl_setopt($ch, CURLOPT_URL, $user_callback_data_url);
                         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -12584,7 +12584,7 @@ class Report extends CI_Controller
                         //curl_setopt($ch, CURLOPT_POSTFIELDS, $api_post_data);
                         $output = curl_exec($ch);
                         curl_close($ch);
-            
+
                         // save system log
                         $log_msg = '[' . date('d-m-Y H:i:s') . ' - Open Payout Call Back Send Successfully.]' . PHP_EOL;
                         $this->User->generateCallbackLog($log_msg);
@@ -14082,7 +14082,7 @@ class Report extends CI_Controller
             $sql_summery .= " AND a.user_id = '$user'";
         }
 
-        #$get_success_recharge = $this->db->query($sql_summery)->row_array();
+        $get_success_recharge = $this->db->query($sql_summery)->row_array();
 
         $successAmount = isset($get_success_recharge['totalSuccessAmount']) ? number_format($get_success_recharge['totalSuccessAmount'], 2) : '0.00';
         $successCharge = isset($get_success_recharge['totalSuccessCharge']) ? number_format($get_success_recharge['totalSuccessCharge'], 2) : '0.00';

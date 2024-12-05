@@ -720,7 +720,10 @@ $activeGateway = $this->User->account_active_gateway();
                     <?php if (in_array(5, $activeService)) { ?>
                     <a class="collapse-item" href="{site_url}distributor/wallet/addFund">Add Fund</a>
                     <?php } ?>
-
+                     <?php if(in_array(32, $activeService)){ ?>
+                        
+                    <a class="collapse-item" href="{site_url}distributor/wallet/virtualAccount">Virtual Account</a>
+                    <?php } ?>
                     <a class="collapse-item" href="{site_url}distributor/wallet/myWalletList">My Wallet</a>
                     <a class="collapse-item" href="{site_url}distributor/wallet/walletList">Member Wallet</a>
 
