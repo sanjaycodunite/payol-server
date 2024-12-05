@@ -33,7 +33,7 @@ class Bank extends CI_Controller
     }
 
     // save member
-  
+
      public function verifyAuth()
     {
         $response = [];
@@ -72,7 +72,7 @@ class Bank extends CI_Controller
 
         // Wallet and package logic
         $chk_wallet_balance = $this->db->get_where('users', ['account_id' => $account_id, 'id' => $loggedUser['id']])->row_array();
-        $wallet_balance = isset($chk_wallet_balance['wallet_balance']) ? $chk_wallet_balance['wallet_balance'] : 0;
+        $wallet_balance =$this->User->getMemberWalletBalanceSP($loggedUser['id']);
 
         $get_verification_charge = $this->db->get_where('tbl_dmr_account_verify_charge', ['account_id' => $account_id, 'package_id' => $chk_wallet_balance['package_id']])->row_array();
         $verification_charge = isset($get_verification_charge['surcharge']) ? $get_verification_charge['surcharge'] : 0;
@@ -293,7 +293,7 @@ class Bank extends CI_Controller
                         <input type="hidden" class="form-control" id="accountHolderName" name="account_holder_name" value="' .
                                         htmlspecialchars($bene_data['account_holder_name']) .
                                         '" >
-                        
+
                         <input type="hidden" class="form-control" id="ben_account_number" name="ben_account_number" value="' .
                                         htmlspecialchars($bene_data['account_no']) .
                                         '" >
@@ -312,7 +312,7 @@ class Bank extends CI_Controller
                         <input type="hidden" class="form-control" id="txnId" name="txn_id" value="' .
                                         htmlspecialchars($bene_data['txn_id']) .
                                         '" >
-                      
+
                         <input type="hidden" class="form-control" id="type" name="type" value="' .
                                         htmlspecialchars($bene_data['type']) .
                                         '" >
@@ -372,7 +372,7 @@ class Bank extends CI_Controller
             }
         }
     }
-     
+
     public function upiVerifyAuth()
     {
         $response = [];

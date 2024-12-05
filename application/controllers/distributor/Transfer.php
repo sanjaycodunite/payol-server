@@ -1414,7 +1414,7 @@ class Transfer extends CI_Controller
     public function updateBenificaryAuth()
     {
         $account_id = $this->User->get_domain_account();
-        $loggedUser = $this->User->getAdminLoggedUser(RETAILER_SESSION_ID);
+        $loggedUser = $this->User->getAdminLoggedUser(DISTRIBUTOR_SESSION_ID);
         $loggedAccountID = $loggedUser['id'];
         $post = $this->input->post();
         $response = [];

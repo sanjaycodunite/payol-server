@@ -2658,7 +2658,7 @@ $(document).ready(function () {
   });
 
   $('#confirmDeletem1').click(function () {
-    var benDeleteUrl = siteUrl + `retailer/transfer/deleteBeneficiary/${delBeneficiaryId}`;
+    var benDeleteUrl = siteUrl + `distributor/transfer/deleteBeneficiary/${delBeneficiaryId}`;
     $.ajax({
       url: benDeleteUrl,
       type: "POST",
