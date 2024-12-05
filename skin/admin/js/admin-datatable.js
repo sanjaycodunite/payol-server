@@ -215,6 +215,9 @@ $("#newPayoutTransferSearchBtn").on("click", function () {
   newPayoutTransferDataTable(keyword, fromDate, toDate, status, user);
 });
 
+
+
+
 function upiWalletDataTable(keyword = "", member_id = "", date = "") {
   var siteUrl = $("#siteUrl").val();
   var upiWalletDataTable = $("#upiWalletDataTable").DataTable({
@@ -267,7 +270,7 @@ function upiWalletDataTable(keyword = "", member_id = "", date = "") {
         d.extra_search = keyword + "|" + member_id + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#upiWalletSearchBtn").on("click", function () {
@@ -352,7 +355,7 @@ function nsdlListDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#nsdlListSearchBtn").on("click", function () {
@@ -433,7 +436,7 @@ function nsdlPanListDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#nsdlPanListSearchBtn").on("click", function () {
@@ -518,7 +521,7 @@ function bomListDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#bomListSearchBtn").on("click", function () {
@@ -581,7 +584,7 @@ function comWalletDataTable(keyword = "", member_id = "", date = "") {
         d.extra_search = keyword + "|" + member_id + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -657,7 +660,7 @@ function cashDepositeDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -720,7 +723,7 @@ function upiCollectionQrDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -776,7 +779,7 @@ function upiCashQrDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -850,7 +853,7 @@ function currentAccountDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#currentAccountSearchBtn").on("click", function () {
@@ -907,7 +910,7 @@ function axisAccountDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#axisAccountSearchBtn").on("click", function () {
@@ -954,7 +957,7 @@ function retailerQrDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -1005,7 +1008,7 @@ function dashboardApiDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 
   /*setInterval( function () {
@@ -1069,7 +1072,7 @@ function topupHistoryDataTable(keyword = "", member_id = "", date = "") {
         d.extra_search = keyword + "|" + member_id + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -1264,7 +1267,7 @@ function downlineDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date + "|" + memberID;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -1325,7 +1328,7 @@ function uplineDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date + "|" + memberID;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -1391,7 +1394,7 @@ function aepsKycDataTable(keyword = "", fromDate = "", toDate = "", user = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate + "|" + user;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -1467,7 +1470,7 @@ function iciciAepsKycDataTable(
         d.extra_search = keyword + "|" + fromDate + "|" + toDate + "|" + user;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -1609,7 +1612,7 @@ function walletDeductDataTable(wallet_type = "", user_type = "", date = "") {
         d.extra_search = wallet_type + "|" + user_type + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -2087,7 +2090,7 @@ function matmHistoryDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -2165,7 +2168,7 @@ function gatewayHistoryDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -2217,7 +2220,7 @@ function apiDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -2464,7 +2467,7 @@ function apiMemberDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -2515,7 +2518,7 @@ function userDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -2836,7 +2839,7 @@ function eWalletDataTable(keyword = "", member_id = "", date = "") {
         d.extra_search = keyword + "|" + member_id + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#eWalletSearchBtn").on("click", function () {
@@ -2901,7 +2904,7 @@ function cWalletDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#cWalletSearchBtn").on("click", function () {
@@ -3050,7 +3053,7 @@ function ticketDataTable(keyword = "", member_id = "", date = "") {
         d.extra_search = keyword + "|" + member_id + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#ticketSearchBtn").on("click", function () {
@@ -3124,7 +3127,7 @@ function complainDataTable(keyword = "", member_id = "", date = "") {
         d.extra_search = keyword + "|" + member_id + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#complainSearchBtn").on("click", function () {
@@ -3346,7 +3349,7 @@ function fundRequestDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -3409,7 +3412,7 @@ function myWalletDataTable(keyword = "", member_id = "", date = "") {
         d.extra_search = keyword + "|" + member_id + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#myWalletSearchBtn").on("click", function () {
@@ -3496,7 +3499,7 @@ function clubDataTable(keyword = "") {
         d.extra_search = keyword;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#clubSearchBtn").on("click", function () {
@@ -3557,7 +3560,7 @@ function myEwalletDataTable(keyword = "", member_id = "", date = "") {
         d.extra_search = keyword + "|" + member_id + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#myEwalletSearchBtn").on("click", function () {
@@ -3616,7 +3619,7 @@ function myFundRequestDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -4176,7 +4179,7 @@ function rechargeCommisionDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -4241,7 +4244,7 @@ function bbpsCommisionDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -4320,7 +4323,7 @@ function fundTransferCommisionDataTable(
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -4403,7 +4406,7 @@ function moneyTransferCommisionDataTable(
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -4482,7 +4485,7 @@ function openPayoutCommisionDataTable(
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -4559,7 +4562,7 @@ function aepsCommisionDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -4640,7 +4643,7 @@ function myAepsCommisionDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -4713,7 +4716,7 @@ function cashDepositeCommisionDataTable(
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -4786,7 +4789,7 @@ function upiCommisionDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -4863,7 +4866,7 @@ function referralCommisionDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -4936,7 +4939,7 @@ function upiCashCommisionDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -4988,7 +4991,7 @@ function moveMemberDataTable(keyword = "") {
         d.extra_search = keyword;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -5066,7 +5069,7 @@ function bbpsDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -5381,7 +5384,7 @@ function upiApiLogDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -5453,7 +5456,7 @@ function payoutApiLogDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -5535,7 +5538,7 @@ function upiCashDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -5614,7 +5617,7 @@ function utiPancardDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -5697,7 +5700,7 @@ function manualMoneyTransferDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -5773,7 +5776,7 @@ function adminBankTransferDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -6310,7 +6313,7 @@ function dmtHistoryDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -6384,7 +6387,7 @@ function accountDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -6458,7 +6461,7 @@ function iciciAccountDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -6524,7 +6527,7 @@ function newAepsKycDataTable(keyword = "", date = "", user = "") {
         d.extra_search = keyword + "|" + date + "|" + user;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -6691,7 +6694,7 @@ function dynamicInvoiceDataTable(keyword = "") {
         d.extra_search = keyword;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#invoiceSearchBtn").on("click", function () {
@@ -6743,7 +6746,7 @@ function invoiceSummeryDataTable(keyword = "") {
         d.extra_search = keyword + "|" + invoice_id;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -6825,7 +6828,7 @@ function nsdlPanCardListDataTable(
         d.extra_search = keyword + "|" + fromDate + "|" + toDate + "|" + user;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#nsdlPanCardListSearchBtn").on("click", function () {
@@ -6923,7 +6926,7 @@ function nsdlActivationDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -7074,7 +7077,7 @@ function findPanDataTable(keyword = "", fromDate = "", toDate = "", user = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate + "|" + user;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -7141,7 +7144,7 @@ function utiPanRequestDataTable(keyword = "", fromDate = "", toDate = "") {
         d.extra_search = keyword + "|" + fromDate + "|" + toDate;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -7195,7 +7198,7 @@ function tdsInvoiceDataTable(keyword = "") {
         d.extra_search = keyword;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#tdsinvoiceSearchBtn").on("click", function () {
@@ -7247,7 +7250,7 @@ function tdsInvoiceSummeryDataTable(keyword = "") {
         d.extra_search = keyword + "|" + invoice_id;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -7300,7 +7303,7 @@ function manualInvoiceDataTable(keyword = "") {
         d.extra_search = keyword;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 $("#manualInvoiceSearchBtn").on("click", function () {
@@ -7374,7 +7377,7 @@ function apiFundRequestDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -7743,7 +7746,7 @@ function openMoneyTransferHistoryDataTable(
   type = ""
 ) {
   const siteUrl = $("#siteUrl").val();
-  console.log(siteUrl);
+
   if (!fromDate) {
     fromDate = $("#from_date").val();
   }
@@ -7771,7 +7774,7 @@ function openMoneyTransferHistoryDataTable(
     order: [[0, "desc"]],
     deferRender: true,
     ajax: {
-      url: siteUrl + "admin/report/getOpenMoneyTransferListCombined",
+      url: siteUrl+"admin/report/getOpenMoneyTransferListCombined",
       data: function (d) {
         d.extra_search = [keyword, fromDate, toDate, status, user, type].join(
           "|"
@@ -7815,71 +7818,73 @@ $("#openMoneyTransferHistorySearchBtn").on("click", function () {
   );
 });
 
-function openPayoutSuccessBtn() {
-  var siteUrl = $("#siteUrl").val();
-  var str = $("#openMoneySuccessForm").serialize();
-  $.ajax({
-    type: "POST",
-    url: siteUrl + "admin/report/successOpenMoneyPayoutAjax",
-    data: str,
-    success: function (r) {
-      var data = JSON.parse($.trim(r));
-      $("#updateComplainModel").modal("hide");
-      alert(data['msg']);
-      const dataTable = $("#openMoneyTransferHistoryDataTable").DataTable();
-      dataTable.destroy();
+function openPayoutSuccessBtn()
+{
+    var siteUrl = $("#siteUrl").val();
+    var str = $("#openMoneySuccessForm").serialize();
+      $.ajax({
+        type: "POST",
+        url: siteUrl + "admin/report/successOpenMoneyPayoutAjax",
+        data: str,
+        success: function (r) {
+          var data = JSON.parse($.trim(r));
+          $("#updateComplainModel").modal("hide");
+          alert(data['msg']);
+          const dataTable = $("#openMoneyTransferHistoryDataTable").DataTable();
+  dataTable.destroy();
 
-      const keyword = $("#keyword").val();
-      const fromDate = $("#from_date").val();
-      const toDate = $("#to_date").val();
-      const status = $("#status").val();
-      const user = $("#user").val();
-      const type = $("#type").val();
-      openMoneyTransferHistoryDataTable(
-        keyword,
-        fromDate,
-        toDate,
-        status,
-        user,
-        type
-      );
-    }
-  });
+  const keyword = $("#keyword").val();
+  const fromDate = $("#from_date").val();
+  const toDate = $("#to_date").val();
+  const status = $("#status").val();
+  const user = $("#user").val();
+  const type = $("#type").val();
+  openMoneyTransferHistoryDataTable(
+    keyword,
+    fromDate,
+    toDate,
+    status,
+    user,
+    type
+  );
+        }
+      });
 }
 
-function refundOpenPayout(id) {
-  if (confirm("Are you sure you want to refund this transaction?")) {
-    var siteUrl = $("#siteUrl").val();
+function refundOpenPayout(id)
+{
+    if(confirm("Are you sure you want to refund this transaction?")){
+        var siteUrl = $("#siteUrl").val();
+    
+      $.ajax({
+        type: "POST",
+        url: siteUrl + "admin/report/refundOpenMoneyPayoutAjax/"+id,
+        success: function (r) {
+          var data = JSON.parse($.trim(r));
+          alert(data['msg']);
+          const dataTable = $("#openMoneyTransferHistoryDataTable").DataTable();
+  dataTable.destroy();
 
-    $.ajax({
-      type: "POST",
-      url: siteUrl + "admin/report/refundOpenMoneyPayoutAjax/" + id,
-      success: function (r) {
-        var data = JSON.parse($.trim(r));
-        alert(data['msg']);
-        const dataTable = $("#openMoneyTransferHistoryDataTable").DataTable();
-        dataTable.destroy();
-
-        const keyword = $("#keyword").val();
-        const fromDate = $("#from_date").val();
-        const toDate = $("#to_date").val();
-        const status = $("#status").val();
-        const user = $("#user").val();
-        const type = $("#type").val();
-        openMoneyTransferHistoryDataTable(
-          keyword,
-          fromDate,
-          toDate,
-          status,
-          user,
-          type
-        );
-      }
-    });
-  }
-  else {
-    return false;
-  }
+  const keyword = $("#keyword").val();
+  const fromDate = $("#from_date").val();
+  const toDate = $("#to_date").val();
+  const status = $("#status").val();
+  const user = $("#user").val();
+  const type = $("#type").val();
+  openMoneyTransferHistoryDataTable(
+    keyword,
+    fromDate,
+    toDate,
+    status,
+    user,
+    type
+  );
+        }
+      });
+    }
+    else{
+        return false;
+    }
 }
 
 function openMoneyUpiTransferHistoryDataTable(
@@ -8444,7 +8449,7 @@ function kycDataTable(keyword = "") {
         d.extra_search = keyword;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 
@@ -8496,7 +8501,7 @@ function aepsApiLogDataTable(keyword = "", date = "") {
         d.extra_search = keyword + "|" + date;
       }
     },
-    initComplete: function (settings, json) { }
+    initComplete: function (settings, json) {}
   });
 }
 

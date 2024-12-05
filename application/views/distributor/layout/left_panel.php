@@ -31,14 +31,14 @@ $activeGateway = $this->User->account_active_gateway();
         <!-- Nav Item - Dashboard  -->
         <li class="nav-item">
             <a class="nav-link" href="{site_url}distributor/home">
-                <i class="fas fa-fw fa-home"></i>
+                <i class="fas fa-fw fa-home" style="color: #f3baba !important;"></i>
                 <span>Home</span></a>
         </li>
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
             <a class="nav-link" href="{site_url}distributor/dashboard">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <i class="fas fa-fw fa-tachometer-alt" style="color: #f3baba !important;"></i>
                 <span>Dashboard</span></a>
         </li>
 
@@ -48,7 +48,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
                 aria-expanded="true" aria-controls="collapseThree">
-                <i class="fa fa-users"></i>
+                <i class="fa fa-users" style="color: #f3baba !important;"></i>
                 <span>Members</span>
             </a>
             <div id="collapseThree" <?php if (
@@ -79,7 +79,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse5" aria-expanded="true"
                 aria-controls="collapseThree">
-                <i class="fa fa-mobile"></i>
+                <i class="fas fa-mobile" style="color: #f3baba !important;"></i>
                 <span>Recharge</span>
             </a>
             <div id="collapse5" <?php if (
@@ -113,7 +113,7 @@ $activeGateway = $this->User->account_active_gateway();
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link" href="{site_url}distributor/bbps">
-                <i class="fa fa-tv"></i>
+                <i class="fa fa-tv" style="color: #f3baba !important;"></i>
                 <span>BBPS Live</span></a>
         </li>
         <?php } ?>
@@ -122,7 +122,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDmt"
                 aria-expanded="true" aria-controls="collapseDmt">
-                <i class="fa fa-mobile"></i>
+                <i class="fa fa-mobile" style="color: #f3baba !important;"></i>
                 <span>DMT</span>
             </a>
             <div id="collapseDmt" class="collapse" aria-labelledby="heading5" data-parent="#accordionSidebar">
@@ -139,7 +139,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse16" aria-expanded="true"
                 aria-controls="collapse16">
-                <i class="fa fa-bullhorn"></i>
+                <i class="fa fa-bullhorn" style="color: #f3baba !important;"></i>
                 <span>AEPS1 Service</span>
             </a>
             <div id="collapse16" <?php if ($content_block == 'aeps/list' || $content_block == 'aeps/transfer') { ?>
@@ -164,7 +164,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse88" aria-expanded="true"
                 aria-controls="collapse88">
-                <i class="fa fa-mobile"></i>
+                <i class="fa fa-mobile" style="color: #f3baba !important;"></i>
                 <span>AEPS Payout</span>
             </a>
             <div id="collapse88"
@@ -196,7 +196,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAEPS"
                 aria-expanded="true" aria-controls="collapseAEPS">
-                <i class="fa fa-bullhorn"></i>
+                <i class="fa fa-bullhorn" style="color: #f3baba !important;"></i>
                 <span><?php echo $this->User->getAepsTitle(); ?> Service</span>
             </a>
             <div id="collapseAEPS"
@@ -225,7 +225,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse898"
                 aria-expanded="true" aria-controls="collapse898">
-                <i class="fa fa-mobile"></i>
+                <i class="fa fa-mobile" style="color: #f3baba !important;"></i>
                 <span> <?php echo $this->User->getAepsTitle(); ?> AEPS Payout</span>
             </a>
             <div id="collapse898"
@@ -251,7 +251,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInstant"
                 aria-expanded="true" aria-controls="collapseInstant">
-                <i class="fa fa-bullhorn"></i>
+                <i class="fas fa-user-lock" style="color: #f3baba !important;"></i>
                 <span>ICICI AEPS</span>
             </a>
             <div id="collapseInstant"
@@ -280,7 +280,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseinst"
                 aria-expanded="true" aria-controls="collapseinst">
-                <i class="fa fa-mobile"></i>
+                <i class="fas fa-cash-register" style="color: #f3baba !important;"></i>
                 <span>Settlement</span>
             </a>
             <div id="collapseinst"
@@ -308,7 +308,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsesettlement"
                 aria-expanded="true" aria-controls="collapsesettlement">
-                <i class="fa fa-mobile"></i>
+                <i class="fas fa-cash-register" style="color: #f3baba !important;"></i>
                 <span>Settlement 2 </span>
             </a>
             <div id="collapsesettlement"
@@ -369,7 +369,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse16" aria-expanded="true"
                 aria-controls="collapse16">
-                <i class="fa fa-bullhorn"></i>
+                <i class="fas fa-user-lock" style="color: #f3baba !important;"></i>
                 <span>AEPS3 Service</span>
             </a>
             <div id="collapse16"
@@ -401,7 +401,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMoney"
                 aria-expanded="true" aria-controls="collapseMoney">
-                <i class="fa fa-mobile"></i>
+                <i class="fas fa-money-bill-alt" style="color: #f3baba !important;"></i>
                 <span>Money Transfer</span>
             </a>
             <div id="collapseMoney" class="collapse" aria-labelledby="heading5" data-parent="#accordionSidebar">
@@ -422,7 +422,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMoney2"
                 aria-expanded="true" aria-controls="collapseMoney2">
-                <i class="fa fa-mobile"></i>
+                <i class="fas fa-money-bill-alt" style="color: #f3baba !important;"></i>
                 <span>Money Transfer 2</span>
             </a>
             <div id="collapseMoney2" class="collapse" aria-labelledby="heading5" data-parent="#accordionSidebar">
@@ -444,7 +444,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsepan"
                 aria-expanded="true" aria-controls="collapsepan">
-                <i class="fa fa-credit-card"></i>
+                <i class="fa fa-credit-card" style="color: #f3baba !important;"></i>
                 <span>UTI Pancard</span>
             </a>
             <div id="collapsepan" class="collapse" aria-labelledby="heading5" data-parent="#accordionSidebar">
@@ -462,7 +462,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsensdlpan"
                 aria-expanded="true" aria-controls="collapsensdlpan">
-                <i class="fa fa-credit-card"></i>
+                <i class="fa fa-credit-card" style="color: #f3baba !important;"></i>
                 <span>NSDL Pancard</span>
             </a>
             <div id="collapsensdlpan" class="collapse" aria-labelledby="heading5" data-parent="#accordionSidebar">
@@ -503,7 +503,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAccount"
                 aria-expanded="true" aria-controls="collapseAccount">
-                <i class="fa fa-home"></i>
+                <i class="fas fa-tasks" style="color: #f3baba !important;"></i>
                 <span>Account Management </span>
             </a>
             <div id="collapseAccount" <?php if ($content_block == '') { ?> class="collapse show" <?php } else { ?>
@@ -530,7 +530,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUpi"
                 aria-expanded="true" aria-controls="collapseUpi">
-                <i class="flaticon-life-insurance"></i>
+                <i class="flaticon-life-insurance" style="color: #f3baba !important;"></i>
                 <span>UPI Transaction</span>
             </a>
             <div id="collapseUpi" <?php if ($content_block == '') { ?> class="collapse show" <?php } else { ?>
@@ -549,7 +549,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTravel"
                 aria-expanded="true" aria-controls="collapseTravel">
-                <i class="fa fa-bus"></i>
+                <i class="fa fa-bus" style="color: #f3baba !important;"></i>
                 <span>Travel </span>
             </a>
             <div id="collapseTravel" <?php if ($content_block == '') { ?> class="collapse show" <?php } else { ?>
@@ -574,7 +574,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInsurance"
                 aria-expanded="true" aria-controls="collapseInsurance">
-                <i class="flaticon-life-insurance"></i>
+                <i class="flaticon-life-insurance" style="color: #f3baba !important;"></i>
                 <span>Insurance </span>
             </a>
             <div id="collapseInsurance" <?php if ($content_block == '') { ?> class="collapse show" <?php } else { ?>
@@ -595,7 +595,7 @@ $activeGateway = $this->User->account_active_gateway();
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link" href="https://www.capricorn.cash/login" target="_blank">
-                <i class="fa fa-file-signature"></i>
+                <i class="fa fa-file-signature" style="color: #f3baba !important;"></i>
                 <span>Digital Signature</span></a>
         </li>
         <?php } ?>
@@ -603,7 +603,7 @@ $activeGateway = $this->User->account_active_gateway();
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link" href="#" data-toggle="modal" data-target="#instantLoanModal">
-                <i class="fa fa-credit-card"></i>
+                <i class="fa fa-credit-card" style="color: #f3baba !important;"></i>
                 <span>Instant Loan</span></a>
         </li>
         <?php } ?>
@@ -615,7 +615,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse10" aria-expanded="true"
                 aria-controls="collapse10">
-                <i class="fa fa-list"></i>
+                <i class="fa fa-list" style="color: #f3baba !important;"></i>
                 <span>Reports</span>
             </a>
             <div id="collapse10" <?php if (
@@ -688,15 +688,15 @@ $activeGateway = $this->User->account_active_gateway();
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
             <a class="nav-link" href="{site_url}distributor/wallet/payolTransfer">
-                <i class="fa fa-dollar"></i>
+                <i class="fa fa-rupee" style="color: #f3baba !important;"></i>
                 <span>Payol Transfer</span></a>
         </li>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse8" aria-expanded="true"
                 aria-controls="collapse8">
-                <i class="fa fa-file"></i>
-                <span>Main Wallet </span>
+                <i class="fas fa-wallet" style="color: #f3baba !important;"></i>
+                <span>Main Wallet</span>
             </a>
             <div id="collapse8" <?php if (
                     $content_block == 'wallet/walletList' ||
@@ -720,7 +720,10 @@ $activeGateway = $this->User->account_active_gateway();
                     <?php if (in_array(5, $activeService)) { ?>
                     <a class="collapse-item" href="{site_url}distributor/wallet/addFund">Add Fund</a>
                     <?php } ?>
-
+                     <?php if(in_array(32, $activeService)){ ?>
+                        
+                    <a class="collapse-item" href="{site_url}distributor/wallet/virtualAccount">Virtual Account</a>
+                    <?php } ?>
                     <a class="collapse-item" href="{site_url}distributor/wallet/myWalletList">My Wallet</a>
                     <a class="collapse-item" href="{site_url}distributor/wallet/walletList">Member Wallet</a>
 
@@ -750,7 +753,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSaving"
                 aria-expanded="true" aria-controls="collapseSaving">
-                <i class="fa fa-file"></i>
+                <i class="fas fa-piggy-bank" style="color: #f3baba !important;"></i>
                 <span>Saving</span>
             </a>
             <div id="collapseSaving" class="collapse" aria-labelledby="heading8" data-parent="#accordionSidebar">
@@ -770,7 +773,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse111"
                 aria-expanded="true" aria-controls="collapse111">
-                <i class="fa fa-list"></i>
+                <i class="fa fa-rupee" style="color: #f3baba !important;"></i>
                 <span>My Commision</span>
             </a>
             <div id="collapse111"
@@ -818,7 +821,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse9" aria-expanded="true"
                 aria-controls="collapse9">
-                <i class="fa fa-life-ring"></i>
+                <i class="fas fa-hands-helping" style="color: #f3baba !important;"></i>
                 <span>Support Ticket</span>
             </a>
             <div id="collapse9"
@@ -838,7 +841,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse99" aria-expanded="true"
                 aria-controls="collapse99">
-                <i class="fa fa-life-ring"></i>
+                <i class="fas fa-question" style="color: #f3baba !important;"></i>
                 <span>Complain</span>
             </a>
             <div id="collapse99" <?php if ($content_block == 'complain/list') { ?> class="collapse show"
@@ -862,7 +865,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDeposit"
                 aria-expanded="true" aria-controls="collapseDeposit">
-                <i class="fa fa-money-bill-alt"></i>
+                <i class="fas fa-money-bill-alt" style="color: #f3baba !important;"></i>
                 <span>Cash Deposite </span>
             </a>
             <div id="collapseDeposit" <?php if ($content_block == '') { ?> class="collapse show" <?php } else { ?>
@@ -890,11 +893,19 @@ $activeGateway = $this->User->account_active_gateway();
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link" href="<?php echo $linkList['url']; ?>" target="_blank">
-                <i class="fa fa-link"></i>
-                <span><?php echo $linkList['title']; ?></span></a>
+
+                <?php if($linkList['title']=="UTI PAN CARD"){ ?>
+                <i class="fas fa-id-card" style="color: #f3baba !important;"></i>
+                <? } else{ ?>
+                <i class="fas fa-plane-departure" style="color: #f3baba !important;"></i>
+                <? } ?>
+                <span><?php echo $linkList['title']; ?></span>
+            </a>
+
         </li>
         <?php } ?>
         <?php } ?>
+
 
 
 
@@ -902,7 +913,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse13" aria-expanded="true"
                 aria-controls="collapse13">
-                <i class="fa fa-cog"></i>
+                <i class="fa fa-cog" style="color: #f3baba !important;"></i>
                 <span>Setting</span>
             </a>
             <div id="collapse13"
@@ -1039,9 +1050,6 @@ $activeGateway = $this->User->account_active_gateway();
                                         <?php }
                                         ?>
                                     </marquee>
-
-
-
                                     <?php }
                                     ?>
                                 </div>

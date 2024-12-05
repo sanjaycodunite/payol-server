@@ -511,8 +511,7 @@ $activeGateway = $this->User->account_active_gateway();
         <li class="nav-item">
             <a class="nav-link collapsed menu_notification_li" href="#" data-toggle="collapse" data-target="#collapse9"
                 aria-expanded="true" aria-controls="collapse9">
-                <i class="fas fa-hands-helping" style="color: #f3baba !important;"
-                    style="color: #f3baba !important;"></i>
+                <i class="fas fa-hands-helping" style="color: #f3baba !important;" style="color: #f3baba !important;"></i>
                 <span>Support Ticket</span>
                 <span class="menu_notification"><?php echo $this->User->getTotalUnreadTicket(); ?></span>
             </a>
@@ -684,6 +683,7 @@ $activeGateway = $this->User->account_active_gateway();
                     <a class="collapse-item" href="{site_url}admin/master/ipsetting">Manage IP</a>
 
                     <a class="collapse-item" href="{site_url}admin/master/upiApiSwitch">Payin Api Swtich</a>
+                    <a class="collapse-item" href="{site_url}admin/master/payoutApiSwitch">Payout Api Swtich</a>
 
                     <?php if ($accountData['is_payout_otp'] == 1) { ?>
                     <a class="collapse-item" href="{site_url}admin/master/payoutOtpSetting">Payout Amount Setting</a>
@@ -973,14 +973,12 @@ $activeGateway = $this->User->account_active_gateway();
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="{site_url}admin/setting/profile">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"
-                                        style="color: #f3baba !important;"></i>
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400" style="color: #f3baba !important;"></i>
                                     Profile
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"
-                                        style="color: #f3baba !important;"></i>
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" style="color: #f3baba !important;"></i>
                                     Logout
                                 </a>
                             </div>

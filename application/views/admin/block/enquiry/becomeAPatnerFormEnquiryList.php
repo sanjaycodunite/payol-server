@@ -31,15 +31,17 @@
                     <tr>
                         <td><?php echo $i; ?></td>
                         <td>
-                            <strong>Name:</strong> <?php echo $value['name']; ?><br>
-                            <strong>Email:</strong> <?php echo $value['email']; ?><br>
-                            <strong>Mobile:</strong> <?php echo $value['mobile']; ?><br>
-                            <strong>Partner Type:</strong> <?php echo $value['partner_type']; ?><br>
-                            <strong>Product Interest:</strong> <?php echo $value['product_intrest']; ?> <br>
+                            <strong>Name :</strong> <?php echo $value['name']; ?><br>
+                            <strong>Email :</strong> <?php echo $value['email']; ?><br>
+                            <strong>Mobile :</strong> <?php echo $value['mobile']; ?><br>
+                            <strong>Partner Type :</strong> <?php echo $value['partner_type']; ?><br>
+                            <strong>Product Interest :</strong> <?php echo $value['product_intrest']; ?> <br>
                             <strong>Created On :</strong>
                             <?php echo date('d-m-Y <b> h:i A</b>', strtotime($value['created'])); ?>
                         </td>
-                        <td><?php echo $value['message']; ?></td>
+                        <td class="table-message">
+                            <?php echo nl2br(htmlspecialchars(isset($value['message']) && $value['message'] ? $value['message'] : 'N/A')); ?>
+                        </td>
 
                         <td>
                             <button title="delete" class="btn btn-danger btn-sm" data-id="<?= $value['id'] ?>"

@@ -947,17 +947,24 @@ class Webnew extends CI_Controller
             $post = $this->input->post();
             log_message('debug', 'Add Member Auth API Account ID - ' . $account_id . ' Post Data - ' . json_encode($post));
             $this->load->library('form_validation');
-
+            
             $this->form_validation->set_rules('user_id', 'User ID', 'required|xss_clean');
             $this->form_validation->set_rules('role_id', 'Member Type', 'required|xss_clean');
-            $this->form_validation->set_rules('name', 'Name', 'required|xss_clean');
-            $this->form_validation->set_rules('email', 'Email ', 'xss_clean|valid_email');
-            $this->form_validation->set_rules('mobile', 'Mobile Number', 'required|xss_clean|numeric|max_length[12]');
-            $this->form_validation->set_rules('password', 'Password', 'required|xss_clean');
-            $this->form_validation->set_rules('transaction_password', 'Transaction Password', 'required|xss_clean|max_length[6]|min_length[4]');
-            $this->form_validation->set_rules('country_id', 'Country', 'required|xss_clean');
-            $this->form_validation->set_rules('state_id', 'State', 'required|xss_clean');
-            $this->form_validation->set_rules('city', 'City', 'required|xss_clean');
+             $this->form_validation->set_rules('name', 'Name', 'required|min_length[3]|max_length[50]|xss_clean|trim');
+            $this->form_validation->set_rules('email', 'Email', 'required|valid_email|xss_clean|trim');
+            $this->form_validation->set_rules('mobile', 'Mobile', 'required|numeric|min_length[10]|max_length[15]|xss_clean|trim');
+            //$this->form_validation->set_rules('password', 'Password', 'required|xss_clean');
+            //$this->form_validation->set_rules('transaction_password', 'Transaction Password', 'required|xss_clean|max_length[6]|min_length[4]');
+            //$this->form_validation->set_rules('cityname', 'City', 'required|xss_clean|trim');
+            $this->form_validation->set_rules('district', 'District', 'required|xss_clean|trim');
+            $this->form_validation->set_rules('block', 'Block', 'required|xss_clean|trim');
+            $this->form_validation->set_rules('village', 'Village', 'required|xss_clean|trim');
+            $this->form_validation->set_rules('address', 'Address', 'required|xss_clean|trim');
+            $this->form_validation->set_rules('aadhar_num', 'Aadhar Number', 'required|numeric|exact_length[12]|xss_clean|trim');
+            $this->form_validation->set_rules('pan_card', 'PAN Card', 'required|alpha_numeric|exact_length[10]|xss_clean|trim');
+            $this->form_validation->set_rules('country_id', 'Country', 'required|numeric|xss_clean|trim');
+            $this->form_validation->set_rules('state_id', 'State', 'required|numeric|xss_clean|trim');
+            $this->form_validation->set_rules('city', 'City', 'required|xss_clean|trim');
 
             if ($this->form_validation->run() == false) {
                 $response = [

@@ -86,8 +86,8 @@ class Enquiry extends CI_Controller
 		$tableName  = $this->input->post('tableName');
 		$enquiryId  = $this->input->post('enquiryId');
 		$enquiryType = ($this->input->post('enquiryType') == 'webContactForm')
-					? "Contact Form Enquiry"
-					: "Become A Partner Form Enquiry";
+					? "Contact Enquiry"
+					: "Become A Partner Enquiry";
 		$account_id = $this->User->get_domain_account();
 
 		if (empty($tableName) || empty($enquiryId)) {
@@ -107,7 +107,7 @@ class Enquiry extends CI_Controller
 		if ($updated) {
 			$response = [
 				'error' => false,
-				'dataval' => "$enquiryType marked as deleted successfully."
+				'dataval' => "$enquiryType deleted successfully."
 			];
 		} else {
 			log_message('error', "Failed to soft delete $enquiryType: " . $this->db->last_query());

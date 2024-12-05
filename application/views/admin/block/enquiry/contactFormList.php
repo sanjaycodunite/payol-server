@@ -47,8 +47,9 @@
                             </div>
                         </td>
                         <td class="table-message">
-                            <?php echo nl2br(htmlspecialchars($value['message'])); ?>
+                            <?php echo nl2br(htmlspecialchars(isset($value['message']) && $value['message'] ? $value['message'] : 'N/A')); ?>
                         </td>
+
                         <td class="table-action text-center">
                             <button title="delete" class="btn btn-danger btn-sm" data-id="<?= $value['id'] ?>"
                                 onclick="confirmEquirynDelete(this)">
